@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
         dashFrames = 0.2f;
         dashTimer = 0.0f;
 
-        attackFrames = 0.1f;
+        attackFrames = 0.2f;
         attackTimer = 0.0f;
         attackDamage = 1;
         attackSpeed = 10.0f;
@@ -90,6 +90,12 @@ public class PlayerController : MonoBehaviour
         {
             Projectile p = Instantiate(projectile, spawnPoint.position, spawnPoint.rotation).GetComponent<Projectile>();
             p.Init(attackDamage, attackSpeed, spawnPoint.rotation);
+
+            attackTimer = attackFrames;
+        }
+        else
+        {
+            attackTimer -= Time.deltaTime;
         }
     }
 
