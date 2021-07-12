@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     public float gravity;
     public float friction;
     public float drag;
+    private float lastInput;
 
     public Vector2 velocity;
 
@@ -18,7 +19,7 @@ public class PlayerController : MonoBehaviour
     {
         topSpeed = 0.02f;
         acceleration = 0.5f;
-        friction = 0.5f;
+        friction = 0.2f;
         /*
         airAcceleration = 0.5f;
         gravity = 0.5f;
@@ -31,23 +32,31 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         float inputX = Input.GetAxis("Horizontal");
+        velocity.x = HandleGroundMovement(velocity.x, inputX);
+        
+        Vector2 step = new Vector2(velocity.x,0);
+        transform.Translate(step);
+        lastInput = inputX;
+    }
+
+    float HandleGroundMovement(float xVel, float inputX)
+    {
         //if reversing direction
-        if((Mathf.Sign(inputX) != Mathf.Sign(velocity.x))&&(inputX!=0 && velocity.x != 0))
+        if ((Mathf.Sign(inputX) != Mathf.Sign(xVel)) && (inputX != 0 && xVel != 0))
         {
-            velocity.x -= velocity.x;
+            xVel -= xVel;
         }
         else
         {
-            velocity.x = inputX * Time.deltaTime * acceleration + velocity.x;
+            xVel = inputX * Time.deltaTime * acceleration + xVel;
         }
-     
-        if (inputX == 0)
-        {
-            velocity.x = Mathf.MoveTowards(velocity.x, 0, friction*Time.deltaTime);
-        }
-        velocity.x = Mathf.Clamp(velocity.x, -topSpeed, topSpeed);
-        Vector2 step = new Vector2(velocity.x,0);
 
-        transform.Translate(step);
+        //if slowing or no input then apply friction
+        if ((Mathf.Abs(inputX) < Mathf.Abs(lastInput)) || (inputX == 0))
+        {
+            xVel = Mathf.MoveTowards(xVel, 0, friction * Time.deltaTime);
+        }
+        xVel = Mathf.Clamp(xVel, -topSpeed, topSpeed);
+        return xVel;
     }
 }
