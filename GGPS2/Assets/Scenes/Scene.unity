@@ -123,6 +123,75 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1001 &624443363
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2829412435315291717, guid: 0f971990e67c97d47a54c71f400cf1fe, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2829412435315291717, guid: 0f971990e67c97d47a54c71f400cf1fe, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 18.025
+      objectReference: {fileID: 0}
+    - target: {fileID: 2829412435315291717, guid: 0f971990e67c97d47a54c71f400cf1fe, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.12867069
+      objectReference: {fileID: 0}
+    - target: {fileID: 2829412435315291717, guid: 0f971990e67c97d47a54c71f400cf1fe, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.8053586
+      objectReference: {fileID: 0}
+    - target: {fileID: 2829412435315291717, guid: 0f971990e67c97d47a54c71f400cf1fe, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2829412435315291717, guid: 0f971990e67c97d47a54c71f400cf1fe, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2829412435315291717, guid: 0f971990e67c97d47a54c71f400cf1fe, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2829412435315291717, guid: 0f971990e67c97d47a54c71f400cf1fe, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2829412435315291717, guid: 0f971990e67c97d47a54c71f400cf1fe, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2829412435315291717, guid: 0f971990e67c97d47a54c71f400cf1fe, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2829412435315291717, guid: 0f971990e67c97d47a54c71f400cf1fe, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2829412435315291717, guid: 0f971990e67c97d47a54c71f400cf1fe, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6322188434096276550, guid: 0f971990e67c97d47a54c71f400cf1fe, type: 3}
+      propertyPath: m_Name
+      value: brick_tile_temp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6322188434096276550, guid: 0f971990e67c97d47a54c71f400cf1fe, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6322188434096276550, guid: 0f971990e67c97d47a54c71f400cf1fe, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 0f971990e67c97d47a54c71f400cf1fe, type: 3}
 --- !u!1 &1485287680
 GameObject:
   m_ObjectHideFlags: 0
@@ -135,7 +204,7 @@ GameObject:
   - component: {fileID: 1485287682}
   - component: {fileID: 1485287681}
   - component: {fileID: 1485287684}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -228,11 +297,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1485287680}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.1, y: 3.94, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1485287684
 MonoBehaviour:
@@ -246,6 +315,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6ac8b236acee3f42a0f982deff01774, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  topSpeed: 0
+  acceleration: 0
+  friction: 0
+  topFallSpeed: 0
+  airAcceleration: 0
+  gravity: 0
+  drag: 0
+  size: {x: 0, y: 0}
+  grounded: 0
+  velocity: {x: 0, y: 0}
 --- !u!1 &1631994445
 GameObject:
   m_ObjectHideFlags: 0

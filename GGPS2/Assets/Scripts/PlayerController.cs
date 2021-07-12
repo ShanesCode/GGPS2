@@ -6,13 +6,18 @@ public class PlayerController : MonoBehaviour
 {
     public float topSpeed;
     public float acceleration;
+    public float friction;
+
+    public float topFallSpeed;
     public float airAcceleration;
     public float gravity;
-    public float friction;
     public float drag;
-    private float lastInput;
+    public Vector2 size;
+    public bool grounded;
 
     public Vector2 velocity;
+    private float lastInput;
+    LayerMask groundMask;
 
     // Start is called before the first frame update
     void Start()
@@ -20,11 +25,15 @@ public class PlayerController : MonoBehaviour
         topSpeed = 0.02f;
         acceleration = 0.5f;
         friction = 0.2f;
-        /*
-        airAcceleration = 0.5f;
+
+        topFallSpeed = 0.02f;
+        airAcceleration = 0.2f;
         gravity = 0.5f;
         drag = 0.5f;
-        */
+        grounded = false;
+        groundMask = LayerMask.GetMask("Ground");
+        size = new Vector2(GetComponent<BoxCollider2D>().bounds.extents.x, GetComponent<BoxCollider2D>().bounds.extents.y);
+
         velocity = new Vector2(0, 0);
     }
 
@@ -33,10 +42,41 @@ public class PlayerController : MonoBehaviour
     {
         float inputX = Input.GetAxis("Horizontal");
         velocity.x = HandleGroundMovement(velocity.x, inputX);
-        
-        Vector2 step = new Vector2(velocity.x,0);
+
+        grounded = GroundCheck();
+        if (!grounded)
+        {
+            velocity.y -= gravity;
+            velocity.y = Mathf.Clamp(velocity.y, -topFallSpeed, 0);
+        }
+        else
+        {
+            velocity.y = 0;
+        }
+
+        Vector2 step = new Vector2(velocity.x,velocity.y);
         transform.Translate(step);
         lastInput = inputX;
+    }
+
+    bool GroundCheck()
+    {
+        Debug.DrawRay(transform.position, Vector2.down * 2, Color.magenta, 0.01f);
+        RaycastHit2D hit = Physics2D.BoxCast(transform.position, new Vector2(size.x,size.y/2), 0.0f, Vector2.down, size.y, groundMask);
+        if (hit)
+        {
+            //Debug.Log(hit.collider.gameObject.name);
+            float distance = Mathf.Abs(hit.point.y - transform.position.y);
+            if (distance > size.y)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     float HandleGroundMovement(float xVel, float inputX)
