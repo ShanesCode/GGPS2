@@ -190,7 +190,8 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Untagged
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 0f971990e67c97d47a54c71f400cf1fe, type: 3}
 --- !u!1 &1485287680
 GameObject:
@@ -204,6 +205,7 @@ GameObject:
   - component: {fileID: 1485287682}
   - component: {fileID: 1485287681}
   - component: {fileID: 1485287684}
+  - component: {fileID: 1485287685}
   m_Layer: 2
   m_Name: Player
   m_TagString: Untagged
@@ -325,6 +327,29 @@ MonoBehaviour:
   size: {x: 0, y: 0}
   grounded: 0
   velocity: {x: 0, y: 0}
+  bottle: {fileID: 4059492583039086145, guid: b88103461f1bb4749bf70d98b4275ae9, type: 3}
+  hasBottle: 0
+--- !u!50 &1485287685
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1485287680}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &1631994445
 GameObject:
   m_ObjectHideFlags: 0

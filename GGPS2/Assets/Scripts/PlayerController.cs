@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour
     private float lastInput;
     LayerMask groundMask;
 
+    public GameObject bottle;
+    public bool hasBottle;
     // Start is called before the first frame update
     void Start()
     {
@@ -35,6 +37,7 @@ public class PlayerController : MonoBehaviour
         size = new Vector2(GetComponent<BoxCollider2D>().bounds.extents.x, GetComponent<BoxCollider2D>().bounds.extents.y);
 
         velocity = new Vector2(0, 0);
+        hasBottle = false;
     }
 
     // Update is called once per frame
@@ -57,6 +60,11 @@ public class PlayerController : MonoBehaviour
         Vector2 step = new Vector2(velocity.x,velocity.y);
         transform.Translate(step);
         lastInput = inputX;
+
+        if (Input.GetKeyDown("left ctrl"))
+        {
+            PlaceBottle();
+        }
     }
 
     bool GroundCheck()
@@ -99,4 +107,20 @@ public class PlayerController : MonoBehaviour
         xVel = Mathf.Clamp(xVel, -topSpeed, topSpeed);
         return xVel;
     }
+    void PlaceBottle()
+    {
+        if (hasBottle == false)
+        {
+            Instantiate(bottle, transform.position + new Vector3(0, 5, 0), transform.rotation);
+        }
+        if (hasBottle == true)
+        {
+            hasBottle = false;
+            Instantiate(bottle, transform.position + new Vector3(0, 5, 0), transform.rotation);
+        }
+
+    }
+
+
 }
+  
