@@ -1,9 +1,18 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public event EventHandler<OnJumpedEventArgs> OnJumped;
+    public class OnJumpedEventArgs : EventArgs
+    {
+        public int jumpCount;
+    }
+
+    private int jumpCount;
+
     public float topSpeed;
     public float acceleration;
     public float friction;
@@ -22,6 +31,8 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        jumpCount = 0;
+
         topSpeed = 0.02f;
         acceleration = 0.5f;
         friction = 0.2f;
@@ -57,6 +68,11 @@ public class PlayerController : MonoBehaviour
         Vector2 step = new Vector2(velocity.x,velocity.y);
         transform.Translate(step);
         lastInput = inputX;
+
+        if (Input.GetButtonDown("Jump"))
+        {
+            Jump();
+        }
     }
 
     bool GroundCheck()
@@ -98,5 +114,17 @@ public class PlayerController : MonoBehaviour
         }
         xVel = Mathf.Clamp(xVel, -topSpeed, topSpeed);
         return xVel;
+    }
+
+    void Jump()
+    {
+        jumpCount++;
+
+        OnJumpedEventArgs e = new OnJumpedEventArgs
+        {
+            jumpCount = jumpCount
+        };
+
+        OnJumped?.Invoke(this, e);
     }
 }
