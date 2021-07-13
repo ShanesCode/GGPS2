@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour
     private float lastInput;
     LayerMask groundMask;
 
+    public Animator anim;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -35,6 +37,8 @@ public class PlayerController : MonoBehaviour
         size = new Vector2(GetComponent<BoxCollider2D>().bounds.extents.x, GetComponent<BoxCollider2D>().bounds.extents.y);
 
         velocity = new Vector2(0, 0);
+
+        anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -97,6 +101,7 @@ public class PlayerController : MonoBehaviour
             xVel = Mathf.MoveTowards(xVel, 0, friction * Time.deltaTime);
         }
         xVel = Mathf.Clamp(xVel, -topSpeed, topSpeed);
+        anim.SetFloat("xSpeed", Mathf.Abs(xVel));
         return xVel;
     }
 }
