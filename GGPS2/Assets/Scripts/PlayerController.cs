@@ -113,6 +113,7 @@ public class PlayerController : MonoBehaviour
         Vector2 step = new Vector2(velocity.x,velocity.y);
         transform.Translate(step);
         anim.SetFloat("ySpeed",velocity.y);
+        anim.SetFloat("xSpeed", Mathf.Abs(velocity.x));
         lastInput = inputX;
     }
 
@@ -156,7 +157,6 @@ public class PlayerController : MonoBehaviour
             xVel = Mathf.MoveTowards(xVel, 0, friction * Time.deltaTime);
         }
         xVel = Mathf.Clamp(xVel, -topSpeed, topSpeed);
-        anim.SetFloat("xSpeed", Mathf.Abs(xVel));
         return xVel;
     }
 }
