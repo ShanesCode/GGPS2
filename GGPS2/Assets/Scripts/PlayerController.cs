@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
     LayerMask groundMask;
 
     public GameObject bottle;
+    public GameObject bin;
     public bool hasBottle;
     // Start is called before the first frame update
     void Start()
@@ -109,18 +110,29 @@ public class PlayerController : MonoBehaviour
     }
     void PlaceBottle()
     {
+        print(hasBottle);
+        print(bin.transform.position.x);
+        print(transform.position.x);
         if (hasBottle == false)
         {
-            Instantiate(bottle, transform.position + new Vector3(0, 5, 0), transform.rotation);
+            Instantiate(bottle, transform.position + new Vector3(2, 0, 0), transform.rotation);
         }
         if (hasBottle == true)
         {
-            hasBottle = false;
-            Instantiate(bottle, transform.position + new Vector3(0, 5, 0), transform.rotation);
+            // Calculate distance between player and bin objects
+            float diff = transform.position.x - bin.transform.position.x;
+            if (diff < 2 && diff > -2)
+            {
+                print("this is working");
+                hasBottle = false;
+            }
+            else
+            {
+                hasBottle = false;
+                Instantiate(bottle, transform.position + new Vector3(2, 0, 0), transform.rotation);
+            }
         }
-
     }
-
 
 }
   
