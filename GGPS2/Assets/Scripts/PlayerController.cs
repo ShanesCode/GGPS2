@@ -13,8 +13,15 @@ public class PlayerController : MonoBehaviour
     public float airAcceleration;
     public float gravity;
     public float drag;
-    public Vector2 size;
     public bool grounded;
+    public float jumpDelay;
+    public float jumpClimb;
+    public float jumpClimbLong;
+    public float jumpTimer;
+    public float jumpForce;
+    public bool jumping;
+
+    public Vector2 size;
 
     public Vector2 velocity;
     private float lastInput;
@@ -31,8 +38,14 @@ public class PlayerController : MonoBehaviour
 
         topFallSpeed = 0.02f;
         airAcceleration = 0.2f;
-        gravity = 0.5f;
+        gravity = 0.0005f;
         drag = 0.5f;
+
+        jumpDelay = 0.2f;
+        jumpClimb = 0.5f;
+        jumpClimbLong = 0.75f;
+        jumpForce = 1.0f;
+
         grounded = false;
         groundMask = LayerMask.GetMask("Ground");
         size = new Vector2(GetComponent<BoxCollider2D>().bounds.extents.x, GetComponent<BoxCollider2D>().bounds.extents.y);
@@ -45,32 +58,49 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        string currentAnimation = anim.GetCurrentAnimatorClipInfo(0)[0].clip.name;
+        if (currentAnimation == "jump" && !jumping)
+        {
+            anim.SetBool("jump", false);
+            //jump lockout
+            return;
+        }
 
         float inputX = Input.GetAxis("Horizontal");
-        velocity.x = HandleGroundMovement(velocity.x, inputX);
-
         grounded = GroundCheck();
+
+        velocity.x = HandleGroundMovement(velocity.x, inputX, grounded);
+        if(jumping) velocity.y = HandleJumpVelocity(velocity.y);
+
         if (!grounded)
         {
             velocity.y -= gravity;
-            velocity.y = Mathf.Clamp(velocity.y, -topFallSpeed, 0);
+            velocity.y = Mathf.Clamp(velocity.y, -topFallSpeed, topFallSpeed);
         }
         else
         {
-            velocity.y = 0;
+            if(velocity.y < 0) velocity.y = 0;
+            
+            if (Input.GetButtonDown("Jump")) {
+                anim.SetBool("jump", true);
+                grounded = false;
+            }
         }
 
-        Vector2 step = new Vector2(velocity.x,velocity.y);
+        Vector2 step = new Vector2(velocity.x, velocity.y);
         transform.Translate(step);
-        anim.SetFloat("ySpeed",velocity.y);
+
+        anim.SetFloat("ySpeed", velocity.y);
+        anim.SetFloat("xSpeed", Mathf.Abs(velocity.x));
         lastInput = inputX;
     }
 
     bool GroundCheck()
     {
         Vector2 boxColliderPos = new Vector2(transform.position.x + GetComponent<BoxCollider2D>().offset.x, transform.position.y + GetComponent<BoxCollider2D>().offset.y);
+
         Debug.DrawRay(transform.position, Vector2.down * 2, Color.magenta, 0.01f);
-        RaycastHit2D hit = Physics2D.BoxCast(boxColliderPos, new Vector2(size.x,size.y/2), 0.0f, Vector2.down, size.y, groundMask);
+        RaycastHit2D hit = Physics2D.BoxCast(boxColliderPos, new Vector2(size.x, size.y / 2), 0.0f, Vector2.down, size.y, groundMask);
         if (hit)
         {
             //Debug.Log(hit.collider.gameObject.name);
@@ -87,7 +117,29 @@ public class PlayerController : MonoBehaviour
         return false;
     }
 
-    float HandleGroundMovement(float xVel, float inputX)
+    float HandleJumpVelocity(float yVel)
+    {
+        if(jumping) yVel += jumpForce;
+        if(jumpTimer <= 0) jumping = false;
+        jumpTimer -= Time.deltaTime;
+        return yVel;
+    }
+
+    void Jump()
+    {
+        if (Input.GetButton("Jump"))
+        {
+            jumpTimer = jumpClimbLong;
+        }
+        else
+        {
+            jumpTimer = jumpClimb;
+        }
+
+        jumping = true;
+    }
+
+    float HandleGroundMovement(float xVel, float inputX, bool grounded)
     {
         //if reversing direction
         if ((Mathf.Sign(inputX) != Mathf.Sign(xVel)) && (inputX != 0 && xVel != 0))
@@ -96,16 +148,15 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            xVel = inputX * Time.deltaTime * acceleration + xVel;
+            xVel = xVel + inputX * Time.deltaTime * (grounded? acceleration : airAcceleration) ;
         }
 
         //if slowing or no input then apply friction
         if ((Mathf.Abs(inputX) < Mathf.Abs(lastInput)) || (inputX == 0))
         {
-            xVel = Mathf.MoveTowards(xVel, 0, friction * Time.deltaTime);
+            xVel = Mathf.MoveTowards(xVel, 0, (grounded? friction :drag) * Time.deltaTime);
         }
         xVel = Mathf.Clamp(xVel, -topSpeed, topSpeed);
-        anim.SetFloat("xSpeed", Mathf.Abs(xVel));
         return xVel;
     }
 }
