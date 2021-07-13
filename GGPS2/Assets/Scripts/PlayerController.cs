@@ -32,6 +32,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        transform.position = GameObject.FindWithTag("InitialSpawn").transform.position;
         topSpeed = 0.02f;
         acceleration = 0.5f;
         friction = 0.2f;
