@@ -13,8 +13,15 @@ public class PlayerController : MonoBehaviour
     public float airAcceleration;
     public float gravity;
     public float drag;
-    public Vector2 size;
     public bool grounded;
+    public float jumpDelay;
+    public float jumpClimb;
+    public float jumpClimbLong;
+    public float jumpTimer;
+    public float jumpForce;
+    public bool jumping;
+
+    public Vector2 size;
 
     public Vector2 velocity;
     private float lastInput;
@@ -31,8 +38,14 @@ public class PlayerController : MonoBehaviour
 
         topFallSpeed = 0.02f;
         airAcceleration = 0.2f;
-        gravity = 0.5f;
+        gravity = 0.0005f;
         drag = 0.5f;
+
+        jumpDelay = 0.2f;
+        jumpClimb = 0.5f;
+        jumpClimbLong = 0.75f;
+        jumpForce = 1.0f;
+
         grounded = false;
         groundMask = LayerMask.GetMask("Ground");
         size = new Vector2(GetComponent<BoxCollider2D>().bounds.extents.x, GetComponent<BoxCollider2D>().bounds.extents.y);
@@ -45,6 +58,36 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(jumpTimer > 0)
+        {
+            if (!jumping)
+            {
+                jumpTimer -= Time.deltaTime;
+                if (jumpTimer <= 0)
+                {
+                    jumping = true;
+                    if (Input.GetButton("Jump"))
+                    {
+                        jumpTimer = jumpClimbLong;
+                    }
+                    else
+                    {
+                        jumpTimer = jumpClimb;
+                    }
+                }
+                return;
+            }
+            else
+            {
+                jumpTimer -= Time.deltaTime;
+                velocity.y += jumpForce;
+                if(jumpTimer <= 0)
+                {
+                    jumping = false;
+                }
+            }
+            
+        }
 
         float inputX = Input.GetAxis("Horizontal");
         velocity.x = HandleGroundMovement(velocity.x, inputX);
@@ -53,11 +96,18 @@ public class PlayerController : MonoBehaviour
         if (!grounded)
         {
             velocity.y -= gravity;
-            velocity.y = Mathf.Clamp(velocity.y, -topFallSpeed, 0);
+            velocity.y = Mathf.Clamp(velocity.y, -topFallSpeed, topFallSpeed);
         }
         else
         {
-            velocity.y = 0;
+            if(velocity.y < 0)
+            {
+                velocity.y = 0;
+            }
+            if (Input.GetButton("Jump"))
+            {
+                jumpTimer = jumpDelay;
+            }
         }
 
         Vector2 step = new Vector2(velocity.x,velocity.y);
@@ -69,6 +119,7 @@ public class PlayerController : MonoBehaviour
     bool GroundCheck()
     {
         Vector2 boxColliderPos = new Vector2(transform.position.x + GetComponent<BoxCollider2D>().offset.x, transform.position.y + GetComponent<BoxCollider2D>().offset.y);
+
         Debug.DrawRay(transform.position, Vector2.down * 2, Color.magenta, 0.01f);
         RaycastHit2D hit = Physics2D.BoxCast(boxColliderPos, new Vector2(size.x,size.y/2), 0.0f, Vector2.down, size.y, groundMask);
         if (hit)
