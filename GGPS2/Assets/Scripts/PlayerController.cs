@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class PlayerController : MonoBehaviour
 {
     public float topSpeed;
@@ -44,6 +45,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         float inputX = Input.GetAxis("Horizontal");
         velocity.x = HandleGroundMovement(velocity.x, inputX);
 
