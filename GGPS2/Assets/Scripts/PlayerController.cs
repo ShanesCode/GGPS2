@@ -62,6 +62,7 @@ public class PlayerController : MonoBehaviour
 
         Vector2 step = new Vector2(velocity.x,velocity.y);
         transform.Translate(step);
+        anim.SetFloat("ySpeed",velocity.y);
         lastInput = inputX;
     }
 
