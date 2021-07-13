@@ -65,12 +65,13 @@ public class PlayerController : MonoBehaviour
 
     bool GroundCheck()
     {
+        Vector2 boxColliderPos = new Vector2(transform.position.x + GetComponent<BoxCollider2D>().offset.x, transform.position.y + GetComponent<BoxCollider2D>().offset.y);
         Debug.DrawRay(transform.position, Vector2.down * 2, Color.magenta, 0.01f);
-        RaycastHit2D hit = Physics2D.BoxCast(transform.position, new Vector2(size.x,size.y/2), 0.0f, Vector2.down, size.y, groundMask);
+        RaycastHit2D hit = Physics2D.BoxCast(boxColliderPos, new Vector2(size.x,size.y/2), 0.0f, Vector2.down, size.y, groundMask);
         if (hit)
         {
             //Debug.Log(hit.collider.gameObject.name);
-            float distance = Mathf.Abs(hit.point.y - transform.position.y);
+            float distance = Mathf.Abs(hit.point.y - boxColliderPos.y);
             if (distance > size.y)
             {
                 return false;
