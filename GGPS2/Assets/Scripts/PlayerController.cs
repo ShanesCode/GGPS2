@@ -29,7 +29,8 @@ public class PlayerController : MonoBehaviour
 
     
     public Animator anim;
-
+    private Transform spr;
+    private bool left;
     // Start is called before the first frame update
     void Start()
     {
@@ -55,7 +56,11 @@ public class PlayerController : MonoBehaviour
         velocity = new Vector2(0, 0);
 
         anim = GetComponent<Animator>();
+<<<<<<< HEAD
         
+=======
+        spr = transform.GetChild(0);
+>>>>>>> main
     }
 
     // Update is called once per frame
@@ -70,6 +75,7 @@ public class PlayerController : MonoBehaviour
         }
 
         float inputX = Input.GetAxis("Horizontal");
+
         grounded = GroundCheck();
 
         velocity.x = HandleGroundMovement(velocity.x, inputX, grounded);
@@ -95,6 +101,20 @@ public class PlayerController : MonoBehaviour
 
         anim.SetFloat("ySpeed", velocity.y);
         anim.SetFloat("xSpeed", Mathf.Abs(velocity.x));
+        if (left && velocity.x < 0)
+        {
+            Vector3 theScale = transform.localScale;
+            theScale.x *= -1;
+            transform.localScale = theScale;
+            left = false;
+        }
+        if (!left && velocity.x > 0)
+        {
+            Vector3 theScale = transform.localScale;
+            theScale.x *= -1;
+            transform.localScale = theScale;
+            left = true;
+        }
         lastInput = inputX;
 
         
@@ -163,6 +183,11 @@ public class PlayerController : MonoBehaviour
         }
         xVel = Mathf.Clamp(xVel, -topSpeed, topSpeed);
         return xVel;
+    }
+    
+    void Death()
+    {
+
     }
 
     void OnCollisionEnter2D(Collision2D c)
