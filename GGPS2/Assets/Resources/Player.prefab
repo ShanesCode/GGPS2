@@ -350,6 +350,7 @@ GameObject:
   - component: {fileID: 5749075268182060992}
   - component: {fileID: 5749075268182060995}
   - component: {fileID: 5749075268182060994}
+  - component: {fileID: -5522614014910559132}
   m_Layer: 2
   m_Name: Player
   m_TagString: Untagged
@@ -417,8 +418,14 @@ MonoBehaviour:
   airAcceleration: 0
   gravity: 0
   drag: 0
-  size: {x: 0, y: 0}
   grounded: 0
+  jumpDelay: 0
+  jumpClimb: 0
+  jumpClimbLong: 0
+  jumpTimer: 0
+  jumpForce: 0
+  jumping: 0
+  size: {x: 0, y: 0}
   velocity: {x: 0, y: 0}
   anim: {fileID: 0}
 --- !u!95 &5749075268182060994
@@ -440,6 +447,22 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &-5522614014910559132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5749075268182060997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee6721ef43c88584f9ddacede831fadb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bottle: {fileID: 8032861064615473417, guid: 15641d832ff17dd4da82423c32b7a70c, type: 3}
+  bin: {fileID: 1691670446537537924, guid: 0a8ac196820a8c5408d3193ee578430e, type: 3}
+  hasBottle: 0
+  bottles: []
 --- !u!1 &5749075268475602957
 GameObject:
   m_ObjectHideFlags: 0
