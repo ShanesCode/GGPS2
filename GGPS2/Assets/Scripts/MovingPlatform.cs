@@ -16,8 +16,8 @@ public class MovingPlatform : MonoBehaviour
         range = 7.0f;
 
         goals = new Vector2[2];
-        goals[0] = (Vector2)transform.position - new Vector2(range,0);
-        goals[1] = (Vector2)transform.position + new Vector2(range,0);
+        goals[0] = (Vector2)transform.localPosition - new Vector2(range,0);
+        goals[1] = (Vector2)transform.localPosition + new Vector2(range,0);
 
         activeGoal = 0;
     }
@@ -26,14 +26,14 @@ public class MovingPlatform : MonoBehaviour
     void Update()
     {
         CheckProximity(goals[activeGoal]);
-        transform.Translate(new Vector2(speed * Time.deltaTime, 0));
+        transform.Translate(new Vector2(speed * Time.deltaTime * Mathf.Sign(goals[activeGoal].x - transform.localPosition.x), 0));
     }
 
     void CheckProximity(Vector2 goal)
     {
-        if (Vector2.Distance(transform.position, goal) < 1.0f)
+        if (Mathf.Abs(transform.localPosition.x - goal.x) < 0.5f)
         {
-            Debug.Log("i mdae it");
+            Debug.Log("i made it");
             activeGoal += 1;
             if (activeGoal >= goals.Length) activeGoal = 0;
         }
