@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class PlayerController : MonoBehaviour
 {
     public float topSpeed;
@@ -12,8 +13,15 @@ public class PlayerController : MonoBehaviour
     public float airAcceleration;
     public float gravity;
     public float drag;
-    public Vector2 size;
     public bool grounded;
+    public float jumpDelay;
+    public float jumpClimb;
+    public float jumpClimbLong;
+    public float jumpTimer;
+    public float jumpForce;
+    public bool jumping;
+
+    public Vector2 size;
 
     public Vector2 velocity;
     private float lastInput;
@@ -33,8 +41,14 @@ public class PlayerController : MonoBehaviour
 
         topFallSpeed = 0.02f;
         airAcceleration = 0.2f;
-        gravity = 0.5f;
+        gravity = 0.0005f;
         drag = 0.5f;
+
+        jumpDelay = 0.2f;
+        jumpClimb = 0.5f;
+        jumpClimbLong = 0.75f;
+        jumpForce = 1.0f;
+
         grounded = false;
         groundMask = LayerMask.GetMask("Ground");
         size = new Vector2(GetComponent<BoxCollider2D>().bounds.extents.x, GetComponent<BoxCollider2D>().bounds.extents.y);
@@ -48,26 +62,49 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float inputX = Input.GetAxis("Horizontal");
-        velocity.x = HandleGroundMovement(velocity.x, inputX);
+        string currentAnimation = anim.GetCurrentAnimatorClipInfo(0)[0].clip.name;
+        if (currentAnimation == "jump" && !jumping)
+        {
+            anim.SetBool("jump", false);
+            //jump lockout
+            return;
+        }
 
+        float inputX = Input.GetAxis("Horizontal");
         grounded = GroundCheck();
+
+        velocity.x = HandleGroundMovement(velocity.x, inputX, grounded);
+        if (jumping) velocity.y = HandleJumpVelocity(velocity.y);
+
         if (!grounded)
         {
             velocity.y -= gravity;
-            velocity.y = Mathf.Clamp(velocity.y, -topFallSpeed, 0);
+            velocity.y = Mathf.Clamp(velocity.y, -topFallSpeed, topFallSpeed);
         }
         else
         {
-            velocity.y = 0;
+            if (velocity.y < 0) velocity.y = 0;
+
+            if (Input.GetButtonDown("Jump")) {
+                anim.SetBool("jump", true);
+                grounded = false;
+            }
         }
 
-        Vector2 step = new Vector2(velocity.x,velocity.y);
+        Vector2 step = new Vector2(velocity.x, velocity.y);
         transform.Translate(step);
+
+        anim.SetFloat("ySpeed", velocity.y);
+        anim.SetFloat("xSpeed", Mathf.Abs(velocity.x));
         lastInput = inputX;
 
-        if (Input.GetKeyDown("left ctrl"))
+        if (Input.GetKeyDown("r"))
         {
+            CreateBottle();
+        }
+
+        if (Input.GetKeyDown("e"))
+        { 
             PlaceBottle();
         }
     }
@@ -75,8 +112,9 @@ public class PlayerController : MonoBehaviour
     bool GroundCheck()
     {
         Vector2 boxColliderPos = new Vector2(transform.position.x + GetComponent<BoxCollider2D>().offset.x, transform.position.y + GetComponent<BoxCollider2D>().offset.y);
+
         Debug.DrawRay(transform.position, Vector2.down * 2, Color.magenta, 0.01f);
-        RaycastHit2D hit = Physics2D.BoxCast(boxColliderPos, new Vector2(size.x,size.y/2), 0.0f, Vector2.down, size.y, groundMask);
+        RaycastHit2D hit = Physics2D.BoxCast(boxColliderPos, new Vector2(size.x, size.y / 2), 0.0f, Vector2.down, size.y, groundMask);
         if (hit)
         {
             //Debug.Log(hit.collider.gameObject.name);
@@ -93,7 +131,29 @@ public class PlayerController : MonoBehaviour
         return false;
     }
 
-    float HandleGroundMovement(float xVel, float inputX)
+    float HandleJumpVelocity(float yVel)
+    {
+        if (jumping) yVel += jumpForce;
+        if (jumpTimer <= 0) jumping = false;
+        jumpTimer -= Time.deltaTime;
+        return yVel;
+    }
+
+    void Jump()
+    {
+        if (Input.GetButton("Jump"))
+        {
+            jumpTimer = jumpClimbLong;
+        }
+        else
+        {
+            jumpTimer = jumpClimb;
+        }
+
+        jumping = true;
+    }
+
+    float HandleGroundMovement(float xVel, float inputX, bool grounded)
     {
         //if reversing direction
         if ((Mathf.Sign(inputX) != Mathf.Sign(xVel)) && (inputX != 0 && xVel != 0))
@@ -102,34 +162,56 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            xVel = inputX * Time.deltaTime * acceleration + xVel;
+            xVel = xVel + inputX * Time.deltaTime * (grounded ? acceleration : airAcceleration);
         }
 
         //if slowing or no input then apply friction
         if ((Mathf.Abs(inputX) < Mathf.Abs(lastInput)) || (inputX == 0))
         {
-            xVel = Mathf.MoveTowards(xVel, 0, friction * Time.deltaTime);
+            xVel = Mathf.MoveTowards(xVel, 0, (grounded ? friction : drag) * Time.deltaTime);
         }
         xVel = Mathf.Clamp(xVel, -topSpeed, topSpeed);
-        anim.SetFloat("xSpeed", Mathf.Abs(xVel));
         return xVel;
     }
     void PlaceBottle()
     {
-        print(hasBottle);
-        print(bin.transform.position.x);
-        print(transform.position.x);
+        
         if (hasBottle == false)
         {
-            Instantiate(bottle, transform.position + new Vector3(2, 0, 0), transform.rotation);
+            GameObject nearest_bottle = null;
+            float shortest_distance_bottle = 100;
+            GameObject[] allObjects = Object.FindObjectsOfType<GameObject>();
+            foreach (GameObject go in allObjects)
+                if (go.tag == "Bottle")
+                {
+                    float working_diff = Mathf.Abs(transform.position.x - go.transform.position.x);
+                    print(working_diff);
+                    print(shortest_distance_bottle);
+                    if (working_diff < shortest_distance_bottle)
+                    {
+                        shortest_distance_bottle = working_diff;
+                        nearest_bottle = go;
+                        print(shortest_distance_bottle);
+                    }
+                }
+            if (shortest_distance_bottle < 2 && nearest_bottle != null)
+            {
+                Destroy(nearest_bottle);
+                hasBottle = true;
+            }
+            else
+            {
+                Instantiate(bottle, transform.position + new Vector3(2, 0, 0), transform.rotation);
+                hasBottle = false;
+            }
+            
         }
-        if (hasBottle == true)
+        else 
         {
             // Calculate distance between player and bin objects
             float diff = transform.position.x - bin.transform.position.x;
             if (diff < 2 && diff > -2)
             {
-                print("this is working");
                 hasBottle = false;
             }
             else
@@ -140,5 +222,15 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    void CreateBottle()
+    {
+        print(hasBottle);
+        if (hasBottle == false)
+            {
+                hasBottle = true;
+            } 
+    }
+
 }
+
   
