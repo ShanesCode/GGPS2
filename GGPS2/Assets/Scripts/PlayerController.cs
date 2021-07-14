@@ -182,16 +182,13 @@ public class PlayerController : MonoBehaviour
             float shortest_distance_bottle = 100;
             GameObject[] allObjects = Object.FindObjectsOfType<GameObject>();
             foreach (GameObject go in allObjects)
-                if (go.tag == "Bottle")
+                if (go.CompareTag("Bottle"))
                 {
                     float working_diff = Mathf.Abs(transform.position.x - go.transform.position.x);
-                    print(working_diff);
-                    print(shortest_distance_bottle);
                     if (working_diff < shortest_distance_bottle)
                     {
                         shortest_distance_bottle = working_diff;
                         nearest_bottle = go;
-                        print(shortest_distance_bottle);
                     }
                 }
             if (shortest_distance_bottle < 2 && nearest_bottle != null)
@@ -224,7 +221,6 @@ public class PlayerController : MonoBehaviour
 
     void CreateBottle()
     {
-        print(hasBottle);
         if (hasBottle == false)
             {
                 hasBottle = true;
