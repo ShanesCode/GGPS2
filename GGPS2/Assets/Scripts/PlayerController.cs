@@ -27,9 +27,7 @@ public class PlayerController : MonoBehaviour
     private float lastInput;
     LayerMask groundMask;
 
-    public GameObject bottle;
-    public GameObject bin;
-    public bool hasBottle;
+    
     public Animator anim;
 
     // Start is called before the first frame update
@@ -56,7 +54,7 @@ public class PlayerController : MonoBehaviour
         velocity = new Vector2(0, 0);
 
         anim = GetComponent<Animator>();
-        hasBottle = false;
+        
     }
 
     // Update is called once per frame
@@ -98,15 +96,7 @@ public class PlayerController : MonoBehaviour
         anim.SetFloat("xSpeed", Mathf.Abs(velocity.x));
         lastInput = inputX;
 
-        if (Input.GetKeyDown("r"))
-        {
-            CreateBottle();
-        }
-
-        if (Input.GetKeyDown("e"))
-        { 
-            PlaceBottle();
-        }
+        
     }
 
     bool GroundCheck()
@@ -173,60 +163,6 @@ public class PlayerController : MonoBehaviour
         xVel = Mathf.Clamp(xVel, -topSpeed, topSpeed);
         return xVel;
     }
-    void PlaceBottle()
-    {
-        
-        if (hasBottle == false)
-        {
-            GameObject nearest_bottle = null;
-            float shortest_distance_bottle = 100;
-            GameObject[] allObjects = Object.FindObjectsOfType<GameObject>();
-            foreach (GameObject go in allObjects)
-                if (go.CompareTag("Bottle"))
-                {
-                    float working_diff = Mathf.Abs(transform.position.x - go.transform.position.x);
-                    if (working_diff < shortest_distance_bottle)
-                    {
-                        shortest_distance_bottle = working_diff;
-                        nearest_bottle = go;
-                    }
-                }
-            if (shortest_distance_bottle < 2 && nearest_bottle != null)
-            {
-                Destroy(nearest_bottle);
-                hasBottle = true;
-            }
-            else
-            {
-                Instantiate(bottle, transform.position + new Vector3(2, 0, 0), transform.rotation);
-                hasBottle = false;
-            }
-            
-        }
-        else 
-        {
-            // Calculate distance between player and bin objects
-            float diff = transform.position.x - bin.transform.position.x;
-            if (diff < 2 && diff > -2)
-            {
-                hasBottle = false;
-            }
-            else
-            {
-                hasBottle = false;
-                Instantiate(bottle, transform.position + new Vector3(2, 0, 0), transform.rotation);
-            }
-        }
-    }
-
-    void CreateBottle()
-    {
-        if (hasBottle == false)
-            {
-                hasBottle = true;
-            } 
-    }
-
 }
 
   
