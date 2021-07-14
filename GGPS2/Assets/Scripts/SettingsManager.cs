@@ -14,7 +14,8 @@ public class SettingsManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        volume.value = PlayerPrefs.GetFloat("volume", 0.5f);
+        volume.onValueChanged.AddListener(SetVolume);
     }
 
     // Update is called once per frame
