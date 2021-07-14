@@ -173,6 +173,11 @@ public class PlayerController : MonoBehaviour
         xVel = Mathf.Clamp(xVel, -topSpeed, topSpeed);
         return xVel;
     }
+    
+    void Death()
+    {
+
+    }
 
     void OnCollisionEnter2D(Collision2D c)
     {
