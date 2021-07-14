@@ -55,7 +55,11 @@ public class PlayerController : MonoBehaviour
         velocity = new Vector2(0, 0);
 
         anim = GetComponent<Animator>();
+<<<<<<< HEAD
         
+=======
+        spr = transform.GetChild(0);
+>>>>>>> main
     }
 
     // Update is called once per frame
