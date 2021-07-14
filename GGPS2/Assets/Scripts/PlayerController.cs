@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
         jumpDelay = 0.2f;
         jumpClimb = 0.5f;
         jumpClimbLong = 0.75f;
-        jumpForce = 1.0f;
+        jumpForce = 0.02f;
 
         grounded = false;
         groundMask = LayerMask.GetMask("Ground");
@@ -159,5 +159,10 @@ public class PlayerController : MonoBehaviour
         }
         xVel = Mathf.Clamp(xVel, -topSpeed, topSpeed);
         return xVel;
+    }
+
+    void OnCollisionEnter2D(Collision2D c)
+    {
+        //empty
     }
 }
