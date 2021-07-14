@@ -77,7 +77,7 @@ public class BottleController : MonoBehaviour
                     foreach (GameObject go in bottles)
                         {
                             bottle_collider = go.GetComponent<BoxCollider2D>();
-                            if (placement_coordinates.x + (bottle_collider.size.x / 2) < bottle_collider.bounds.max.x && placement_coordinates.x + (bottle_collider.size.x / 2) > bottle_collider.bounds.min.x || placement_coordinates.x - (bottle_collider.size.x / 2) < bottle_collider.bounds.max.x && placement_coordinates.x - (bottle_collider.size.x / 2) > bottle_collider.bounds.min.x)
+                            if (placement_coordinates.x + ((bottle_collider.size.x * bottle_collider.transform.localScale.x) / 2) <= bottle_collider.bounds.max.x && placement_coordinates.x + ((bottle_collider.size.x * bottle_collider.transform.localScale.x) / 2) >= bottle_collider.bounds.min.x || placement_coordinates.x - ((bottle_collider.size.x * bottle_collider.transform.localScale.x) / 2) <= bottle_collider.bounds.max.x && placement_coordinates.x - ((bottle_collider.size.x * bottle_collider.transform.localScale.x) / 2) >= bottle_collider.bounds.min.x)
                             {
                                 if (top_of_stack != null)
                                 { 
@@ -95,7 +95,7 @@ public class BottleController : MonoBehaviour
                     if (top_of_stack != null)
                     {
                         bottle_collider = top_of_stack.GetComponent<BoxCollider2D>();
-                        bottles.Add(Instantiate(bottle, new Vector3(top_of_stack.transform.position.x, top_of_stack.transform.position.y + (bottle_collider.size.y + 1), 0), transform.rotation));
+                        bottles.Add(Instantiate(bottle, new Vector3(top_of_stack.transform.position.x, top_of_stack.transform.position.y + (bottle_collider.size.y + 3), 0), transform.rotation));
                     }
                     else
                     {
