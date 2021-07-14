@@ -24,9 +24,9 @@ public class LevelSelect : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void GoToRoom(int selectedRoom)
+    public void GoToLevel(int selectedLevel)
     {
-        StartCoroutine(LoadYourAsyncScene("Room" + selectedRoom));
+        StartCoroutine(LoadYourAsyncScene("Level" + selectedLevel));
     }
 
     IEnumerator LoadYourAsyncScene(string scene)
