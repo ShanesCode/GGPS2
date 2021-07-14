@@ -98,12 +98,16 @@ public class PlayerController : MonoBehaviour
         anim.SetFloat("xSpeed", Mathf.Abs(velocity.x));
         if (left && velocity.x < 0)
         {
-            spr.localScale = spr.localScale * new Vector2(-1, 1);
+            Vector3 theScale = transform.localScale;
+            theScale.x *= -1;
+            transform.localScale = theScale;
             left = false;
         }
         if (!left && velocity.x > 0)
         {
-            spr.localScale = spr.localScale * new Vector2(-1, 1);
+            Vector3 theScale = transform.localScale;
+            theScale.x *= -1;
+            transform.localScale = theScale;
             left = true;
         }
         lastInput = inputX;
