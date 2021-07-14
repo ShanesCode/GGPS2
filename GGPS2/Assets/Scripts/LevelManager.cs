@@ -11,12 +11,28 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private List<EndRoomTrigger> endRoomTriggers;
     [SerializeField] private List<GameObject> roomSpawnPoints;
     [SerializeField] private GameObject endRoomUI;
+    [SerializeField] private GameObject pauseMenu;
+    [SerializeField] private GameObject settings;
+    GameObject[] test;
+
+    public bool paused;
     // Start is called before the first frame update
     void Start()
     {
+        Time.timeScale = 1;
+        paused = false;
+
         for (int i = 0; i < endRoomTriggers.Count; i++)
         {
             endRoomTriggers[i].GetComponent<EndRoomTrigger>().OnTrigger += LevelManager_OnTrigger;
+        }
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            TogglePause();
         }
     }
 
@@ -24,6 +40,8 @@ public class LevelManager : MonoBehaviour
     {
         // Open End Room UI
         Debug.Log("Room complete: " + e.roomNumber);
+        Time.timeScale = 0;
+        paused = true;
         endRoomUI.SetActive(true);
         nextRoomNumber = e.roomNumber;
     }
@@ -47,6 +65,8 @@ public class LevelManager : MonoBehaviour
     public void GoToNextRoom()
     {
         // Go to next room
+        Time.timeScale = 1;
+        paused = false;
         endRoomUI.SetActive(false);
         player.transform.position = roomSpawnPoints[nextRoomNumber].transform.position;
     }
@@ -63,5 +83,27 @@ public class LevelManager : MonoBehaviour
         // Go to main menu
         endRoomUI.SetActive(false);
         StartCoroutine(LoadYourAsyncScene("MainMenuScene"));
+    }
+
+    private void PauseGame()
+    {
+        Time.timeScale = 0;
+        paused = true;
+        pauseMenu.SetActive(true);
+    }
+
+    public void TogglePause()
+    {
+        if (!paused)
+        {
+            PauseGame();
+        }
+        else
+        {
+            Time.timeScale = 1;
+            pauseMenu.SetActive(false);
+            settings.SetActive(false);
+            paused = false;
+        }
     }
 }

@@ -5,6 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuController : MonoBehaviour
 {
+    public GameObject levelSelect;
+    public GameObject achievements;
+    public GameObject settings;
     // Start is called before the first frame update
     void Start()
     {
@@ -41,16 +44,22 @@ public class MainMenuController : MonoBehaviour
     public void GoToLevelSelect()
     {
         // Show level select UI
+        levelSelect.SetActive(true);
+        gameObject.SetActive(false);
     }
 
     public void GoToAchievements()
     {
         // Show achievements UI
+        achievements.SetActive(true);
+        gameObject.SetActive(false);
     }
 
     public void GoToSettings()
     {
         // Show settings UI
+        settings.SetActive(true);
+        gameObject.SetActive(false);
     }
 
     public void Quit()
