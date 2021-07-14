@@ -7,6 +7,7 @@ public class BottleController : MonoBehaviour
     public GameObject bottle;
     public GameObject bin;
     public bool hasBottle;
+    public List<GameObject> bottles;
 
     // Start is called before the first frame update
     void Start()
@@ -29,45 +30,35 @@ public class BottleController : MonoBehaviour
     }
     void PlaceBottle()
     {
-
         if (hasBottle == false)
         {
             GameObject nearest_bottle = null;
             float shortest_distance_bottle = 100;
-            GameObject[] allObjects = Object.FindObjectsOfType<GameObject>();
-
+            
             // Iterates through all game objects and gets those with tag Bottle
-            foreach (GameObject go in allObjects)
-                if (go.CompareTag("Bottle"))
+            foreach (GameObject go in bottles)
+             {
+                    
+                // Calculates the distance between the player and the current bottle being checked
+                float working_diff = Mathf.Abs(transform.position.x - go.transform.position.x);
+                    
+                // If the current bottle is nearer to the player than the previous nearest, it replaces that bottle
+                if (working_diff < shortest_distance_bottle)
                 {
-
-                    // Calculates the distance between the player and the current bottle being checked
-                    float working_diff = Mathf.Abs(transform.position.x - go.transform.position.x);
-
-                    // If the current bottle is nearer to the player than the previous nearest, it replaces that bottle
-                    if (working_diff < shortest_distance_bottle)
-                    {
-                        shortest_distance_bottle = working_diff;
-                        nearest_bottle = go;
-                    }
+                    shortest_distance_bottle = working_diff;
+                    nearest_bottle = go;
                 }
+             }
 
             // If the nearest bottle is within the specified distance destroy it and change the player hasBottle state
             if (shortest_distance_bottle < 2 && nearest_bottle != null)
             {
+                bottles.Remove(nearest_bottle);
                 Destroy(nearest_bottle);
                 hasBottle = true;
             }
-
-            // If there is no bottle yet placed or no bottle within range, place a new bottle
-            else
-            {
-                Instantiate(bottle, transform.position + new Vector3(2, 0, 0), transform.rotation);
-                hasBottle = false;
-            }
-
         }
-        else
+        else 
         {
             // Calculate distance between player and bin objects
             float diff = transform.position.x - bin.transform.position.x;
@@ -77,8 +68,48 @@ public class BottleController : MonoBehaviour
             }
             else
             {
+                
+                Vector3 placement_coordinates = transform.position + new Vector3(2, 0, 0);
+                BoxCollider2D bottle_collider;
+                GameObject top_of_stack = null;
+                if (bottles.Count > 0)
+                {
+                    foreach (GameObject go in bottles)
+                        {
+                            bottle_collider = go.GetComponent<BoxCollider2D>();
+                            if (placement_coordinates.x + (bottle_collider.size.x / 2) < bottle_collider.bounds.max.x && placement_coordinates.x + (bottle_collider.size.x / 2) > bottle_collider.bounds.min.x || placement_coordinates.x - (bottle_collider.size.x / 2) < bottle_collider.bounds.max.x && placement_coordinates.x - (bottle_collider.size.x / 2) > bottle_collider.bounds.min.x)
+                            {
+                                if (top_of_stack != null)
+                                { 
+                                    if (go.transform.position.y > top_of_stack.transform.position.y)
+                                    {
+                                        top_of_stack = go;
+                                    }
+                                }
+                                else
+                                {
+                                    top_of_stack = go;
+                                }
+                            }
+                        }
+                    if (top_of_stack != null)
+                    {
+                        bottle_collider = top_of_stack.GetComponent<BoxCollider2D>();
+                        bottles.Add(Instantiate(bottle, new Vector3(top_of_stack.transform.position.x, top_of_stack.transform.position.y + (bottle_collider.size.y + 1), 0), transform.rotation));
+                    }
+                    else
+                    {
+                        bottles.Add(Instantiate(bottle, transform.position + new Vector3(2, 0, 0), transform.rotation));
+                    }
+                }
+                    
+                else
+                {
+                    bottles.Add(Instantiate(bottle, transform.position + new Vector3(2, 0, 0), transform.rotation));
+                }
+
+
                 hasBottle = false;
-                Instantiate(bottle, transform.position + new Vector3(2, 0, 0), transform.rotation);
             }
         }
     }
@@ -86,40 +117,9 @@ public class BottleController : MonoBehaviour
     void CreateBottle()
     {
         if (hasBottle == false)
-        {
-            hasBottle = true;
-        }
+            {
+                hasBottle = true;
+            } 
     }
-
-    //void CheckSpace()
-    //{
-    //    Vector3 placement_coordinates = transform.position + new Vector3(2, 0, 0);
-    //    float check_coordinates;
-    //    BoxCollider2D bottle_collider;
-    //    Vector2 collider_size;
-    //    float range_x;
-    //    float range_y;
-    //    foreach (GameObject go in allObjects)
-    //        if (go.tag == "Bottle")
-    //        {
-    //            check_coordinates = go.transform.position.x - placement_coordinates.x;
-    //            bottle_collider = go.GetComponent<BoxCollider2D>();
-    //            collider_size = bottle_collider.size;
-    //            range_x = go.transform.position.x - (collider_size.x / 2);
-    //            range_y = go.transform.position.y - (collider_size.y / 2);
-    //            if (check_coordinates < (range_x + collider_size.x) ^ check_coordinates > range_x)
-    //            {
-    //                Instantiate(bottle, transform.position + new Vector3(2, collider_size.y, 0), transform.rotation);
-    //            }
-    //            else
-    //            {
-    //                Instantiate(bottle, transform.position + new Vector3(2, 0, 0), transform.rotation);
-    //            }
-
-
-    //        }
-
-    //    hasBottle = false;
-    //}
 
 }

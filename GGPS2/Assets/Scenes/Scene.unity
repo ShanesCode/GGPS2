@@ -185,6 +185,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0f971990e67c97d47a54c71f400cf1fe, type: 3}
+--- !u!1 &514932844 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5749075268182060997, guid: dcf53bbaddb713e4ebcaf304bcc16c11, type: 3}
+  m_PrefabInstance: {fileID: 2992795082403043998}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &514932849
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 514932844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee6721ef43c88584f9ddacede831fadb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bottle: {fileID: 4059492583039086145, guid: b88103461f1bb4749bf70d98b4275ae9, type: 3}
+  bin: {fileID: 615299308}
+  hasBottle: 0
+  bottles: []
 --- !u!1 &615299308 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6322188434096276550, guid: 0f971990e67c97d47a54c71f400cf1fe, type: 3}
