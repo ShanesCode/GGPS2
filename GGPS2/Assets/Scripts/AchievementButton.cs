@@ -25,11 +25,11 @@ public class AchievementButton : MonoBehaviour
         if (!achievement.achieved)
         {
             gameObject.GetComponent<Button>().interactable = false;
-            gameObject.GetComponent<Image>().color = new Color(gameObject.GetComponent<Image>().color.r, gameObject.GetComponent<Image>().color.r, gameObject.GetComponent<Image>().color.r, 0.2f);
+            gameObject.GetComponent<Image>().color = new Color(gameObject.GetComponent<Image>().color.r, gameObject.GetComponent<Image>().color.g, gameObject.GetComponent<Image>().color.b, 0.5f);
         } else
         {
             gameObject.GetComponent<Button>().interactable = true;
-            gameObject.GetComponent<Image>().color = new Color(gameObject.GetComponent<Image>().color.r, gameObject.GetComponent<Image>().color.r, gameObject.GetComponent<Image>().color.r, 1.0f);
+            gameObject.GetComponent<Image>().color = new Color(gameObject.GetComponent<Image>().color.r, gameObject.GetComponent<Image>().color.g, gameObject.GetComponent<Image>().color.b, 1.0f);
         }
     }
 

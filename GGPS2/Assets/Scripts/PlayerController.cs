@@ -27,9 +27,9 @@ public class PlayerController : MonoBehaviour
     private float lastInput;
     LayerMask groundMask;
 
-    
     public Animator anim;
-
+    private Transform spr;
+    private bool left;
     // Start is called before the first frame update
     void Start()
     {
@@ -55,7 +55,7 @@ public class PlayerController : MonoBehaviour
         velocity = new Vector2(0, 0);
 
         anim = GetComponent<Animator>();
-        
+        spr = transform.GetChild(0);
     }
 
     // Update is called once per frame
@@ -70,10 +70,11 @@ public class PlayerController : MonoBehaviour
         }
 
         float inputX = Input.GetAxis("Horizontal");
+
         grounded = GroundCheck();
 
         velocity.x = HandleGroundMovement(velocity.x, inputX, grounded);
-        if (jumping) velocity.y = HandleJumpVelocity(velocity.y);
+        if(jumping) velocity.y = HandleJumpVelocity(velocity.y);
 
         if (!grounded)
         {
@@ -82,8 +83,8 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            if (velocity.y < 0) velocity.y = 0;
-
+            if(velocity.y < 0) velocity.y = 0;
+            
             if (Input.GetButtonDown("Jump")) {
                 anim.SetBool("jump", true);
                 grounded = false;
@@ -95,9 +96,21 @@ public class PlayerController : MonoBehaviour
 
         anim.SetFloat("ySpeed", velocity.y);
         anim.SetFloat("xSpeed", Mathf.Abs(velocity.x));
+        if (left && velocity.x < 0)
+        {
+            Vector3 theScale = transform.localScale;
+            theScale.x *= -1;
+            transform.localScale = theScale;
+            left = false;
+        }
+        if (!left && velocity.x > 0)
+        {
+            Vector3 theScale = transform.localScale;
+            theScale.x *= -1;
+            transform.localScale = theScale;
+            left = true;
+        }
         lastInput = inputX;
-
-        
     }
 
     bool GroundCheck()
@@ -124,8 +137,8 @@ public class PlayerController : MonoBehaviour
 
     float HandleJumpVelocity(float yVel)
     {
-        if (jumping) yVel += jumpForce;
-        if (jumpTimer <= 0) jumping = false;
+        if(jumping) yVel += jumpForce;
+        if(jumpTimer <= 0) jumping = false;
         jumpTimer -= Time.deltaTime;
         return yVel;
     }
@@ -153,16 +166,21 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            xVel = xVel + inputX * Time.deltaTime * (grounded ? acceleration : airAcceleration);
+            xVel = xVel + inputX * Time.deltaTime * (grounded? acceleration : airAcceleration) ;
         }
 
         //if slowing or no input then apply friction
         if ((Mathf.Abs(inputX) < Mathf.Abs(lastInput)) || (inputX == 0))
         {
-            xVel = Mathf.MoveTowards(xVel, 0, (grounded ? friction : drag) * Time.deltaTime);
+            xVel = Mathf.MoveTowards(xVel, 0, (grounded? friction :drag) * Time.deltaTime);
         }
         xVel = Mathf.Clamp(xVel, -topSpeed, topSpeed);
         return xVel;
+    }
+    
+    void Death()
+    {
+
     }
 
     void OnCollisionEnter2D(Collision2D c)
@@ -170,5 +188,3 @@ public class PlayerController : MonoBehaviour
         //empty
     }
 }
-
-  
