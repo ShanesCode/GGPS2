@@ -33,6 +33,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        transform.position = GameObject.FindWithTag("InitialSpawn").transform.position;
         topSpeed = 0.02f;
         acceleration = 0.5f;
         friction = 0.2f;
@@ -45,7 +46,7 @@ public class PlayerController : MonoBehaviour
         jumpDelay = 0.2f;
         jumpClimb = 0.5f;
         jumpClimbLong = 0.75f;
-        jumpForce = 1.0f;
+        jumpForce = 0.02f;
 
         grounded = false;
         groundMask = LayerMask.GetMask("Ground");
@@ -162,6 +163,11 @@ public class PlayerController : MonoBehaviour
         }
         xVel = Mathf.Clamp(xVel, -topSpeed, topSpeed);
         return xVel;
+    }
+
+    void OnCollisionEnter2D(Collision2D c)
+    {
+        //empty
     }
 }
 
