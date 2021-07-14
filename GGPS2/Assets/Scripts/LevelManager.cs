@@ -7,7 +7,8 @@ using UnityEngine.UI;
 public class LevelManager : MonoBehaviour
 {
     public GameObject player;
-    public GameObject gameManager;
+    GameManager gameManager = new GameManager();
+    private int currentRoom;
     [SerializeField] public int nextRoomNumber;
     [SerializeField] private List<EndRoomTrigger> endRoomTriggers;
     [SerializeField] private List<GameObject> roomSpawnPoints;
@@ -20,7 +21,6 @@ public class LevelManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        gameManager = GameObject.FindWithTag("GameManager");
         Time.timeScale = 1;
         paused = false;
 
@@ -29,7 +29,8 @@ public class LevelManager : MonoBehaviour
             endRoomTriggers[i].GetComponent<EndRoomTrigger>().OnTrigger += LevelManager_OnTrigger;
         }
 
-        player.transform.position = roomSpawnPoints[gameManager.GetComponent<GameManager>().spawnRoom].transform.position;
+        player.transform.position = roomSpawnPoints[GameManager.spawnRoom].transform.position;
+        currentRoom = GameManager.spawnRoom;
     }
 
     private void Update()
@@ -73,12 +74,14 @@ public class LevelManager : MonoBehaviour
         paused = false;
         endRoomUI.SetActive(false);
         player.transform.position = roomSpawnPoints[nextRoomNumber].transform.position;
+        currentRoom += 1;
     }
 
-    public void ResetLevel()
+    public void ResetRoom()
     {
         // Reset the level, remove the bottles
         endRoomUI.SetActive(false);
+        GameManager.spawnRoom = currentRoom;
         StartCoroutine(LoadYourAsyncScene(SceneManager.GetActiveScene().name));
     }
 

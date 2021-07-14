@@ -9,14 +9,13 @@ public class AchievementsMenuUI : MonoBehaviour
     private List<Image> achievementImages = new List<Image>();
     private List<string> achievementTitles = new List<string>();
 
-    public GameObject gameManager;
+    public GameManager gameManager = new GameManager();
     public GameObject parentMenu;
     public GameObject achievementPanel;
     // Start is called before the first frame update
     void Start()
     {
-        gameManager = GameObject.FindWithTag("GameManager");
-        achievements = gameManager.GetComponent<GameManager>().achievements;
+        achievements = gameManager.achievements;
     }
 
     // Update is called once per frame

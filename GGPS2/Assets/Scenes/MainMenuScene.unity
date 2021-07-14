@@ -907,9 +907,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 810900877}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: SetSpawnRoom
+      - m_Target: {fileID: 1644238295}
+        m_TargetAssemblyTypeName: LevelSelect, Assembly-CSharp
+        m_MethodName: UpdateGameManagerSpawnRoom
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -918,7 +918,7 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
+        m_CallState: 1
       - m_Target: {fileID: 1644238295}
         m_TargetAssemblyTypeName: LevelSelect, Assembly-CSharp
         m_MethodName: GoToLevel
@@ -1744,9 +1744,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 810900877}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: SetSpawnRoom
+      - m_Target: {fileID: 1644238295}
+        m_TargetAssemblyTypeName: LevelSelect, Assembly-CSharp
+        m_MethodName: UpdateGameManagerSpawnRoom
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1755,7 +1755,7 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
+        m_CallState: 1
       - m_Target: {fileID: 1644238295}
         m_TargetAssemblyTypeName: LevelSelect, Assembly-CSharp
         m_MethodName: GoToLevel
@@ -1889,9 +1889,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 810900877}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: SetSpawnRoom
+      - m_Target: {fileID: 1644238295}
+        m_TargetAssemblyTypeName: LevelSelect, Assembly-CSharp
+        m_MethodName: UpdateGameManagerSpawnRoom
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1900,7 +1900,7 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
+        m_CallState: 1
       - m_Target: {fileID: 1644238295}
         m_TargetAssemblyTypeName: LevelSelect, Assembly-CSharp
         m_MethodName: GoToLevel
@@ -3455,64 +3455,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 809699054}
   m_CullTransparentMesh: 1
---- !u!1 &810900876
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 810900878}
-  - component: {fileID: 810900877}
-  m_Layer: 0
-  m_Name: GameManager
-  m_TagString: GameManager
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &810900877
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 810900876}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 41fd83ed4757734428a273bfff68d6e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spawnRoom: 0
-  achievements:
-  - id: 0
-    title: King Chugger
-    requirement: Drink 50 times.
-    flavourText: Not one bathroom break needed, the sign of a true king.
-    sprite: {fileID: 0}
-    achieved: 1
-  - id: 1
-    title: Standup Citizen
-    requirement: Recycle 10 times.
-    flavourText: The council still has every right to harrass you, but you'll still
-      take the moral high ground.
-    sprite: {fileID: 0}
-    achieved: 0
---- !u!4 &810900878
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 810900876}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 650.82166, y: 326.47394, z: -0.24840176}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &841671469
 GameObject:
   m_ObjectHideFlags: 0
@@ -3730,9 +3672,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 810900877}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: SetSpawnRoom
+      - m_Target: {fileID: 1644238295}
+        m_TargetAssemblyTypeName: LevelSelect, Assembly-CSharp
+        m_MethodName: UpdateGameManagerSpawnRoom
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3741,7 +3683,7 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
+        m_CallState: 1
       - m_Target: {fileID: 1644238295}
         m_TargetAssemblyTypeName: LevelSelect, Assembly-CSharp
         m_MethodName: GoToLevel
@@ -5439,7 +5381,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dba073bfbba295f499cd283ed8604824, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 810900876}
   parentMenu: {fileID: 953469080}
   achievementPanel: {fileID: 569645823}
 --- !u!1 &1465369469
@@ -5659,9 +5600,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 810900877}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: SetSpawnRoom
+      - m_Target: {fileID: 1644238295}
+        m_TargetAssemblyTypeName: LevelSelect, Assembly-CSharp
+        m_MethodName: UpdateGameManagerSpawnRoom
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5670,7 +5611,7 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
+        m_CallState: 1
       - m_Target: {fileID: 1644238295}
         m_TargetAssemblyTypeName: LevelSelect, Assembly-CSharp
         m_MethodName: GoToLevel
@@ -7108,9 +7049,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 810900877}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: SetSpawnRoom
+      - m_Target: {fileID: 1644238295}
+        m_TargetAssemblyTypeName: LevelSelect, Assembly-CSharp
+        m_MethodName: UpdateGameManagerSpawnRoom
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7119,7 +7060,7 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
+        m_CallState: 1
       - m_Target: {fileID: 1644238295}
         m_TargetAssemblyTypeName: LevelSelect, Assembly-CSharp
         m_MethodName: GoToLevel
@@ -7521,8 +7462,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 953469081}
         m_TargetAssemblyTypeName: MainMenuController, Assembly-CSharp
-        m_MethodName: GoToLevel
-        m_Mode: 3
+        m_MethodName: StartNewGame
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -8073,9 +8014,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 810900877}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: SetSpawnRoom
+      - m_Target: {fileID: 1644238295}
+        m_TargetAssemblyTypeName: LevelSelect, Assembly-CSharp
+        m_MethodName: UpdateGameManagerSpawnRoom
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8084,7 +8025,7 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
+        m_CallState: 1
       - m_Target: {fileID: 1644238295}
         m_TargetAssemblyTypeName: LevelSelect, Assembly-CSharp
         m_MethodName: GoToLevel
@@ -8352,9 +8293,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 810900877}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: SetSpawnRoom
+      - m_Target: {fileID: 1644238295}
+        m_TargetAssemblyTypeName: LevelSelect, Assembly-CSharp
+        m_MethodName: UpdateGameManagerSpawnRoom
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8363,7 +8304,7 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
+        m_CallState: 1
       - m_Target: {fileID: 1644238295}
         m_TargetAssemblyTypeName: LevelSelect, Assembly-CSharp
         m_MethodName: GoToLevel

@@ -14,13 +14,12 @@ public class AchievementButton : MonoBehaviour
     public TextMeshProUGUI achievementFlavour;
     public Image achievementImage;
 
-    private GameObject gameManager;
+    public GameManager gameManager = new GameManager();
     private Achievement achievement;
     // Start is called before the first frame update
     void Start()
     {
-        gameManager = GameObject.FindWithTag("GameManager");
-        achievement = gameManager.GetComponent<GameManager>().achievements[achievementID];
+        achievement = gameManager.achievements[achievementID];
         
         if (!achievement.achieved)
         {

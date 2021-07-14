@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class LevelSelect : MonoBehaviour
 {
     public GameObject parentMenu;
+    GameManager gameManager = new GameManager();
     // Start is called before the first frame update
     void Start()
     {
@@ -16,6 +17,11 @@ public class LevelSelect : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void UpdateGameManagerSpawnRoom(int roomNumber)
+    {
+        gameManager.SetSpawnRoom(roomNumber);
     }
 
     public void ReturnToParent()
