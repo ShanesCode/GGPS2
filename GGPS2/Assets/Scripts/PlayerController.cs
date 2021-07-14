@@ -28,7 +28,8 @@ public class PlayerController : MonoBehaviour
     LayerMask groundMask;
 
     public Animator anim;
-
+    private Transform spr;
+    private bool left;
     // Start is called before the first frame update
     void Start()
     {
@@ -54,6 +55,7 @@ public class PlayerController : MonoBehaviour
         velocity = new Vector2(0, 0);
 
         anim = GetComponent<Animator>();
+        spr = transform.GetChild(0);
     }
 
     // Update is called once per frame
@@ -68,6 +70,7 @@ public class PlayerController : MonoBehaviour
         }
 
         float inputX = Input.GetAxis("Horizontal");
+
         grounded = GroundCheck();
 
         velocity.x = HandleGroundMovement(velocity.x, inputX, grounded);
@@ -93,6 +96,16 @@ public class PlayerController : MonoBehaviour
 
         anim.SetFloat("ySpeed", velocity.y);
         anim.SetFloat("xSpeed", Mathf.Abs(velocity.x));
+        if (left && velocity.x < 0)
+        {
+            spr.localScale = spr.localScale * new Vector2(-1, 1);
+            left = false;
+        }
+        if (!left && velocity.x > 0)
+        {
+            spr.localScale = spr.localScale * new Vector2(-1, 1);
+            left = true;
+        }
         lastInput = inputX;
     }
 
