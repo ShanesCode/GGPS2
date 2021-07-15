@@ -19,7 +19,6 @@ public class PlayerController : MonoBehaviour
 
     private float jumpForce;
     private bool jumpSquat;
-    bool jumped;
 
     private LayerMask groundMask;
     [SerializeField] private bool grounded;
@@ -36,7 +35,6 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         jumpCount = 0;
-        jumped = false;
 
         speedMax = 5.0f;
         jumpForce = 400.0f;
