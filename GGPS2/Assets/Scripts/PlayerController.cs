@@ -4,7 +4,11 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private float speedMax;
+
+    GameManager gameManager = new GameManager();
+    private int jumpCount;
+
+    public float speedMax;
     private bool left;
 
     private float jumpForce;
@@ -25,6 +29,8 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        jumpCount = 0;
+
         speedMax = 5.0f;
         jumpForce = 400.0f;
         left = true;
@@ -79,6 +85,9 @@ public class PlayerController : MonoBehaviour
     {
         rb2d.AddForce(new Vector2(0, jumpForce));
         jumpSquat = false;
+
+        jumpCount++;
+        gameManager.UpdateJumpCount(jumpCount);
     }
 
     bool GroundCheck()
