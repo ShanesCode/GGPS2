@@ -9,13 +9,21 @@ public class SettingsManager : MonoBehaviour
     public GameObject parentMenu;
 
     public AudioMixer mixer;
-    public Slider volume;
+    public Slider masterVolume;
+    public Slider musicVolume;
+    public Slider sfxVolume;
 
     // Start is called before the first frame update
     void Start()
     {
-        volume.value = PlayerPrefs.GetFloat("volume", 0.5f);
-        volume.onValueChanged.AddListener(SetVolume);
+        masterVolume.value = PlayerPrefs.GetFloat("masterVolume", 0.5f);
+        masterVolume.onValueChanged.AddListener(SetMasterVolume);
+
+        musicVolume.value = PlayerPrefs.GetFloat("musicVolume", 0.5f);
+        musicVolume.onValueChanged.AddListener(SetMusicVolume);
+
+        sfxVolume.value = PlayerPrefs.GetFloat("sfxVolume", 0.5f);
+        sfxVolume.onValueChanged.AddListener(SetSFXVolume);
     }
 
     // Update is called once per frame
@@ -30,9 +38,21 @@ public class SettingsManager : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void SetVolume(float sliderValue)
+    public void SetMasterVolume(float sliderValue)
     {
         mixer.SetFloat("masterVolume", Mathf.Log10(sliderValue) * 20);
-        PlayerPrefs.SetFloat("volume", sliderValue);
+        PlayerPrefs.SetFloat("masterVolume", sliderValue);
+    }
+
+    public void SetMusicVolume(float sliderValue)
+    {
+        mixer.SetFloat("musicVolume", Mathf.Log10(sliderValue) * 20);
+        PlayerPrefs.SetFloat("musicVolume", sliderValue);
+    }
+
+    public void SetSFXVolume(float sliderValue)
+    {
+        mixer.SetFloat("sfxVolume", Mathf.Log10(sliderValue) * 20);
+        PlayerPrefs.SetFloat("sfxVolume", sliderValue);
     }
 }
