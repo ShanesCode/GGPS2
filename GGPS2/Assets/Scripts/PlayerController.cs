@@ -25,11 +25,15 @@ public class PlayerController : MonoBehaviour
     private Vector2 groundOffset;
     private Vector2 size;
 
-    private Vector2 groundVelocity = Vector2.zero;
+    private Vector2 groundVelocity;
 
     Animator anim;
     Rigidbody2D rb2d;
     BoxCollider2D col;
+
+    private float inputX;
+    private bool jump;
+    private float xVelocity;
 
     // Start is called before the first frame update
     void Start()
@@ -47,20 +51,25 @@ public class PlayerController : MonoBehaviour
         groundOffset = new Vector2(0, GetComponent<BoxCollider2D>().size.y / 2);
         anim = GetComponent<Animator>();
         rb2d = GetComponent<Rigidbody2D>();
+
+        xVelocity = 0;
+
+        groundVelocity = Vector2.zero;
     }
 
-    // Update is called once per frame
-    void FixedUpdate()
+    private void Update()
     {
-        //lockout during jumpsquat
-        if (jumpSquat) return;
-
         //pull inputs
-        float inputX = Input.GetAxis("Horizontal");
-        bool jump = Input.GetButtonDown("Jump");
+        inputX = Input.GetAxis("Horizontal");
+        xVelocity = speedMax * inputX;
 
-        float xVelocity = speedMax * inputX;
+        jump = Input.GetButtonDown("Jump");
 
+        if (grounded && jump)
+        {
+            anim.SetBool("jump", true);
+            jumpSquat = true;
+        }
 
         if (Mathf.Abs(xVelocity) > 0)
         {
@@ -70,19 +79,15 @@ public class PlayerController : MonoBehaviour
 
         grounded = GroundCheck();
 
-        rb2d.velocity = new Vector2(xVelocity + groundVelocity.x, rb2d.velocity.y);
-
-        if (grounded && jump)
-        {
-            rb2d.velocity = new Vector2(rb2d.velocity.x, 0);
-            anim.SetBool("jump", true);
-            jumpSquat = true;
-        }
-
-        anim.SetFloat("xSpeed", Mathf.Abs(inputX));
+        anim.SetFloat("xSpeed", Mathf.Abs(rb2d.velocity.x));
         anim.SetFloat("ySpeed", rb2d.velocity.y);
+    }
 
-
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        if (jumpSquat) return;
+        rb2d.velocity = new Vector2(xVelocity + groundVelocity.x, rb2d.velocity.y);
     }
 
     void Jump()
@@ -108,7 +113,9 @@ public class PlayerController : MonoBehaviour
             {
                 anim.SetBool("grounded", true);
 
-                if (hit.rigidbody != null) { groundVelocity = hit.rigidbody.velocity; }
+                if (hit.rigidbody != null) {
+                    groundVelocity = hit.rigidbody.velocity;
+                }
 
                 OnGroundedEventArgs e = new OnGroundedEventArgs()
                 {

@@ -6830,6 +6830,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 7013660467188972380, guid: dcf53bbaddb713e4ebcaf304bcc16c11, type: 3}
+      propertyPath: m_AngularDrag
+      value: 0.05
+      objectReference: {fileID: 0}
     - target: {fileID: 7013660467188972449, guid: dcf53bbaddb713e4ebcaf304bcc16c11, type: 3}
       propertyPath: m_RootOrder
       value: 0
