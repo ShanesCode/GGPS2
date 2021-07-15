@@ -53,13 +53,13 @@ public class MovingPlatform : MonoBehaviour
         Vector2 distance = (Vector2)transform.localPosition - goal;
         if (distance.magnitude < 0.5f)
         {
-            activeGoal += 1;
+            activeGoal++;
             if (activeGoal >= goals.Length) activeGoal = 0;
         }
 
-        // If x direction of next goal is different, flip
         if (direction != Vector2.zero)
         {
+            // If x direction of next goal is different, flip
             if (flips && Mathf.Sign(goals[activeGoal].x - transform.localPosition.x) != Mathf.Sign(direction.x)) { Flip(); };
         }
         direction = goals[activeGoal] - (Vector2)transform.localPosition;
