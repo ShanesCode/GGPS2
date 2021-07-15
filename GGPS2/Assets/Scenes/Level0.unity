@@ -3773,7 +3773,7 @@ MonoBehaviour:
   achievement: {fileID: 943049096}
   requirement: {fileID: 758146887}
   image: {fileID: 1423027515}
-  displayTime: 3
+  displayTime: 5
 --- !u!1 &1375128146
 GameObject:
   m_ObjectHideFlags: 0

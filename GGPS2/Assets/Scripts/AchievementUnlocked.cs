@@ -11,7 +11,7 @@ public class AchievementUnlocked : MonoBehaviour
     public TextMeshProUGUI requirement;
     public Image image;
 
-    [Range(0.0f, 5.0f)]public float displayTime = 3.0f;
+    [Range(0.0f, 10.0f)]public float displayTime = 3.0f;
     private float displayReset;
     // Start is called before the first frame update
     void Start()
@@ -40,6 +40,7 @@ public class AchievementUnlocked : MonoBehaviour
             achievement.text = "";
             requirement.text = "";
             image.sprite = null;
+            displayTime = 0;
         }
     }
 }
