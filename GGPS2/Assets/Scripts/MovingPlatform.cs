@@ -23,6 +23,7 @@ public class MovingPlatform : MonoBehaviour
         {
             rb2d = gameObject.AddComponent<Rigidbody2D>();
         }
+        rb2d.isKinematic = true;
 
         activeGoal = 0;
     }
@@ -38,7 +39,7 @@ public class MovingPlatform : MonoBehaviour
     private void Update()
     {
         rb2d.velocity = speed * direction.normalized;
-        //transform.position = Vector2.MoveTowards(transform.position, (Vector2)transform.position + goals[activeGoal], speed * Time.deltaTime);
+        //transform.position = Vector2.MoveTowards(transform.position, direction, speed * Time.deltaTime);
     }
 
     // Update is called once per frame

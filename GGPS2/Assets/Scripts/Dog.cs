@@ -29,12 +29,6 @@ public class Dog : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void SquashHead()
     {
         head.GetComponent<SpriteRenderer>().sprite = squashedHead;

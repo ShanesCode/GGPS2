@@ -6,21 +6,23 @@ public class Bird : MonoBehaviour
 {
     public GameObject head;
     public Sprite squashedHead;
-    
-    public GameObject wing;
-    public Sprite wingUp;
-    public Sprite wingMiddle;
-    public Sprite wingDown;
+    public GameObject player;
+
+    private Animator anim;
     // Start is called before the first frame update
     void Start()
     {
-        
+        player = GameObject.FindWithTag("Player");
+        player.GetComponent<PlayerController>().OnGrounded += Bird_OnGrounded;
+        anim = GetComponent<Animator>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Bird_OnGrounded(object sender, PlayerController.OnGroundedEventArgs e)
     {
-        
+        if (e.groundTransform == gameObject.transform)
+        {
+            anim.SetTrigger("squashed");
+        }
     }
 
     public void SquashHead()
