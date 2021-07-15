@@ -16,6 +16,11 @@ public class MovingPlatform : MonoBehaviour
     void Awake()
     {
         rb2d = GetComponent<Rigidbody2D>();
+        if (rb2d == null)
+        {
+            rb2d = gameObject.AddComponent<Rigidbody2D>();
+        }
+
         speed = 2.0f;
         range = 7.0f;
 
@@ -39,13 +44,13 @@ public class MovingPlatform : MonoBehaviour
 
     void CheckProximity(Vector2 goal)
     {
-        float distance = transform.localPosition.x - goal.x;
-        if (Mathf.Abs(distance) < 0.5f)
+        float distance = Mathf.Abs(transform.localPosition.x - goal.x);
+        if (distance < 0.5f)
         {
             activeGoal += 1;
             if (activeGoal >= goals.Length) activeGoal = 0;
         }
-        direction = Mathf.Sign(distance);
+        direction = Mathf.Sign(goal.x - transform.localPosition.x);
     }
 
     
