@@ -2,21 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager
 {
-    public int spawnRoom;
+    public static GameManager gameManager;
 
-    public List<Achievement> achievements = new List<Achievement>();
-    
-    private void Awake()
-    {
-        DontDestroyOnLoad(transform.gameObject);
-    }
+    public static int spawnRoom;
 
-    private void Start()
+    public List<Achievement> achievements = new List<Achievement>()
     {
-        spawnRoom = 0;
-    }
+        new Achievement(0, "King Chugger", "Drink 50 times.", "Not one bathroom break needed, the sign of a true king.", null, true),
+        new Achievement(1, "Standup Citizen", "Recycle 10 times.", "The council still has every right to harass you, but you'll still take the moral high ground.")
+    };
 
     public void SetSpawnRoom(int roomNumber)
     {

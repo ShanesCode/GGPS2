@@ -33,7 +33,6 @@ public class MovingPlatform : MonoBehaviour
     {
         if (Mathf.Abs(transform.localPosition.x - goal.x) < 0.5f)
         {
-            Debug.Log("i made it");
             activeGoal += 1;
             if (activeGoal >= goals.Length) activeGoal = 0;
         }

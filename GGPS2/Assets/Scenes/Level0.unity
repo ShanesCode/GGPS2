@@ -1329,7 +1329,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 747197495}
         m_TargetAssemblyTypeName: LevelManager, Assembly-CSharp
-        m_MethodName: ResetLevel
+        m_MethodName: ResetRoom
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2044,11 +2044,6 @@ CanvasRenderer:
 --- !u!1 &1000349563 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5749075268182060997, guid: dcf53bbaddb713e4ebcaf304bcc16c11, type: 3}
-  m_PrefabInstance: {fileID: 2992795082403043998}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &1000349567 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5749075268182060993, guid: dcf53bbaddb713e4ebcaf304bcc16c11, type: 3}
   m_PrefabInstance: {fileID: 2992795082403043998}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1003387570
@@ -5333,6 +5328,7 @@ GameObject:
   - component: {fileID: 2132614055}
   - component: {fileID: 2132614057}
   - component: {fileID: 2132614056}
+  - component: {fileID: 2132614058}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -5348,11 +5344,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2132614054}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.5000002, z: -10}
+  m_LocalPosition: {x: -0.25, y: 5.79, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1000349567}
-  m_RootOrder: 1
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!81 &2132614056
 AudioListener:
@@ -5405,6 +5401,21 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!114 &2132614058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2132614054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 233fd0bb4cfb5d84e8e711122b60be60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 1000349563}
+  x_offset: 0
+  y_offset: 3
 --- !u!1001 &2992795082403043998
 PrefabInstance:
   m_ObjectHideFlags: 0
