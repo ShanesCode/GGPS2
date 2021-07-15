@@ -2,189 +2,101 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class PlayerController : MonoBehaviour
 {
-    public float topSpeed;
-    public float acceleration;
-    public float friction;
+    public float speedMax;
+    private bool left;
 
-    public float topFallSpeed;
-    public float airAcceleration;
-    public float gravity;
-    public float drag;
-    public bool grounded;
-    public float jumpDelay;
+    public float jumpForce;
     public float jumpClimb;
     public float jumpClimbLong;
-    public float jumpTimer;
-    public float jumpForce;
-    public bool jumping;
+    private bool jumpSquat;
 
-    public Vector2 size;
+    private LayerMask groundMask;
+    private bool grounded;
+    private Vector2 groundOffset;
+    private Vector2 size;
 
-    public Vector2 velocity;
-    private float lastInput;
-    LayerMask groundMask;
+    Animator anim;
+    Rigidbody2D rb2d;
+    BoxCollider2D col;
 
-    public Animator anim;
-    private Transform spr;
-    private bool left;
     // Start is called before the first frame update
     void Start()
     {
-        transform.position = GameObject.FindWithTag("InitialSpawn").transform.position;
-        topSpeed = 0.02f;
-        acceleration = 0.5f;
-        friction = 0.2f;
+        speedMax = 5.0f;
+        jumpForce = 400.0f;
+        left = true;
+        jumpSquat = false;
 
-        topFallSpeed = 0.02f;
-        airAcceleration = 0.2f;
-        gravity = 0.0005f;
-        drag = 0.5f;
-
-        jumpDelay = 0.2f;
-        jumpClimb = 0.5f;
-        jumpClimbLong = 0.75f;
-        jumpForce = 0.02f;
-
-        grounded = false;
+        col = GetComponent<BoxCollider2D>();
+        size = col.size;
         groundMask = LayerMask.GetMask("Ground");
-        size = new Vector2(GetComponent<BoxCollider2D>().bounds.extents.x, GetComponent<BoxCollider2D>().bounds.extents.y);
-
-        velocity = new Vector2(0, 0);
-
+        groundOffset = new Vector2(0, GetComponent<BoxCollider2D>().size.y / 2);
         anim = GetComponent<Animator>();
-        spr = transform.GetChild(0);
+        rb2d = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        string currentAnimation = anim.GetCurrentAnimatorClipInfo(0)[0].clip.name;
-        if (currentAnimation == "jump" && !jumping)
-        {
-            anim.SetBool("jump", false);
-            //jump lockout
-            return;
-        }
+        //lockout during jumpsquat
+        if (jumpSquat) return;
 
+        //pull inputs
         float inputX = Input.GetAxis("Horizontal");
+        bool jump = Input.GetButtonDown("Jump");
+
+        float xVelocity = speedMax * inputX;
+
+
+        if (Mathf.Abs(xVelocity) > 0)
+        {
+            if (xVelocity > 0 && left) Flip();
+            if (xVelocity < 0 && !left) Flip();
+        }
+        rb2d.velocity = new Vector2(xVelocity,rb2d.velocity.y);
 
         grounded = GroundCheck();
-
-        velocity.x = HandleGroundMovement(velocity.x, inputX, grounded);
-        if(jumping) velocity.y = HandleJumpVelocity(velocity.y);
-
-        if (!grounded)
+        if(grounded && jump)
         {
-            velocity.y -= gravity;
-            velocity.y = Mathf.Clamp(velocity.y, -topFallSpeed, topFallSpeed);
-        }
-        else
-        {
-            if(velocity.y < 0) velocity.y = 0;
-            
-            if (Input.GetButtonDown("Jump")) {
-                anim.SetBool("jump", true);
-                grounded = false;
-            }
+            anim.SetBool("jump", true);
+            jumpSquat = true;
         }
 
-        Vector2 step = new Vector2(velocity.x, velocity.y);
-        transform.Translate(step);
+        anim.SetFloat("xSpeed", Mathf.Abs(rb2d.velocity.x));
+        anim.SetFloat("ySpeed", rb2d.velocity.y);
 
-        anim.SetFloat("ySpeed", velocity.y);
-        anim.SetFloat("xSpeed", Mathf.Abs(velocity.x));
-        if (left && velocity.x < 0)
-        {
-            Vector3 theScale = transform.localScale;
-            theScale.x *= -1;
-            transform.localScale = theScale;
-            left = false;
-        }
-        if (!left && velocity.x > 0)
-        {
-            Vector3 theScale = transform.localScale;
-            theScale.x *= -1;
-            transform.localScale = theScale;
-            left = true;
-        }
-        lastInput = inputX;
-    }
 
-    bool GroundCheck()
-    {
-        Vector2 boxColliderPos = new Vector2(transform.position.x + GetComponent<BoxCollider2D>().offset.x, transform.position.y + GetComponent<BoxCollider2D>().offset.y);
-
-        Debug.DrawRay(transform.position, Vector2.down * 2, Color.magenta, 0.01f);
-        RaycastHit2D hit = Physics2D.BoxCast(boxColliderPos, new Vector2(size.x, size.y / 2), 0.0f, Vector2.down, size.y, groundMask);
-        if (hit)
-        {
-            //Debug.Log(hit.collider.gameObject.name);
-            float distance = Mathf.Abs(hit.point.y - boxColliderPos.y);
-            if (distance > size.y)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    float HandleJumpVelocity(float yVel)
-    {
-        if(jumping) yVel += jumpForce;
-        if(jumpTimer <= 0) jumping = false;
-        jumpTimer -= Time.deltaTime;
-        return yVel;
     }
 
     void Jump()
     {
-        if (Input.GetButton("Jump"))
-        {
-            jumpTimer = jumpClimbLong;
-        }
-        else
-        {
-            jumpTimer = jumpClimb;
-        }
-
-        jumping = true;
+        rb2d.AddForce(new Vector2(0, jumpForce));
+        jumpSquat = false;
     }
 
-    float HandleGroundMovement(float xVel, float inputX, bool grounded)
+    bool GroundCheck()
     {
-        //if reversing direction
-        if ((Mathf.Sign(inputX) != Mathf.Sign(xVel)) && (inputX != 0 && xVel != 0))
-        {
-            xVel -= xVel;
-        }
-        else
-        {
-            xVel = xVel + inputX * Time.deltaTime * (grounded? acceleration : airAcceleration) ;
-        }
+        Vector2 boxColliderPos = new Vector2(transform.position.x + col.offset.x, transform.position.y + col.offset.y);
 
-        //if slowing or no input then apply friction
-        if ((Mathf.Abs(inputX) < Mathf.Abs(lastInput)) || (inputX == 0))
+        RaycastHit2D hit = Physics2D.CircleCast((Vector2)transform.position + groundOffset, col.size.x/2, Vector2.down, groundMask);
+        if (hit) 
         {
-            xVel = Mathf.MoveTowards(xVel, 0, (grounded? friction :drag) * Time.deltaTime);
+            float distance = Mathf.Abs(hit.point.y - boxColliderPos.y);
+            if (distance <= size.y)
+            {
+                anim.SetBool("grounded", true);
+                return true;
+            }
         }
-        xVel = Mathf.Clamp(xVel, -topSpeed, topSpeed);
-        return xVel;
-    }
-    
-    void Death()
-    {
-
+        anim.SetBool("grounded", false);
+        return false;
     }
 
-    void OnCollisionEnter2D(Collision2D c)
+    void Flip()
     {
-        //empty
+        transform.localScale *= new Vector2(-1,1);
+        left = !left;
     }
 }
