@@ -11,6 +11,9 @@ public class MovingPlatform : MonoBehaviour
     public Vector2[] goals;
     public int activeGoal;
 
+    public bool flips;
+    public bool left;
+
     Rigidbody2D rb2d;
     // Start is called before the first frame update
     void Awake()
@@ -29,11 +32,11 @@ public class MovingPlatform : MonoBehaviour
         goals[1] = (Vector2)transform.localPosition + new Vector2(range,0);
 
         activeGoal = 0;
-    }
+}
 
     private void Update()
     {
-        rb2d.velocity = new Vector2(speed * direction, rb2d.velocity.y) ;
+        rb2d.velocity = new Vector2(speed * direction, rb2d.velocity.y);
     }
 
     // Update is called once per frame
@@ -49,6 +52,7 @@ public class MovingPlatform : MonoBehaviour
         {
             activeGoal += 1;
             if (activeGoal >= goals.Length) activeGoal = 0;
+            if (flips) { Flip(); };
         }
         direction = Mathf.Sign(goal.x - transform.localPosition.x);
     }
@@ -59,5 +63,11 @@ public class MovingPlatform : MonoBehaviour
     {
         Gizmos.color = Color.blue;
         Gizmos.DrawLine(transform.position - new Vector3(range, 0, 0), transform.position + new Vector3(range, 0, 0));
+    }
+
+    void Flip()
+    {
+        transform.localScale *= new Vector2(-1, 1);
+        left = !left;
     }
 }

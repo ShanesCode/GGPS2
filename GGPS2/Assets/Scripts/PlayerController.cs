@@ -1,9 +1,15 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public event EventHandler<OnGroundedEventArgs> OnGrounded;
+    public class OnGroundedEventArgs
+    {
+        public Transform groundTransform;
+    }
 
     GameManager gameManager = new GameManager();
     private int jumpCount;
@@ -101,12 +107,20 @@ public class PlayerController : MonoBehaviour
             if (distance <= size.y)
             {
                 anim.SetBool("grounded", true);
+
+                OnGroundedEventArgs e = new OnGroundedEventArgs()
+                {
+                    groundTransform = hit.transform
+                };
+                
+                OnGrounded?.Invoke(this, e);
                 return true;
             }
         }
         anim.SetBool("grounded", false);
         return false;
     }
+
     private void OnCollisionStay2D(Collision2D collision)
     {
         GameObject other = collision.collider.gameObject;
