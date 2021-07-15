@@ -1,190 +1,150 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class PlayerController : MonoBehaviour
 {
-    public float topSpeed;
-    public float acceleration;
-    public float friction;
+    public event EventHandler<OnGroundedEventArgs> OnGrounded;
+    public class OnGroundedEventArgs
+    {
+        public Transform groundTransform;
+    }
 
-    public float topFallSpeed;
-    public float airAcceleration;
-    public float gravity;
-    public float drag;
-    public bool grounded;
-    public float jumpDelay;
-    public float jumpClimb;
-    public float jumpClimbLong;
-    public float jumpTimer;
-    public float jumpForce;
-    public bool jumping;
+    GameManager gameManager = new GameManager();
+    private int jumpCount;
 
-    public Vector2 size;
-
-    public Vector2 velocity;
-    private float lastInput;
-    LayerMask groundMask;
-
-    public Animator anim;
-    private Transform spr;
+    public float speedMax;
     private bool left;
+
+    private float jumpForce;
+    private bool jumpSquat;
+
+    private LayerMask groundMask;
+    private bool grounded;
+    private Vector2 groundOffset;
+    private Vector2 size;
+
+    private Vector2 platformVelocity = Vector2.zero;
+    private bool onPlatform;
+
+    Animator anim;
+    Rigidbody2D rb2d;
+    BoxCollider2D col;
+
     // Start is called before the first frame update
     void Start()
     {
-        transform.position = GameObject.FindWithTag("InitialSpawn").transform.position;
-        topSpeed = 0.02f;
-        acceleration = 0.5f;
-        friction = 0.2f;
+        jumpCount = 0;
 
-        topFallSpeed = 0.02f;
-        airAcceleration = 0.2f;
-        gravity = 0.0005f;
-        drag = 0.5f;
+        speedMax = 5.0f;
+        jumpForce = 400.0f;
+        left = true;
+        jumpSquat = false;
 
-        jumpDelay = 0.2f;
-        jumpClimb = 0.5f;
-        jumpClimbLong = 0.75f;
-        jumpForce = 0.02f;
+        onPlatform = false;
 
-        grounded = false;
+        col = GetComponent<BoxCollider2D>();
+        size = col.size;
         groundMask = LayerMask.GetMask("Ground");
-        size = new Vector2(GetComponent<BoxCollider2D>().bounds.extents.x, GetComponent<BoxCollider2D>().bounds.extents.y);
-
-        velocity = new Vector2(0, 0);
-
+        groundOffset = new Vector2(0, GetComponent<BoxCollider2D>().size.y / 2);
         anim = GetComponent<Animator>();
-        spr = transform.GetChild(0);
+        rb2d = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        string currentAnimation = anim.GetCurrentAnimatorClipInfo(0)[0].clip.name;
-        if (currentAnimation == "jump" && !jumping)
-        {
-            anim.SetBool("jump", false);
-            //jump lockout
-            return;
-        }
+        //lockout during jumpsquat
+        if (jumpSquat) return;
 
+        //pull inputs
         float inputX = Input.GetAxis("Horizontal");
+        bool jump = Input.GetButtonDown("Jump");
 
+        float xVelocity = speedMax * inputX;
+
+
+        if (Mathf.Abs(xVelocity) > 0)
+        {
+            if (xVelocity > 0 && left) Flip();
+            if (xVelocity < 0 && !left) Flip();
+        }
+        
+        rb2d.velocity = new Vector2(xVelocity,rb2d.velocity.y);
+        if (onPlatform) rb2d.velocity += platformVelocity;
+        
         grounded = GroundCheck();
-
-        velocity.x = HandleGroundMovement(velocity.x, inputX, grounded);
-        if(jumping) velocity.y = HandleJumpVelocity(velocity.y);
-
-        if (!grounded)
+        if(grounded && jump)
         {
-            velocity.y -= gravity;
-            velocity.y = Mathf.Clamp(velocity.y, -topFallSpeed, topFallSpeed);
-        }
-        else
-        {
-            if(velocity.y < 0) velocity.y = 0;
-            
-            if (Input.GetButtonDown("Jump")) {
-                anim.SetBool("jump", true);
-                grounded = false;
-            }
+            anim.SetBool("jump", true);
+            jumpSquat = true;
         }
 
-        Vector2 step = new Vector2(velocity.x, velocity.y);
-        transform.Translate(step);
+        anim.SetFloat("xSpeed", Mathf.Abs(inputX));
+        anim.SetFloat("ySpeed", Mathf.Abs(rb2d.velocity.y));
 
-        anim.SetFloat("ySpeed", velocity.y);
-        anim.SetFloat("xSpeed", Mathf.Abs(velocity.x));
-        if (left && velocity.x < 0)
-        {
-            Vector3 theScale = transform.localScale;
-            theScale.x *= -1;
-            transform.localScale = theScale;
-            left = false;
-        }
-        if (!left && velocity.x > 0)
-        {
-            Vector3 theScale = transform.localScale;
-            theScale.x *= -1;
-            transform.localScale = theScale;
-            left = true;
-        }
-        lastInput = inputX;
-    }
 
-    bool GroundCheck()
-    {
-        Vector2 boxColliderPos = new Vector2(transform.position.x + GetComponent<BoxCollider2D>().offset.x, transform.position.y + GetComponent<BoxCollider2D>().offset.y);
-
-        Debug.DrawRay(transform.position, Vector2.down * 2, Color.magenta, 0.01f);
-        RaycastHit2D hit = Physics2D.BoxCast(boxColliderPos, new Vector2(size.x, size.y / 2), 0.0f, Vector2.down, size.y, groundMask);
-        if (hit)
-        {
-            //Debug.Log(hit.collider.gameObject.name);
-            float distance = Mathf.Abs(hit.point.y - boxColliderPos.y);
-            if (distance > size.y)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    float HandleJumpVelocity(float yVel)
-    {
-        if(jumping) yVel += jumpForce;
-        if(jumpTimer <= 0) jumping = false;
-        jumpTimer -= Time.deltaTime;
-        return yVel;
     }
 
     void Jump()
     {
-        if (Input.GetButton("Jump"))
-        {
-            jumpTimer = jumpClimbLong;
-        }
-        else
-        {
-            jumpTimer = jumpClimb;
-        }
+        rb2d.AddForce(new Vector2(0, jumpForce));
+        jumpSquat = false;
 
-        jumping = true;
+        jumpCount++;
+        gameManager.UpdateJumpCount(jumpCount);
     }
 
-    float HandleGroundMovement(float xVel, float inputX, bool grounded)
+    bool GroundCheck()
     {
-        //if reversing direction
-        if ((Mathf.Sign(inputX) != Mathf.Sign(xVel)) && (inputX != 0 && xVel != 0))
-        {
-            xVel -= xVel;
-        }
-        else
-        {
-            xVel = xVel + inputX * Time.deltaTime * (grounded? acceleration : airAcceleration) ;
-        }
+        Vector2 boxColliderPos = new Vector2(transform.position.x + col.offset.x, transform.position.y + col.offset.y);
 
-        //if slowing or no input then apply friction
-        if ((Mathf.Abs(inputX) < Mathf.Abs(lastInput)) || (inputX == 0))
+        RaycastHit2D hit = Physics2D.CircleCast((Vector2)transform.position + groundOffset, col.size.x/2, Vector2.down, groundMask);
+        if (hit) 
         {
-            xVel = Mathf.MoveTowards(xVel, 0, (grounded? friction :drag) * Time.deltaTime);
+            float distance = Mathf.Abs(hit.point.y - boxColliderPos.y);
+            if (distance <= size.y)
+            {
+                anim.SetBool("grounded", true);
+
+                OnGroundedEventArgs e = new OnGroundedEventArgs()
+                {
+                    groundTransform = hit.transform
+                };
+                
+                OnGrounded?.Invoke(this, e);
+                return true;
+            }
         }
-        xVel = Mathf.Clamp(xVel, -topSpeed, topSpeed);
-        return xVel;
+        anim.SetBool("grounded", false);
+        return false;
     }
-    
-    void Death()
-    {
 
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        GameObject other = collision.collider.gameObject;
+        if (other.GetComponent<MovingPlatform>())
+        {
+            onPlatform = true;
+            platformVelocity = other.GetComponent<Rigidbody2D>().velocity;
+        }
     }
 
-    void OnCollisionEnter2D(Collision2D c)
+    private void OnCollisionExit2D(Collision2D collision)
     {
-        //empty
+        onPlatform = false;
+        platformVelocity = Vector2.zero;
+    }
+
+    void Flip()
+    {
+        transform.localScale *= new Vector2(-1,1);
+        left = !left;
+    }
+
+    public bool GetFacing()
+    {
+        return left;
     }
 }

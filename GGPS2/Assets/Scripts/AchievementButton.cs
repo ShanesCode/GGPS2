@@ -19,7 +19,7 @@ public class AchievementButton : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        achievement = gameManager.achievements[achievementID];
+        achievement = GameManager.achievements[achievementID];
         
         if (!achievement.achieved)
         {
