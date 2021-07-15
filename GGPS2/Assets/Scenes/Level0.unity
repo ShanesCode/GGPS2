@@ -6918,17 +6918,33 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bird
       objectReference: {fileID: 0}
+    - target: {fileID: 7974452649818891836, guid: d62a3928ab2f6304cbf224dd0dd274c7, type: 3}
+      propertyPath: m_Size.x
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7974452649818891836, guid: d62a3928ab2f6304cbf224dd0dd274c7, type: 3}
+      propertyPath: m_Size.y
+      value: 0.57
+      objectReference: {fileID: 0}
+    - target: {fileID: 7974452649818891836, guid: d62a3928ab2f6304cbf224dd0dd274c7, type: 3}
+      propertyPath: m_Offset.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7974452649818891836, guid: d62a3928ab2f6304cbf224dd0dd274c7, type: 3}
+      propertyPath: m_Offset.y
+      value: -0.09
+      objectReference: {fileID: 0}
     - target: {fileID: 7974452649818891839, guid: d62a3928ab2f6304cbf224dd0dd274c7, type: 3}
       propertyPath: m_RootOrder
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7974452649818891839, guid: d62a3928ab2f6304cbf224dd0dd274c7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -16.29
+      value: -13.51
       objectReference: {fileID: 0}
     - target: {fileID: 7974452649818891839, guid: d62a3928ab2f6304cbf224dd0dd274c7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 10.59
+      value: 9.14
       objectReference: {fileID: 0}
     - target: {fileID: 7974452649818891839, guid: d62a3928ab2f6304cbf224dd0dd274c7, type: 3}
       propertyPath: m_LocalPosition.z

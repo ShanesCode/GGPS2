@@ -19,14 +19,14 @@ public class PlayerController : MonoBehaviour
 
     private float jumpForce;
     private bool jumpSquat;
+    bool jumped;
 
     private LayerMask groundMask;
-    private bool grounded;
+    [SerializeField] private bool grounded;
     private Vector2 groundOffset;
     private Vector2 size;
 
-    private Vector2 platformVelocity = Vector2.zero;
-    private bool onPlatform;
+    private Vector2 groundVelocity = Vector2.zero;
 
     Animator anim;
     Rigidbody2D rb2d;
@@ -36,13 +36,12 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         jumpCount = 0;
+        jumped = false;
 
         speedMax = 5.0f;
         jumpForce = 400.0f;
         left = true;
         jumpSquat = false;
-
-        onPlatform = false;
 
         col = GetComponent<BoxCollider2D>();
         size = col.size;
@@ -70,19 +69,20 @@ public class PlayerController : MonoBehaviour
             if (xVelocity > 0 && left) Flip();
             if (xVelocity < 0 && !left) Flip();
         }
-        
-        rb2d.velocity = new Vector2(xVelocity,rb2d.velocity.y);
-        if (onPlatform) rb2d.velocity += platformVelocity;
-        
+
         grounded = GroundCheck();
-        if(grounded && jump)
+
+        rb2d.velocity = new Vector2(xVelocity + groundVelocity.x, rb2d.velocity.y);
+
+        if (grounded && jump)
         {
+            rb2d.velocity = new Vector2(rb2d.velocity.x, 0);
             anim.SetBool("jump", true);
             jumpSquat = true;
         }
 
         anim.SetFloat("xSpeed", Mathf.Abs(inputX));
-        anim.SetFloat("ySpeed", Mathf.Abs(rb2d.velocity.y));
+        anim.SetFloat("ySpeed", rb2d.velocity.y);
 
 
     }
@@ -94,6 +94,8 @@ public class PlayerController : MonoBehaviour
 
         jumpCount++;
         gameManager.UpdateJumpCount(jumpCount);
+
+        grounded = false;
     }
 
     bool GroundCheck()
@@ -108,6 +110,8 @@ public class PlayerController : MonoBehaviour
             {
                 anim.SetBool("grounded", true);
 
+                if (hit.rigidbody != null) { groundVelocity = hit.rigidbody.velocity; }
+
                 OnGroundedEventArgs e = new OnGroundedEventArgs()
                 {
                     groundTransform = hit.transform
@@ -118,23 +122,8 @@ public class PlayerController : MonoBehaviour
             }
         }
         anim.SetBool("grounded", false);
+        groundVelocity = Vector2.zero;
         return false;
-    }
-
-    private void OnCollisionStay2D(Collision2D collision)
-    {
-        GameObject other = collision.collider.gameObject;
-        if (other.GetComponent<MovingPlatform>())
-        {
-            onPlatform = true;
-            platformVelocity = other.GetComponent<Rigidbody2D>().velocity;
-        }
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        onPlatform = false;
-        platformVelocity = Vector2.zero;
     }
 
     void Flip()
