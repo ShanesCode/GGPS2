@@ -4,20 +4,20 @@ using UnityEngine;
 
 public class Bottle : MonoBehaviour
 {
-    
+
     // Start is called before the first frame update
     void Start()
     {
-        //GetComponent<Rigidbody2D>().velocity = new Vector3(0, -0.01f, 0);
+        gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(3f, 5f);
     }
 
     // Update is called once per frame
     void Update()
     {
-        //if (GetComponent<Rigidbody2D>().velocity.y == 0)
-        //{
-        //    GetComponent<Rigidbody2D>().isKinematic = true;
-        //}
+        if (Mathf.Abs(gameObject.GetComponent<Rigidbody2D>().velocity.y) <= 0.000001f && Mathf.Abs(gameObject.GetComponent<Rigidbody2D>().velocity.x) <= 0.000001f)
+        {
+            gameObject.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+        }
     }
 
     private void OnTriggerStay2D(Collider2D collision)

@@ -27,6 +27,10 @@ public class BottleController : MonoBehaviour
         {
             PlaceBottle();
         }
+        foreach (GameObject bottle in bottles)
+        {
+            
+        }
     }
     void PlaceBottle()
     {
@@ -34,21 +38,21 @@ public class BottleController : MonoBehaviour
         {
             GameObject nearest_bottle = null;
             float shortest_distance_bottle = 100;
-            
+
             // Iterates through all game objects and gets those with tag Bottle
-            foreach (GameObject go in bottles)
-             {
-                    
+            foreach (GameObject bottle in bottles)
+            {
+
                 // Calculates the distance between the player and the current bottle being checked
-                float working_diff = Mathf.Abs(transform.position.x - go.transform.position.x);
-                    
+                float working_diff = Mathf.Abs(transform.position.x - bottle.transform.position.x);
+
                 // If the current bottle is nearer to the player than the previous nearest, it replaces that bottle
                 if (working_diff < shortest_distance_bottle)
                 {
                     shortest_distance_bottle = working_diff;
-                    nearest_bottle = go;
+                    nearest_bottle = bottle;
                 }
-             }
+            }
 
             // If the nearest bottle is within the specified distance destroy it and change the player hasBottle state
             if (shortest_distance_bottle < 2 && nearest_bottle != null)
@@ -58,7 +62,7 @@ public class BottleController : MonoBehaviour
                 hasBottle = true;
             }
         }
-        else 
+        else
         {
             // Calculate distance between player and bin objects
             float diff = transform.position.x - bin.transform.position.x;
@@ -68,48 +72,52 @@ public class BottleController : MonoBehaviour
             }
             else
             {
-                
-                Vector3 placement_coordinates = transform.position + new Vector3(2, 0, 0);
+                Vector3 placement_coordinates = transform.position + new Vector3(1, 0, 0);
                 BoxCollider2D bottle_collider;
                 GameObject top_of_stack = null;
                 if (bottles.Count > 0)
                 {
                     foreach (GameObject go in bottles)
+                    {
+                        bottle_collider = go.GetComponent<BoxCollider2D>();
+                        if (placement_coordinates.x + ((bottle_collider.size.x * bottle_collider.transform.localScale.x) / 2) <= bottle_collider.bounds.max.x && placement_coordinates.x + ((bottle_collider.size.x * bottle_collider.transform.localScale.x) / 2) >= bottle_collider.bounds.min.x || placement_coordinates.x - ((bottle_collider.size.x * bottle_collider.transform.localScale.x) / 2) <= bottle_collider.bounds.max.x && placement_coordinates.x - ((bottle_collider.size.x * bottle_collider.transform.localScale.x) / 2) >= bottle_collider.bounds.min.x)
                         {
-                            bottle_collider = go.GetComponent<BoxCollider2D>();
-                            if (placement_coordinates.x + ((bottle_collider.size.x * bottle_collider.transform.localScale.x) / 2) <= bottle_collider.bounds.max.x && placement_coordinates.x + ((bottle_collider.size.x * bottle_collider.transform.localScale.x) / 2) >= bottle_collider.bounds.min.x || placement_coordinates.x - ((bottle_collider.size.x * bottle_collider.transform.localScale.x) / 2) <= bottle_collider.bounds.max.x && placement_coordinates.x - ((bottle_collider.size.x * bottle_collider.transform.localScale.x) / 2) >= bottle_collider.bounds.min.x)
+                            if (top_of_stack != null)
                             {
-                                if (top_of_stack != null)
-                                { 
-                                    if (go.transform.position.y > top_of_stack.transform.position.y)
-                                    {
-                                        top_of_stack = go;
-                                    }
-                                }
-                                else
+                                if (go.transform.position.y > top_of_stack.transform.position.y)
                                 {
                                     top_of_stack = go;
                                 }
                             }
+                            else
+                            {
+                                top_of_stack = go;
+                            }
                         }
+                    }
                     if (top_of_stack != null)
                     {
                         bottle_collider = top_of_stack.GetComponent<BoxCollider2D>();
-                        bottles.Add(Instantiate(bottle, new Vector3(top_of_stack.transform.position.x, top_of_stack.transform.position.y + (bottle_collider.size.y + 3), 0), transform.rotation));
+                        if (top_of_stack.transform.position.y + (bottle_collider.size.y * bottle_collider.transform.localScale.y) > 3 * (bottle_collider.size.y * bottle_collider.transform.localScale.y))
+                        {
+                            hasBottle = true;
+                        }
+                        else
+                        {
+                            bottles.Add(Instantiate(bottle, new Vector3(top_of_stack.transform.position.x, top_of_stack.transform.position.y + (bottle_collider.size.y * bottle_collider.transform.localScale.y), 0), transform.rotation));
+                        }
+                        
                     }
                     else
                     {
-                        bottles.Add(Instantiate(bottle, transform.position + new Vector3(2, 0, 0), transform.rotation));
+                        bottles.Add(Instantiate(bottle, transform.position + new Vector3(1, 0, 0), transform.rotation));
                     }
                 }
-                    
+
                 else
                 {
                     bottles.Add(Instantiate(bottle, transform.position + new Vector3(2, 0, 0), transform.rotation));
                 }
-
-
-                hasBottle = false;
             }
         }
     }
