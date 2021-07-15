@@ -4,18 +4,19 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float speedMax;
+    private float speedMax;
     private bool left;
 
-    public float jumpForce;
-    public float jumpClimb;
-    public float jumpClimbLong;
+    private float jumpForce;
     private bool jumpSquat;
 
     private LayerMask groundMask;
     private bool grounded;
     private Vector2 groundOffset;
     private Vector2 size;
+
+    private Vector2 platformVelocity = Vector2.zero;
+    private bool onPlatform;
 
     Animator anim;
     Rigidbody2D rb2d;
@@ -28,6 +29,8 @@ public class PlayerController : MonoBehaviour
         jumpForce = 400.0f;
         left = true;
         jumpSquat = false;
+
+        onPlatform = false;
 
         col = GetComponent<BoxCollider2D>();
         size = col.size;
@@ -55,8 +58,10 @@ public class PlayerController : MonoBehaviour
             if (xVelocity > 0 && left) Flip();
             if (xVelocity < 0 && !left) Flip();
         }
+        
         rb2d.velocity = new Vector2(xVelocity,rb2d.velocity.y);
-
+        if (onPlatform) rb2d.velocity += platformVelocity;
+        
         grounded = GroundCheck();
         if(grounded && jump)
         {
@@ -64,8 +69,8 @@ public class PlayerController : MonoBehaviour
             jumpSquat = true;
         }
 
-        anim.SetFloat("xSpeed", Mathf.Abs(rb2d.velocity.x));
-        anim.SetFloat("ySpeed", rb2d.velocity.y);
+        anim.SetFloat("xSpeed", Mathf.Abs(inputX));
+        anim.SetFloat("ySpeed", Mathf.Abs(rb2d.velocity.y));
 
 
     }
@@ -93,10 +98,30 @@ public class PlayerController : MonoBehaviour
         anim.SetBool("grounded", false);
         return false;
     }
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        GameObject other = collision.collider.gameObject;
+        if (other.GetComponent<MovingPlatform>())
+        {
+            onPlatform = true;
+            platformVelocity = other.GetComponent<Rigidbody2D>().velocity;
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        onPlatform = false;
+        platformVelocity = Vector2.zero;
+    }
 
     void Flip()
     {
         transform.localScale *= new Vector2(-1,1);
         left = !left;
+    }
+
+    public bool GetFacing()
+    {
+        return left;
     }
 }
