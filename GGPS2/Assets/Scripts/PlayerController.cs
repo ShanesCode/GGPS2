@@ -23,7 +23,6 @@ public class PlayerController : MonoBehaviour
     Animator anim;
     Rigidbody2D rb2d;
     BoxCollider2D col;
-    bool jump;
 
     // Start is called before the first frame update
     void Start()
@@ -43,18 +42,6 @@ public class PlayerController : MonoBehaviour
         rb2d = GetComponent<Rigidbody2D>();
     }
 
-    private void Update()
-    {
-        if (Input.GetButtonDown("Jump"))
-        {
-            jump = true;
-        }
-        else
-        {
-            jump = false;
-        }
-    }
-
     // Update is called once per frame
     void FixedUpdate()
     {
@@ -63,6 +50,7 @@ public class PlayerController : MonoBehaviour
 
         //pull inputs
         float inputX = Input.GetAxis("Horizontal");
+        bool jump = Input.GetButtonDown("Jump");
 
         float xVelocity = speedMax * inputX;
 
