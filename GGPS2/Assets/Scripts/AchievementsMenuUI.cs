@@ -15,7 +15,7 @@ public class AchievementsMenuUI : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        achievements = gameManager.achievements;
+        achievements = GameManager.achievements;
     }
 
     // Update is called once per frame

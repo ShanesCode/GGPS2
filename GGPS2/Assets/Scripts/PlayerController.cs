@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    GameManager gameManager = new GameManager();
+    private int jumpCount;
+
     public float topSpeed;
     public float acceleration;
     public float friction;
@@ -33,7 +36,6 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        transform.position = GameObject.FindWithTag("InitialSpawn").transform.position;
         topSpeed = 0.02f;
         acceleration = 0.5f;
         friction = 0.2f;
@@ -155,6 +157,9 @@ public class PlayerController : MonoBehaviour
         }
 
         jumping = true;
+
+        jumpCount++;
+        gameManager.UpdateJumpCount(jumpCount);
     }
 
     float HandleGroundMovement(float xVel, float inputX, bool grounded)
