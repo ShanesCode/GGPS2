@@ -27,13 +27,18 @@ public class BottleController : MonoBehaviour
         {
             PlaceBottle();
         }
-        foreach (GameObject bottle in bottles)
-        {
-            
-        }
     }
     void PlaceBottle()
     {
+        int flip = 1;
+        if (GetComponent<PlayerController>().GetFacing() == false)
+        {
+            flip = 1;
+        }
+        else
+        {
+            flip = -1;
+        }
         if (hasBottle == false)
         {
             GameObject nearest_bottle = null;
@@ -72,7 +77,7 @@ public class BottleController : MonoBehaviour
             }
             else
             {
-                Vector3 placement_coordinates = transform.position + new Vector3(1, 0, 0);
+                Vector3 placement_coordinates = transform.position + new Vector3(flip * 1, 0, 0);
                 BoxCollider2D bottle_collider;
                 GameObject top_of_stack = null;
                 if (bottles.Count > 0)
@@ -98,25 +103,28 @@ public class BottleController : MonoBehaviour
                     if (top_of_stack != null)
                     {
                         bottle_collider = top_of_stack.GetComponent<BoxCollider2D>();
-                        if (top_of_stack.transform.position.y + (bottle_collider.size.y * bottle_collider.transform.localScale.y) > 3 * (bottle_collider.size.y * bottle_collider.transform.localScale.y))
+                        if (top_of_stack.transform.position.y + (bottle_collider.size.y * bottle_collider.transform.localScale.y) > 2 * (bottle_collider.size.y * bottle_collider.transform.localScale.y))
                         {
                             hasBottle = true;
                         }
                         else
                         {
                             bottles.Add(Instantiate(bottle, new Vector3(top_of_stack.transform.position.x, top_of_stack.transform.position.y + (bottle_collider.size.y * bottle_collider.transform.localScale.y), 0), transform.rotation));
+                            hasBottle = false;
                         }
                         
                     }
                     else
                     {
-                        bottles.Add(Instantiate(bottle, transform.position + new Vector3(1, 0, 0), transform.rotation));
+                        bottles.Add(Instantiate(bottle, transform.position + new Vector3(flip * 1, 0, 0), transform.rotation));
+                        hasBottle = false;
                     }
                 }
 
                 else
                 {
-                    bottles.Add(Instantiate(bottle, transform.position + new Vector3(2, 0, 0), transform.rotation));
+                    bottles.Add(Instantiate(bottle, transform.position + new Vector3(flip * 1, 0, 0), transform.rotation));
+                    hasBottle = false;
                 }
             }
         }
