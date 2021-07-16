@@ -35,6 +35,9 @@ public class PlayerController : MonoBehaviour
     private bool jump;
     private float xVelocity;
 
+    bool rightBlocked;
+    bool leftBlocked;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -55,6 +58,9 @@ public class PlayerController : MonoBehaviour
         xVelocity = 0;
 
         groundVelocity = Vector2.zero;
+
+        rightBlocked = false;
+        leftBlocked = false;
     }
 
     private void Update()
@@ -62,6 +68,15 @@ public class PlayerController : MonoBehaviour
         //pull inputs
         inputX = Input.GetAxis("Horizontal");
         xVelocity = speedMax * inputX;
+
+        if (rightBlocked)
+        {
+            if (xVelocity > 0) { xVelocity = 0; }
+        } 
+        else if (leftBlocked)
+        {
+            if (xVelocity < 0) { xVelocity = 0; }
+        }
 
         jump = Input.GetButtonDown("Jump");
 
@@ -140,5 +155,48 @@ public class PlayerController : MonoBehaviour
     public bool GetFacing()
     {
         return left;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        // Get contact points
+        ContactPoint2D[] contacts = new ContactPoint2D[10];
+        collision.GetContacts(contacts);
+
+        // Below is being used to prevent wall-cling behaviour
+        // Check if those contacts are near the leftmost or rightmost edge of collider
+        int contactsNearBoundingBoxLeftSide = 0;
+        int contactsNearBoundingBoxRightSide = 0;
+        foreach (ContactPoint2D contact in contacts)
+        {
+            if (contact.collider == null) { break; }
+
+            if (Mathf.Abs(contact.point.x - col.bounds.min.x) < 0.1)
+            {
+                contactsNearBoundingBoxLeftSide++;
+            }
+
+            if (Mathf.Abs(contact.point.x - col.bounds.max.x) < 0.1)
+            {
+                contactsNearBoundingBoxRightSide++;
+            }
+        }
+
+        // If all collision points are near leftmost or rightmost edge, assume player is colliding to his side and not below
+        // Prevent player from adding any xVelocity in that direction
+        if (contactsNearBoundingBoxLeftSide > 0 && contactsNearBoundingBoxRightSide == 0)
+        {
+            leftBlocked = true;
+        }
+        else if (contactsNearBoundingBoxRightSide > 0 && contactsNearBoundingBoxLeftSide == 0)
+        {
+            rightBlocked = true;
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        rightBlocked = false;
+        leftBlocked = false;
     }
 }
