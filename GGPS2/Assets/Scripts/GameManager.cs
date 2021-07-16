@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
 
     #region Requirements
     private const int JUMPING_JACK = 250;
-    private const int KING_CHUGGER = 5; // 50
+    private const int KING_CHUGGER = 50;
     private const int STANDUP_CITIZEN = 1; // 10
     private const int DAREDEVIL = 3; // 30
     // A stack of bottles is a "bottle tower" if it is at least BOTTLE_TOWER tall.
