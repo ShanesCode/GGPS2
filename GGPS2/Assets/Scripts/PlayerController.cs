@@ -21,16 +21,22 @@ public class PlayerController : MonoBehaviour
     private bool jumpSquat;
 
     private LayerMask groundMask;
-    private bool grounded;
+    [SerializeField] private bool grounded;
     private Vector2 groundOffset;
     private Vector2 size;
 
-    private Vector2 platformVelocity = Vector2.zero;
-    private bool onPlatform;
+    private Vector2 groundVelocity;
 
     Animator anim;
     Rigidbody2D rb2d;
     BoxCollider2D col;
+
+    private float inputX;
+    private bool jump;
+    private float xVelocity;
+
+    bool rightBlocked;
+    bool leftBlocked;
 
     // Start is called before the first frame update
     void Start()
@@ -42,49 +48,64 @@ public class PlayerController : MonoBehaviour
         left = true;
         jumpSquat = false;
 
-        onPlatform = false;
-
         col = GetComponent<BoxCollider2D>();
         size = col.size;
         groundMask = LayerMask.GetMask("Ground");
         groundOffset = new Vector2(0, GetComponent<BoxCollider2D>().size.y / 2);
         anim = GetComponent<Animator>();
         rb2d = GetComponent<Rigidbody2D>();
+
+        xVelocity = 0;
+
+        groundVelocity = Vector2.zero;
+
+        rightBlocked = false;
+        leftBlocked = false;
     }
 
-    // Update is called once per frame
-    void FixedUpdate()
+    private void Update()
     {
-        //lockout during jumpsquat
-        if (jumpSquat) return;
-
         //pull inputs
-        float inputX = Input.GetAxis("Horizontal");
-        bool jump = Input.GetButtonDown("Jump");
+        inputX = Input.GetAxis("Horizontal");
+        xVelocity = speedMax * inputX;
 
-        float xVelocity = speedMax * inputX;
+        if (rightBlocked)
+        {
+            if (xVelocity > 0) { xVelocity = 0; }
+        } 
+        else if (leftBlocked)
+        {
+            if (xVelocity < 0) { xVelocity = 0; }
+        }
 
+        if (grounded)
+        {
+            jump = Input.GetButtonDown("Jump");
+        }
+
+        if (grounded && jump)
+        {
+            anim.SetBool("jump", true);
+            jumpSquat = true;
+        }
 
         if (Mathf.Abs(xVelocity) > 0)
         {
             if (xVelocity > 0 && left) Flip();
             if (xVelocity < 0 && !left) Flip();
         }
-        
-        rb2d.velocity = new Vector2(xVelocity,rb2d.velocity.y);
-        if (onPlatform) rb2d.velocity += platformVelocity;
-        
+
         grounded = GroundCheck();
-        if(grounded && jump)
-        {
-            anim.SetBool("jump", true);
-            jumpSquat = true;
-        }
 
-        anim.SetFloat("xSpeed", Mathf.Abs(inputX));
-        anim.SetFloat("ySpeed", Mathf.Abs(rb2d.velocity.y));
+        anim.SetFloat("xSpeed", Mathf.Abs(xVelocity));
+        anim.SetFloat("ySpeed", rb2d.velocity.y);
+    }
 
-
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        if (jumpSquat) return;
+        rb2d.velocity = new Vector2(xVelocity + groundVelocity.x, rb2d.velocity.y);
     }
 
     void Jump()
@@ -94,6 +115,8 @@ public class PlayerController : MonoBehaviour
 
         jumpCount++;
         gameManager.UpdateJumpCount(jumpCount);
+
+        grounded = false;
     }
 
     bool GroundCheck()
@@ -108,6 +131,10 @@ public class PlayerController : MonoBehaviour
             {
                 anim.SetBool("grounded", true);
 
+                if (hit.rigidbody != null) {
+                    groundVelocity = hit.rigidbody.velocity;
+                }
+
                 OnGroundedEventArgs e = new OnGroundedEventArgs()
                 {
                     groundTransform = hit.transform
@@ -118,23 +145,8 @@ public class PlayerController : MonoBehaviour
             }
         }
         anim.SetBool("grounded", false);
+        groundVelocity = Vector2.zero;
         return false;
-    }
-
-    private void OnCollisionStay2D(Collision2D collision)
-    {
-        GameObject other = collision.collider.gameObject;
-        if (other.GetComponent<MovingPlatform>())
-        {
-            onPlatform = true;
-            platformVelocity = other.GetComponent<Rigidbody2D>().velocity;
-        }
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        onPlatform = false;
-        platformVelocity = Vector2.zero;
     }
 
     void Flip()
@@ -146,5 +158,48 @@ public class PlayerController : MonoBehaviour
     public bool GetFacing()
     {
         return left;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        // Get contact points
+        ContactPoint2D[] contacts = new ContactPoint2D[10];
+        collision.GetContacts(contacts);
+
+        // Below is being used to prevent wall-cling behaviour
+        // Check if those contacts are near the leftmost or rightmost edge of collider
+        int contactsNearBoundingBoxLeftSide = 0;
+        int contactsNearBoundingBoxRightSide = 0;
+        foreach (ContactPoint2D contact in contacts)
+        {
+            if (contact.collider == null) { break; }
+
+            if (Mathf.Abs(contact.point.x - col.bounds.min.x) < 0.1)
+            {
+                contactsNearBoundingBoxLeftSide++;
+            }
+
+            if (Mathf.Abs(contact.point.x - col.bounds.max.x) < 0.1)
+            {
+                contactsNearBoundingBoxRightSide++;
+            }
+        }
+
+        // If all collision points are near leftmost or rightmost edge, assume player is colliding to his side and not below
+        // Prevent player from adding any xVelocity in that direction
+        if (contactsNearBoundingBoxLeftSide > 0 && contactsNearBoundingBoxRightSide == 0)
+        {
+            leftBlocked = true;
+        }
+        else if (contactsNearBoundingBoxRightSide > 0 && contactsNearBoundingBoxLeftSide == 0)
+        {
+            rightBlocked = true;
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        rightBlocked = false;
+        leftBlocked = false;
     }
 }

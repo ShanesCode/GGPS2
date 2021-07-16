@@ -6,10 +6,10 @@ public class MovingPlatform : MonoBehaviour
 {
     public bool autoMode = true;
     public float speed;
-    public float range;
-    private float direction;
+    //public float range;
+    private Vector2 direction;
     public Vector2[] goals;
-    public int activeGoal;
+    [SerializeField] private int activeGoal;
 
     public bool flips;
     public bool left;
@@ -23,46 +23,45 @@ public class MovingPlatform : MonoBehaviour
         {
             rb2d = gameObject.AddComponent<Rigidbody2D>();
         }
-
-        speed = 2.0f;
-        range = 7.0f;
-
-        goals = new Vector2[2];
-        goals[0] = (Vector2)transform.localPosition - new Vector2(range,0);
-        goals[1] = (Vector2)transform.localPosition + new Vector2(range,0);
+        rb2d.isKinematic = true;
 
         activeGoal = 0;
-}
+    }
+
+    private void Start()
+    {
+        for (int i = 0; i < goals.Length; i++)
+        {
+            goals[i] += (Vector2)transform.localPosition;
+        }
+    }
 
     private void Update()
     {
-        rb2d.velocity = new Vector2(speed * direction, rb2d.velocity.y);
+        CheckProximity(goals[activeGoal]);
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        CheckProximity(goals[activeGoal]);
+        rb2d.velocity = speed * direction.normalized;
     }
 
     void CheckProximity(Vector2 goal)
     {
-        float distance = Mathf.Abs(transform.localPosition.x - goal.x);
-        if (distance < 0.5f)
+        Vector2 distance = (Vector2)transform.localPosition - goal;
+        if (distance.magnitude < 0.5f)
         {
-            activeGoal += 1;
+            activeGoal++;
             if (activeGoal >= goals.Length) activeGoal = 0;
-            if (flips) { Flip(); };
         }
-        direction = Mathf.Sign(goal.x - transform.localPosition.x);
-    }
 
-    
-
-    void OnDrawGizmos()
-    {
-        Gizmos.color = Color.blue;
-        Gizmos.DrawLine(transform.position - new Vector3(range, 0, 0), transform.position + new Vector3(range, 0, 0));
+        if (direction != Vector2.zero)
+        {
+            // If x direction of next goal is different, flip
+            if (flips && Mathf.Sign(goals[activeGoal].x - transform.localPosition.x) != Mathf.Sign(direction.x)) { Flip(); };
+        }
+        direction = goals[activeGoal] - (Vector2)transform.localPosition;
     }
 
     void Flip()
