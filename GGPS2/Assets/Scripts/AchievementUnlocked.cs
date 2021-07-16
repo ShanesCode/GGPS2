@@ -13,14 +13,23 @@ public class AchievementUnlocked : MonoBehaviour
 
     [Range(0.0f, 10.0f)]public float displayTime = 3.0f;
     private float displayReset;
+
+    GameObject gameManager;
+
     // Start is called before the first frame update
     void Start()
     {
-        GameManager.OnAchievementUnlocked += GameManager_OnAchievementUnlocked;
+        achievementUnlockedUI = transform.GetChild(0).transform.gameObject;
+        achievement = transform.GetChild(0).transform.GetChild(2).GetComponent<TextMeshProUGUI>();
+        requirement = transform.GetChild(0).transform.GetChild(3).GetComponent<TextMeshProUGUI>();
+        image = transform.GetChild(0).transform.GetChild(0).GetComponent<Image>();
+
+        gameManager = GameObject.FindWithTag("GameManager");
+        gameManager.GetComponent<GameManager>().OnAchievementUnlocked += AchievementUnlocked_OnAchievementUnlocked;
         displayReset = displayTime;
     }
 
-    private void GameManager_OnAchievementUnlocked(object sender, GameManager.OnAchievementUnlockedEventArgs e)
+    private void AchievementUnlocked_OnAchievementUnlocked(object sender, GameManager.OnAchievementUnlockedEventArgs e)
     {
         achievementUnlockedUI.SetActive(true);
         achievement.text = e.title;

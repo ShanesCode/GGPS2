@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class LevelManager : MonoBehaviour
 {
     public GameObject player;
-    GameManager gameManager = new GameManager();
+    GameObject gameManager;
     private int currentRoom;
     [SerializeField] public int nextRoomNumber;
     [SerializeField] private List<EndRoomTrigger> endRoomTriggers;
@@ -21,6 +21,8 @@ public class LevelManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gameManager = GameObject.FindWithTag("GameManager");
+
         Time.timeScale = 1;
         paused = false;
 
@@ -32,8 +34,8 @@ public class LevelManager : MonoBehaviour
         player = GameObject.FindWithTag("Player");
         player.GetComponent<PlayerController>().OnDeath += LevelMan_OnDeath;
 
-        player.transform.position = roomSpawnPoints[GameManager.spawnRoom].transform.position;
-        currentRoom = GameManager.spawnRoom;
+        player.transform.position = roomSpawnPoints[gameManager.GetComponent<GameManager>().spawnRoom].transform.position;
+        currentRoom = gameManager.GetComponent<GameManager>().spawnRoom;
     }
 
     private void Update()
@@ -89,7 +91,7 @@ public class LevelManager : MonoBehaviour
             Destroy(b);
         }*/
         endRoomUI.SetActive(false);
-        GameManager.spawnRoom = currentRoom;
+        gameManager.GetComponent<GameManager>().spawnRoom = currentRoom;
         StartCoroutine(LoadYourAsyncScene(SceneManager.GetActiveScene().name));
     }
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,13 +11,19 @@ public class BottleController : MonoBehaviour
     public List<GameObject> bottles;
     private Animator anim;
     int flip;
+    int drinkCount;
 
     GameObject nearest_bottle;
     Vector3 bottleCarryOffset;
 
+    GameObject gameManager;
+
     // Start is called before the first frame update
     void Start()
     {
+        gameManager = GameObject.FindWithTag("GameManager");
+        drinkCount = gameManager.GetComponent<GameManager>().GetDrinkCount();
+
         hasBottle = false;
         anim = GetComponent<Animator>();
     }
@@ -170,6 +177,9 @@ public class BottleController : MonoBehaviour
 
     public void CreateBottle()
     {
+        drinkCount++;
+        gameManager.GetComponent<GameManager>().UpdateDrinkCount(drinkCount);
+
         nearest_bottle = bottle;
         nearest_bottle.GetComponent<Bottle>().SetBeingCarried(true);
         bottleCarryOffset = new Vector3(transform.position.x + (gameObject.GetComponent<BoxCollider2D>().bounds.size.x * flip) / 2, transform.position.y + 1, transform.position.z);

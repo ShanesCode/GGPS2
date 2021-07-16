@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
         //empty..... for now..........
     }
 
-    GameManager gameManager = new GameManager();
+    GameObject gameManager;
     private int jumpCount;
 
     public float speedMax;
@@ -67,6 +67,8 @@ public class PlayerController : MonoBehaviour
 
         rightBlocked = false;
         leftBlocked = false;
+
+        gameManager = GameObject.FindWithTag("GameManager");
     }
 
     private void Update()
@@ -120,7 +122,7 @@ public class PlayerController : MonoBehaviour
         jumpSquat = false;
 
         jumpCount++;
-        gameManager.UpdateJumpCount(jumpCount);
+        gameManager.GetComponent<GameManager>().UpdateJumpCount(jumpCount);
 
         grounded = false;
     }
