@@ -78,7 +78,10 @@ public class PlayerController : MonoBehaviour
             if (xVelocity < 0) { xVelocity = 0; }
         }
 
-        jump = Input.GetButtonDown("Jump");
+        if (grounded)
+        {
+            jump = Input.GetButtonDown("Jump");
+        }
 
         if (grounded && jump)
         {
