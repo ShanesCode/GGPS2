@@ -2,9 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Bottle : MonoBehaviour
 {
+    public GameObject label;
+    public GameObject labelText;
 
     [SerializeField] private LayerMask groundMask;
     private Vector2 size;
@@ -18,6 +21,9 @@ public class Bottle : MonoBehaviour
     bool grounded;
 
     int flip;
+
+    public List<string> firstWords;
+    public List<string> secondWords;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,6 +32,9 @@ public class Bottle : MonoBehaviour
         player = GameObject.FindWithTag("Player");
 
         tag = "Bottle";
+
+        RandomiseBottleColours();
+        RandomiseBottleWords();
     }
 
     // Update is called once per frame
@@ -109,5 +118,28 @@ public class Bottle : MonoBehaviour
             gameObject.GetComponent<BoxCollider2D>().enabled = true;
             gameObject.GetComponent<Rigidbody2D>().isKinematic = false;
         }
+    }
+
+    void RandomiseBottleColours()
+    {
+        float bottleRed = UnityEngine.Random.Range(0.0f, 1.0f);
+        float bottleGreen = UnityEngine.Random.Range(0.0f, 1.0f);
+        float bottleBlue = UnityEngine.Random.Range(0.0f, 1.0f);
+
+        gameObject.GetComponent<SpriteRenderer>().color = new Color(bottleRed, bottleGreen, bottleBlue);
+
+        float labelRed = 1.0f - bottleRed;
+        float labelGreen = 1.0f - bottleGreen;
+        float labelBlue = 1.0f - bottleBlue;
+
+        label.GetComponent<SpriteRenderer>().color = new Color(labelRed, labelGreen, labelBlue);
+    }
+
+    void RandomiseBottleWords()
+    {
+        int firstWord = UnityEngine.Random.Range(0, firstWords.Count);
+        int secondWord = UnityEngine.Random.Range(0, secondWords.Count);
+
+        labelText.GetComponent<TextMeshPro>().text = firstWords[firstWord] + '\n' + secondWords[secondWord];
     }
 }
