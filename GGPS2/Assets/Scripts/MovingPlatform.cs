@@ -38,14 +38,13 @@ public class MovingPlatform : MonoBehaviour
 
     private void Update()
     {
-        rb2d.velocity = speed * direction.normalized;
-        //transform.position = Vector2.MoveTowards(transform.position, direction, speed * Time.deltaTime);
+        CheckProximity(goals[activeGoal]);
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        CheckProximity(goals[activeGoal]);
+        rb2d.velocity = speed * direction.normalized;
     }
 
     void CheckProximity(Vector2 goal)
