@@ -29,6 +29,9 @@ public class LevelManager : MonoBehaviour
             endRoomTriggers[i].GetComponent<EndRoomTrigger>().OnTrigger += LevelManager_OnTrigger;
         }
 
+        player = GameObject.FindWithTag("Player");
+        player.GetComponent<PlayerController>().OnDeath += LevelMan_OnDeath;
+
         player.transform.position = roomSpawnPoints[GameManager.spawnRoom].transform.position;
         currentRoom = GameManager.spawnRoom;
     }
@@ -80,6 +83,11 @@ public class LevelManager : MonoBehaviour
     public void ResetRoom()
     {
         // Reset the level, remove the bottles
+        /*GameObject[] bottles = GameObject.FindGameObjectsWithTag("Bottle");
+        foreach(GameObject b in bottles)
+        {
+            Destroy(b);
+        }*/
         endRoomUI.SetActive(false);
         GameManager.spawnRoom = currentRoom;
         StartCoroutine(LoadYourAsyncScene(SceneManager.GetActiveScene().name));
@@ -112,5 +120,10 @@ public class LevelManager : MonoBehaviour
             settings.SetActive(false);
             paused = false;
         }
+    }
+    private void LevelMan_OnDeath(object sender, PlayerController.OnDeathEventArgs e)
+    {
+        Debug.Log("player is dead");
+        ResetRoom();
     }
 }
