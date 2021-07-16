@@ -8,6 +8,7 @@ TagManager:
   - EndRoomTrigger
   - InitialSpawn
   - GameManager
+  - Bottle
   layers:
   - Default
   - TransparentFX

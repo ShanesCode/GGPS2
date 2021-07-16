@@ -12,19 +12,28 @@ public class BottleController : MonoBehaviour
     int flip;
 
     GameObject nearest_bottle;
+    Vector3 bottleCarryOffset;
 
     // Start is called before the first frame update
     void Start()
     {
         hasBottle = false;
         anim = GetComponent<Animator>();
-        nearest_bottle = null;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown("r"))
+        if (GetComponent<PlayerController>().GetFacing() == false)
+        {
+            flip = 1;
+        }
+        else
+        {
+            flip = -1;
+        }
+
+        if (Input.GetKeyDown("r") && !hasBottle)
         {
             anim.SetTrigger("drink");
             CreateBottle();
@@ -34,18 +43,15 @@ public class BottleController : MonoBehaviour
         {
             InteractBottle();
         }
+
+        if (hasBottle && nearest_bottle != null)
+        {
+            bottleCarryOffset = new Vector3(transform.position.x + (gameObject.GetComponent<BoxCollider2D>().bounds.size.x * flip) / 2, transform.position.y + 1, transform.position.z);
+            nearest_bottle.transform.position = bottleCarryOffset;
+        }
     }
     void InteractBottle()
-    {        
-        if (GetComponent<PlayerController>().GetFacing() == false)
-        {
-            flip = 1;
-        }
-        else
-        {
-            flip = -1;
-        }
-        
+    {               
         if (hasBottle == false)
         {
             CheckPickupBottle();
@@ -85,7 +91,10 @@ public class BottleController : MonoBehaviour
     public void PickupBottle()
     {
         bottles.Remove(nearest_bottle);
-        Destroy(nearest_bottle);
+        nearest_bottle.GetComponent<Bottle>().SetBeingCarried(true);
+        bottleCarryOffset = new Vector3(transform.position.x + (gameObject.GetComponent<BoxCollider2D>().bounds.size.x * flip) / 2, transform.position.y + 1, transform.position.z);
+        nearest_bottle.transform.position = bottleCarryOffset;
+
         hasBottle = true;
     }
 
@@ -131,21 +140,29 @@ public class BottleController : MonoBehaviour
                     }
                     else
                     {
-                        bottles.Add(Instantiate(bottle, new Vector3(top_of_stack.transform.position.x, top_of_stack.transform.position.y + (bottle_collider.size.y * bottle_collider.transform.localScale.y), 0), transform.rotation));
+                        nearest_bottle.GetComponent<Bottle>().SetBeingCarried(false);
+                        nearest_bottle.transform.position = new Vector3(top_of_stack.transform.position.x, top_of_stack.transform.position.y + (bottle_collider.size.y * bottle_collider.transform.localScale.y), 0);
+                        bottles.Add(nearest_bottle);
                         hasBottle = false;
                     }
 
                 }
                 else
                 {
-                    bottles.Add(Instantiate(bottle, transform.position + new Vector3(flip * 1, 0, 0), transform.rotation));
+                    nearest_bottle.GetComponent<Bottle>().SetBeingCarried(false);
+                    Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), nearest_bottle.GetComponent<Collider2D>(), true);
+                    nearest_bottle.GetComponent<Bottle>().ChuckBottle();
+                    bottles.Add(nearest_bottle);
                     hasBottle = false;
                 }
             }
 
             else
             {
-                bottles.Add(Instantiate(bottle, transform.position + new Vector3(flip * 1, 0, 0), transform.rotation));
+                nearest_bottle.GetComponent<Bottle>().SetBeingCarried(false);
+                Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), nearest_bottle.GetComponent<Collider2D>(), true);
+                nearest_bottle.GetComponent<Bottle>().ChuckBottle();
+                bottles.Add(nearest_bottle);
                 hasBottle = false;
             }
         }
@@ -153,10 +170,13 @@ public class BottleController : MonoBehaviour
 
     public void CreateBottle()
     {
-        if (hasBottle == false)
-            {
-                hasBottle = true;
-            } 
+        nearest_bottle = bottle;
+        nearest_bottle.GetComponent<Bottle>().SetBeingCarried(true);
+        bottleCarryOffset = new Vector3(transform.position.x + (gameObject.GetComponent<BoxCollider2D>().bounds.size.x * flip) / 2, transform.position.y + 1, transform.position.z);
+        nearest_bottle.transform.position = bottleCarryOffset;
+        nearest_bottle = Instantiate(nearest_bottle);
+
+        hasBottle = true;
     }
 
 }

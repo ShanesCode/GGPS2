@@ -6,20 +6,31 @@ using UnityEngine;
 public class Bottle : MonoBehaviour
 {
 
-    private LayerMask groundMask;
-    private bool grounded;
-    private Vector2 groundOffset;
+    [SerializeField] private LayerMask groundMask;
     private Vector2 size;
     BoxCollider2D col;
+    GameObject player;
+
+    GameObject ground;
+
+    float x_offset_from_ground;
+
+    bool grounded;
+
+    int flip;
     // Start is called before the first frame update
     void Start()
     {
         col = GetComponent<BoxCollider2D>();
         size = col.size;
-        groundMask = LayerMask.GetMask("Ground");
-        groundOffset = new Vector2(0, GetComponent<BoxCollider2D>().size.y / 2);
-        GameObject player = GameObject.Find("Player");
-        int flip = 1;
+        player = GameObject.FindWithTag("Player");
+
+        tag = "Bottle";
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
         if (player.GetComponent<PlayerController>().GetFacing() == false)
         {
             flip = 1;
@@ -28,57 +39,75 @@ public class Bottle : MonoBehaviour
         {
             flip = -1;
         }
-        gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(flip * 3f, 5f);
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (GroundCheck() == true)
+        if (grounded)
         {
-            gameObject.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+            //gameObject.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+            Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), player.GetComponent<Collider2D>(), false);
         }
     }
 
-    private void OnTriggerStay2D(Collider2D collision)
+    private void FixedUpdate()
     {
-        if (collision.gameObject.name == "Player")
-        {
-            Debug.Log("Beep Boop Stay");
-        }
+        grounded = GroundCheck();
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.name == "Player")
-        {
-            Debug.Log("Beep Boop Enter");
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.gameObject.name == "Player")
-        {
-            Debug.Log("Beep Boop Exit");
-        }
-    }
     bool GroundCheck()
     {
-        //Vector2 boxColliderPos = new Vector2(transform.position.x + col.offset.x, transform.position.y + col.offset.y);
-        Vector2 bottom_of_object = new Vector2(transform.position.x, transform.position.y - (col.size.y / 2));
+        Vector2 boxColliderPos = new Vector2(transform.position.x + col.offset.x, transform.position.y + col.offset.y);
+        Vector2 bottom_of_object = new Vector2(transform.position.x, transform.position.y + (col.size.y / 2));
 
-        RaycastHit2D hit = Physics2D.BoxCast(bottom_of_object, new Vector2(col.size.x * 0.5f, 0.0002f), 0f, new Vector2(0, 0), groundMask);
-        
+        gameObject.layer = LayerMask.NameToLayer("Default");
+        RaycastHit2D hit = Physics2D.CircleCast(bottom_of_object, col.size.x / 2, Vector2.down, Mathf.Infinity, groundMask);
+
         if (hit)
         {
-            float distance = Mathf.Abs(hit.point.y - bottom_of_object.y);
-            if (distance <= size.y)
+            float distance = Mathf.Abs(hit.point.y - boxColliderPos.y);
+            if (distance <= 0.85)
             {
-                                             
+                if (ground != hit.transform.gameObject)
+                {
+                    gameObject.GetComponent<Rigidbody2D>().drag = 1;
+                    gameObject.GetComponent<Rigidbody2D>().mass = 9999999;
+
+                    if (hit.rigidbody != null)
+                    {
+                        gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(hit.rigidbody.velocity.x, hit.rigidbody.velocity.y);
+                    }
+
+                    ground = hit.transform.gameObject;
+                }
+
+                gameObject.layer = LayerMask.NameToLayer("Ground");
                 return true;
             }
         }
+
+        gameObject.layer = LayerMask.NameToLayer("Ground");
         return false;
+    }
+
+    public void ChuckBottle()
+    {
+        gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(flip * 3f, 5f);
+    }
+
+    public void SetBeingCarried(bool carried)
+    {
+        ground = null;
+        gameObject.GetComponent<Rigidbody2D>().drag = 0;
+        gameObject.GetComponent<Rigidbody2D>().mass = 1;
+
+        if (carried)
+        {
+            //gameObject.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
+            gameObject.GetComponent<BoxCollider2D>().enabled = false;
+            gameObject.GetComponent<Rigidbody2D>().isKinematic = true;
+        }
+        else
+        {
+            gameObject.GetComponent<BoxCollider2D>().enabled = true;
+            gameObject.GetComponent<Rigidbody2D>().isKinematic = false;
+        }
     }
 }
