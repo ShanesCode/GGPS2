@@ -10,6 +10,12 @@ public class PlayerController : MonoBehaviour
     {
         public Transform groundTransform;
     }
+    public event EventHandler<OnDeathEventArgs> OnDeath;
+
+    public class OnDeathEventArgs
+    {
+        //empty..... for now..........
+    }
 
     GameManager gameManager = new GameManager();
     private int jumpCount;
@@ -202,6 +208,12 @@ public class PlayerController : MonoBehaviour
         {
             rightBlocked = true;
         }
+    }
+    public void Kill()
+    {
+        OnDeathEventArgs e = new OnDeathEventArgs();
+
+        OnDeath?.Invoke(this, e);
     }
 
     private void OnCollisionExit2D(Collision2D collision)
