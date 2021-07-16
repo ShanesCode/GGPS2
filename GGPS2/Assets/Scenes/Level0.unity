@@ -6816,9 +6816,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 233fd0bb4cfb5d84e8e711122b60be60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 1000349563}
-  x_offset: 0
   y_offset: 1.5
+  smoothingStep: 1
 --- !u!1001 &3807949598051756529
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6945,6 +6944,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 8876144569204872224, guid: dcf53bbaddb713e4ebcaf304bcc16c11, type: 3}
+      propertyPath: m_Mass
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8876144569204872224, guid: dcf53bbaddb713e4ebcaf304bcc16c11, type: 3}
+      propertyPath: m_GravityScale
+      value: 2.5
+      objectReference: {fileID: 0}
     - target: {fileID: 8876144569204872231, guid: dcf53bbaddb713e4ebcaf304bcc16c11, type: 3}
       propertyPath: m_Name
       value: Player
