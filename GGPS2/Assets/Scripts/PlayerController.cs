@@ -89,7 +89,7 @@ public class PlayerController : MonoBehaviour
             jump = Input.GetButtonDown("Jump");
         }
 
-        if (grounded && jump)
+        if (grounded && jump && !GetComponent<BottleController>().hasBottle)
         {
             anim.SetBool("jump", true);
             jumpSquat = true;
@@ -176,9 +176,16 @@ public class PlayerController : MonoBehaviour
         // Check if those contacts are near the leftmost or rightmost edge of collider
         int contactsNearBoundingBoxLeftSide = 0;
         int contactsNearBoundingBoxRightSide = 0;
+        int contactsNearBoundingBoxBottomSide = 0;
+
         foreach (ContactPoint2D contact in contacts)
         {
             if (contact.collider == null) { break; }
+
+            if (Mathf.Abs(contact.point.y - col.bounds.min.y) < 0.1)
+            {
+                contactsNearBoundingBoxBottomSide++;
+            }
 
             if (Mathf.Abs(contact.point.x - col.bounds.min.x) < 0.1)
             {
@@ -193,11 +200,11 @@ public class PlayerController : MonoBehaviour
 
         // If all collision points are near leftmost or rightmost edge, assume player is colliding to his side and not below
         // Prevent player from adding any xVelocity in that direction
-        if (contactsNearBoundingBoxLeftSide > 0 && contactsNearBoundingBoxRightSide == 0)
+        if (contactsNearBoundingBoxLeftSide > 0 && contactsNearBoundingBoxRightSide == 0 && contactsNearBoundingBoxBottomSide != 0)
         {
             leftBlocked = true;
         }
-        else if (contactsNearBoundingBoxRightSide > 0 && contactsNearBoundingBoxLeftSide == 0)
+        else if (contactsNearBoundingBoxRightSide > 0 && contactsNearBoundingBoxLeftSide == 0 && contactsNearBoundingBoxBottomSide != 0)
         {
             rightBlocked = true;
         }
