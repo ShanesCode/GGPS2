@@ -79,7 +79,7 @@ public class PlayerController : MonoBehaviour
 
         grounded = GroundCheck();
 
-        anim.SetFloat("xSpeed", Mathf.Abs(rb2d.velocity.x));
+        anim.SetFloat("xSpeed", Mathf.Abs(xVelocity));
         anim.SetFloat("ySpeed", rb2d.velocity.y);
     }
 
