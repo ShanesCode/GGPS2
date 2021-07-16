@@ -109,17 +109,23 @@ public class BottleController : MonoBehaviour
     {
         // Calculate distance between player and bin objects
         float diff = transform.position.x - bin.transform.position.x;
+
+        // If there is a bin nearby
         if (diff < 2 && diff > -2)
         {
+            // Maybe play an animation on the bin? At least increment recycled counter
             hasBottle = false;
         }
         else
         {
+            // Either throw a bottle or add it onto a stack, if there's a stack in front of you
             Vector3 placement_coordinates = transform.position + new Vector3(flip * 1, 0, 0);
             BoxCollider2D bottle_collider;
             GameObject top_of_stack = null;
             if (bottles.Count > 0)
             {
+                // This foreach loop is used to check how big the stack of bottles is
+                // I think it might also prevent the player form stacking above some value
                 foreach (GameObject go in bottles)
                 {
                     bottle_collider = go.GetComponent<BoxCollider2D>();
@@ -147,6 +153,7 @@ public class BottleController : MonoBehaviour
                     }
                     else
                     {
+                        // Put bottle on top of stack?
                         nearest_bottle.GetComponent<Bottle>().SetBeingCarried(false);
                         nearest_bottle.transform.position = new Vector3(top_of_stack.transform.position.x, top_of_stack.transform.position.y + (bottle_collider.size.y * bottle_collider.transform.localScale.y), 0);
                         bottles.Add(nearest_bottle);
@@ -156,20 +163,22 @@ public class BottleController : MonoBehaviour
                 }
                 else
                 {
-                    nearest_bottle.GetComponent<Bottle>().SetBeingCarried(false);
-                    Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), nearest_bottle.GetComponent<Collider2D>(), true);
-                    nearest_bottle.GetComponent<Bottle>().ChuckBottle();
-                    bottles.Add(nearest_bottle);
+                    // Throw the bottle
+                    nearest_bottle.GetComponent<Bottle>().SetBeingCarried(false); // Makes the bottles non-kinematic and adds the collider. Also sets mass and drag to default
+                    Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), nearest_bottle.GetComponent<Collider2D>(), true); // Prevents the bottle colliding with the player
+                    nearest_bottle.GetComponent<Bottle>().ChuckBottle(); // Gives the bottle velocity
+                    bottles.Add(nearest_bottle); // Adds the bottle to the list of bottles in the world
                     hasBottle = false;
                 }
             }
 
             else
             {
-                nearest_bottle.GetComponent<Bottle>().SetBeingCarried(false);
-                Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), nearest_bottle.GetComponent<Collider2D>(), true);
-                nearest_bottle.GetComponent<Bottle>().ChuckBottle();
-                bottles.Add(nearest_bottle);
+                // Throw the bottle
+                nearest_bottle.GetComponent<Bottle>().SetBeingCarried(false); // Makes the bottles non-kinematic and adds the collider. Also sets mass and drag to default
+                Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), nearest_bottle.GetComponent<Collider2D>(), true); // Prevents the bottle colliding with the player
+                nearest_bottle.GetComponent<Bottle>().ChuckBottle(); // Gives the bottle velocity
+                bottles.Add(nearest_bottle); // Adds the bottle to the list of bottles in the world
                 hasBottle = false;
             }
         }
@@ -181,7 +190,7 @@ public class BottleController : MonoBehaviour
         gameManager.GetComponent<GameManager>().UpdateDrinkCount(drinkCount);
 
         nearest_bottle = bottle;
-        nearest_bottle.GetComponent<Bottle>().SetBeingCarried(true);
+        nearest_bottle.GetComponent<Bottle>().SetBeingCarried(true);  // Makes the bottles kinematic and removes the collider.  Also sets mass and drag to default
         bottleCarryOffset = new Vector3(transform.position.x + (gameObject.GetComponent<BoxCollider2D>().bounds.size.x * flip) / 2, transform.position.y + 1, transform.position.z);
         nearest_bottle.transform.position = bottleCarryOffset;
         nearest_bottle = Instantiate(nearest_bottle);
