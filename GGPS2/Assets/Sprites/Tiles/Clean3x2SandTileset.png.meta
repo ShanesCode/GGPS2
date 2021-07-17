@@ -1,25 +1,25 @@
 fileFormatVersion: 2
-guid: b1b5a2dbad740c544ac14a0a1f3d6e2c
+guid: 6c4ce4e4645a72f4b9eb5b16430ba6be
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 8076046041362954224
-    second: SandTiles_0
+      213: -1688944877012319836
+    second: CleanSandTiles_0
   - first:
-      213: 3079755848125757503
-    second: SandTiles_1
+      213: -4526379096821992557
+    second: CleanSandTiles_1
   - first:
-      213: -2489249372091665714
-    second: SandTiles_2
+      213: 8790013212778709092
+    second: CleanSandTiles_2
   - first:
-      213: 6539772155659128081
-    second: SandTiles_3
+      213: 4770542112485891750
+    second: CleanSandTiles_3
   - first:
-      213: -4343143764011819993
-    second: SandTiles_4
+      213: -949067062564641466
+    second: CleanSandTiles_4
   - first:
-      213: -4420619078743114788
-    second: SandTiles_5
+      213: 8429123336035180000
+    second: CleanSandTiles_5
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -64,7 +64,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 512
+  spritePixelsToUnits: 256
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -109,7 +109,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: SandTiles_0
+      name: CleanSandTiles_0
       rect:
         serializedVersion: 2
         x: 0
@@ -123,14 +123,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0f7732df511e31070800000000000000
-      internalID: 8076046041362954224
+      spriteID: 4a107703599af88e0800000000000000
+      internalID: -1688944877012319836
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SandTiles_1
+      name: CleanSandTiles_1
       rect:
         serializedVersion: 2
         x: 512
@@ -144,14 +144,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f38b77a60ad7dba20800000000000000
-      internalID: 3079755848125757503
+      spriteID: 393fb2771321f21c0800000000000000
+      internalID: -4526379096821992557
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SandTiles_2
+      name: CleanSandTiles_2
       rect:
         serializedVersion: 2
         x: 1024
@@ -165,14 +165,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ec2bc1b72e8647dd0800000000000000
-      internalID: -2489249372091665714
+      spriteID: 4604aae02766cf970800000000000000
+      internalID: 8790013212778709092
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SandTiles_3
+      name: CleanSandTiles_3
       rect:
         serializedVersion: 2
         x: 0
@@ -186,14 +186,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 11d8d0a5020f1ca50800000000000000
-      internalID: 6539772155659128081
+      spriteID: 6ae53c0a6ce543240800000000000000
+      internalID: 4770542112485891750
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SandTiles_4
+      name: CleanSandTiles_4
       rect:
         serializedVersion: 2
         x: 512
@@ -207,14 +207,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 72c5f91f1cd0ab3c0800000000000000
-      internalID: -4343143764011819993
+      spriteID: 645afc3f88c34d2f0800000000000000
+      internalID: -949067062564641466
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SandTiles_5
+      name: CleanSandTiles_5
       rect:
         serializedVersion: 2
         x: 1024
@@ -228,8 +228,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cdbb33c8e5ec6a2c0800000000000000
-      internalID: -4420619078743114788
+      spriteID: 0ed1554c3034af470800000000000000
+      internalID: 8429123336035180000
       vertices: []
       indices: 
       edges: []

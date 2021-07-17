@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class KillBox : MonoBehaviour
 {
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        GameObject other = collision.gameObject;
-        if(other.tag == "Player")
+    
+        if(other.gameObject.tag == "Player")
         {
-            other.GetComponent<PlayerController>().Kill();
+            other.gameObject.GetComponent<PlayerController>().Kill();
         }
     }
 }
