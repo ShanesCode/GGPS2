@@ -27,6 +27,9 @@ public class Bottle : MonoBehaviour
 
     private int wasteCount;
     GameObject gameManager;
+
+    Vector2 boxColliderPos;
+    Vector2 bottom_of_object;
     // Start is called before the first frame update
 
     private void Awake()
@@ -65,8 +68,13 @@ public class Bottle : MonoBehaviour
         if (grounded)
         {
             //gameObject.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+            gameObject.GetComponent<Rigidbody2D>().drag = 1;
+            gameObject.GetComponent<Rigidbody2D>().mass = 9999999;
             Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), player.GetComponent<Collider2D>(), false);
         }
+
+        boxColliderPos = new Vector2(transform.position.x + col.offset.x, transform.position.y + col.offset.y);
+        bottom_of_object = new Vector2(transform.position.x, transform.position.y - (col.size.y / 2));
     }
 
     private void FixedUpdate()
@@ -74,48 +82,15 @@ public class Bottle : MonoBehaviour
         grounded = GroundCheck();
     }
 
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(bottom_of_object, col.size.x / 2);
+    }
+
     bool GroundCheck()
     {
-        Vector2 boxColliderPos = new Vector2(transform.position.x + col.offset.x, transform.position.y + col.offset.y);
-        Vector2 bottom_of_object = new Vector2(transform.position.x, transform.position.y + (col.size.y / 2));
-
-        // Set this bottle to default layer so that it doesn't hit itself whilst going through these lines of code
-        gameObject.layer = LayerMask.NameToLayer("Default");
-        RaycastHit2D hit = Physics2D.CircleCast(bottom_of_object, col.size.x / 2, Vector2.down, Mathf.Infinity, groundMask);
-
-        if (hit)
-        {
-            float distance = Mathf.Abs(hit.point.y - boxColliderPos.y);
-            if (distance <= 0.85)
-            {
-                // If ground changes
-                if (ground != hit.transform.gameObject)
-                { 
-                    // Set mass super high so player can't move the bottle
-                    // Set drag to 1 so that the bottle stays on the dog (haven't checked bird). A high value seems to make the bottle get stuck in the air
-                    gameObject.GetComponent<Rigidbody2D>().drag = 1;
-                    gameObject.GetComponent<Rigidbody2D>().mass = 9999999;
-
-                    // If the ground has a rigidbody (moving platforms or other bottle on platform)
-                    if (hit.rigidbody != null)
-                    {
-                        // Set the velocity equal to that of the ground
-                        gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(hit.rigidbody.velocity.x, hit.rigidbody.velocity.y);
-                    }
-
-                    // Update current ground
-                    ground = hit.transform.gameObject;
-                }
-
-                // Set the bottle back to the ground layer so that it is hit by the same code for other bottles
-                gameObject.layer = LayerMask.NameToLayer("Ground");
-                return true;
-            }
-        }
-
-        // Set the bottle back to the ground layer so that it is hit by the same code for other bottles
-        gameObject.layer = LayerMask.NameToLayer("Ground");
-        return false;
+        return Physics2D.BoxCast(col.bounds.center, col.bounds.size, 0f, Vector2.down, .1f, groundMask);
     }
 
     public void ChuckBottle()

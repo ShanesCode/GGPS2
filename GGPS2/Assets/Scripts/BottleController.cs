@@ -10,16 +10,31 @@ public class BottleController : MonoBehaviour
     public List<GameObject> bins;
     public bool hasBottle;
     public List<GameObject> bottles;
+
+    public List<BottleStack> bottleStacks;
+
+    public class BottleStack
+    {
+        public float xmin;
+        public float xmax;
+        public List<GameObject> bottles;
+    }
+
     private Animator anim;
     int flip;
+
+    float bottleHeight;
+
+    private int biggestStack;
 
     [Range(0, 5)] public float binDetectionDistance = 2.0f;
     
     private int drinkCount;
     private int recycleCount;
-    private int wasteCount;
+    //private int wasteCount;
 
     GameObject nearest_bottle;
+    GameObject carried_bottle;
     Vector3 bottleCarryOffset;
 
     GameObject gameManager;
@@ -27,6 +42,10 @@ public class BottleController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        carried_bottle = null;
+
+        biggestStack = 0;
+
         gameManager = GameObject.FindWithTag("GameManager");
         drinkCount = gameManager.GetComponent<GameManager>().GetDrinkCount();
         recycleCount = gameManager.GetComponent<GameManager>().GetRecycleCount();
@@ -43,6 +62,8 @@ public class BottleController : MonoBehaviour
 
         hasBottle = false;
         anim = GetComponent<Animator>();
+
+        bottleHeight = bottle.GetComponent<BoxCollider2D>().size.y * bottle.GetComponent<BoxCollider2D>().transform.localScale.y;
     }
 
     // Update is called once per frame
@@ -68,10 +89,10 @@ public class BottleController : MonoBehaviour
             InteractBottle();
         }
 
-        if (hasBottle && nearest_bottle != null)
+        if (hasBottle && carried_bottle != null)
         {
             bottleCarryOffset = new Vector3(transform.position.x + (gameObject.GetComponent<BoxCollider2D>().bounds.size.x * flip) / 2, transform.position.y + 1, transform.position.z);
-            nearest_bottle.transform.position = bottleCarryOffset;
+            carried_bottle.transform.position = bottleCarryOffset;
         }
     }
     void InteractBottle()
@@ -116,9 +137,10 @@ public class BottleController : MonoBehaviour
     public void PickupBottle()
     {
         bottles.Remove(nearest_bottle);
-        nearest_bottle.GetComponent<Bottle>().SetBeingCarried(true);
+        carried_bottle = nearest_bottle;
+        carried_bottle.GetComponent<Bottle>().SetBeingCarried(true);
         bottleCarryOffset = new Vector3(transform.position.x + (gameObject.GetComponent<BoxCollider2D>().bounds.size.x * flip) / 2, transform.position.y + 1, transform.position.z);
-        nearest_bottle.transform.position = bottleCarryOffset;
+        carried_bottle.transform.position = bottleCarryOffset;
 
         //wasteCount = gameManager.GetComponent<GameManager>().GetWasteCount();
         //wasteCount--;
@@ -140,7 +162,7 @@ public class BottleController : MonoBehaviour
                 hasBottle = false;
                 recycleCount++;
                 gameManager.GetComponent<GameManager>().UpdateRecycleCount(recycleCount);
-                Destroy(nearest_bottle);
+                Destroy(carried_bottle);
                 return;
             }
         }
@@ -150,6 +172,7 @@ public class BottleController : MonoBehaviour
         BoxCollider2D bottle_collider;
         GameObject top_of_stack = null;
         List<GameObject> bottlesAtXOfPlacementPosition = new List<GameObject>();
+        bool currentlyCheckingBiggestStack = false;
         if (bottles.Count > 0)
         {
             // For each bottle in the world
@@ -159,9 +182,11 @@ public class BottleController : MonoBehaviour
                 bottle_collider = b.GetComponent<BoxCollider2D>();
 
                 // Check if the bottle is at the x coordinate of where we want to place our bottle
-                bool bottleAtXOfPlacementPosition = (placement_coordinates.x + ((bottle_collider.size.x * bottle_collider.transform.localScale.x) / 2) <= bottle_collider.bounds.max.x && placement_coordinates.x + ((bottle_collider.size.x * bottle_collider.transform.localScale.x) / 2) >= bottle_collider.bounds.min.x || placement_coordinates.x - ((bottle_collider.size.x * bottle_collider.transform.localScale.x) / 2) <= bottle_collider.bounds.max.x && placement_coordinates.x - ((bottle_collider.size.x * bottle_collider.transform.localScale.x) / 2) >= bottle_collider.bounds.min.x);
+                // bool bottleAtXOfPlacementPosition = (placement_coordinates.x + ((bottle_collider.size.x * bottle_collider.transform.localScale.x) / 2) <= bottle_collider.bounds.max.x && placement_coordinates.x + ((bottle_collider.size.x * bottle_collider.transform.localScale.x) / 2) >= bottle_collider.bounds.min.x || placement_coordinates.x - ((bottle_collider.size.x * bottle_collider.transform.localScale.x) / 2) <= bottle_collider.bounds.max.x && placement_coordinates.x - ((bottle_collider.size.x * bottle_collider.transform.localScale.x) / 2) >= bottle_collider.bounds.min.x);
+                bool bottleAtXOfPlacementPosition = (placement_coordinates.x <= bottle_collider.bounds.max.x && placement_coordinates.x >= bottle_collider.bounds.min.x);
                 if (bottleAtXOfPlacementPosition)
                 {
+                    // Add it to a new list
                     bottlesAtXOfPlacementPosition.Add(b);
                 }
             }
@@ -181,6 +206,13 @@ public class BottleController : MonoBehaviour
                         top_of_stack = b;
                     }
                 }
+
+                // If the biggest recorded stack is smaller than the stack being checked
+                if (biggestStack < bottlesAtXOfPlacementPosition.Count)
+                {
+                    biggestStack = bottlesAtXOfPlacementPosition.Count;
+                    currentlyCheckingBiggestStack = true;
+                }
             }
 
             if (top_of_stack != null)
@@ -189,7 +221,6 @@ public class BottleController : MonoBehaviour
 
                 // If adding to the stack means the stack will be bigger than 2 bottles above the player's feet
                 float playerFeetYPos = gameObject.GetComponent<Collider2D>().bounds.min.y;
-                float bottleHeight = bottle_collider.size.y * bottle_collider.transform.localScale.y;
                 float topOfTopBottleYPos = top_of_stack.transform.position.y + bottleHeight;
                 
                 if (topOfTopBottleYPos > playerFeetYPos + MAX_BOTTLE_STACK_HEIGHT_ABOVE_PLAYER * bottleHeight)
@@ -200,33 +231,47 @@ public class BottleController : MonoBehaviour
                 else
                 {
                     // Put bottle on top of stack?
-                    nearest_bottle.GetComponent<Bottle>().SetBeingCarried(false);
-                    nearest_bottle.transform.position = new Vector3(top_of_stack.transform.position.x, top_of_stack.transform.position.y + (bottle_collider.size.y * bottle_collider.transform.localScale.y), 0);
-                    bottles.Add(nearest_bottle);
+                    carried_bottle.GetComponent<Bottle>().SetBeingCarried(false);
+                    carried_bottle.transform.position = new Vector3(top_of_stack.transform.position.x, top_of_stack.transform.position.y + (bottle_collider.size.y * bottle_collider.transform.localScale.y), 0);
+                    bottles.Add(carried_bottle);
                     hasBottle = false;
+                    
+                    if (currentlyCheckingBiggestStack)
+                    {
+                        biggestStack++;
+                        gameManager.GetComponent<GameManager>().UpdateBottleStack(biggestStack, true);
+                    }
+
                     return;
                 }
             }
             else
             {
                 // Throw the bottle
-                nearest_bottle.GetComponent<Bottle>().SetBeingCarried(false); // Makes the bottles non-kinematic and adds the collider. Also sets mass and drag to default
-                Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), nearest_bottle.GetComponent<Collider2D>(), true); // Prevents the bottle colliding with the player
-                nearest_bottle.GetComponent<Bottle>().ChuckBottle(); // Gives the bottle velocity
-                bottles.Add(nearest_bottle); // Adds the bottle to the list of bottles in the world
+                carried_bottle.GetComponent<Bottle>().SetBeingCarried(false); // Makes the bottles non-kinematic and adds the collider. Also sets mass and drag to default
+                Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), carried_bottle.GetComponent<Collider2D>(), true); // Prevents the bottle colliding with the player
+                carried_bottle.GetComponent<Bottle>().ChuckBottle(); // Gives the bottle velocity
+                bottles.Add(carried_bottle); // Adds the bottle to the list of bottles in the world
                 hasBottle = false;
+                carried_bottle = null;
                 return;
             }
         }
-
         else
         {
             // Throw the bottle
-            nearest_bottle.GetComponent<Bottle>().SetBeingCarried(false); // Makes the bottles non-kinematic and adds the collider. Also sets mass and drag to default
-            Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), nearest_bottle.GetComponent<Collider2D>(), true); // Prevents the bottle colliding with the player
-            nearest_bottle.GetComponent<Bottle>().ChuckBottle(); // Gives the bottle velocity
-            bottles.Add(nearest_bottle); // Adds the bottle to the list of bottles in the world
+            carried_bottle.GetComponent<Bottle>().SetBeingCarried(false); // Makes the bottles non-kinematic and adds the collider. Also sets mass and drag to default
+            Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), carried_bottle.GetComponent<Collider2D>(), true); // Prevents the bottle colliding with the player
+            carried_bottle.GetComponent<Bottle>().ChuckBottle(); // Gives the bottle velocity
+            bottles.Add(carried_bottle); // Adds the bottle to the list of bottles in the world
             hasBottle = false;
+            carried_bottle = null;
+
+            // Create a new bottlestack and add the new bottle to it
+            /*BottleStack bottleStack = new BottleStack();
+            bottleStack.bottles.Add(carried_bottle);
+            bottleStack.xmin = carried_bottle.GetComponent<Collider2D>().bounds.min.x;
+            bottleStack.xmax = carried_bottle.GetComponent<Collider2D>().bounds.max.x;*/
             return;
         }
     }
@@ -236,11 +281,11 @@ public class BottleController : MonoBehaviour
         drinkCount++;
         gameManager.GetComponent<GameManager>().UpdateDrinkCount(drinkCount);
 
-        nearest_bottle = bottle;
-        nearest_bottle.GetComponent<Bottle>().SetBeingCarried(true);  // Makes the bottles kinematic and removes the collider.  Also sets mass and drag to default
+        carried_bottle = bottle;
+        carried_bottle.GetComponent<Bottle>().SetBeingCarried(true);  // Makes the bottles kinematic and removes the collider.  Also sets mass and drag to default
         bottleCarryOffset = new Vector3(transform.position.x + (gameObject.GetComponent<BoxCollider2D>().bounds.size.x * flip) / 2, transform.position.y + 1, transform.position.z);
-        nearest_bottle.transform.position = bottleCarryOffset;
-        nearest_bottle = Instantiate(nearest_bottle);
+        carried_bottle.transform.position = bottleCarryOffset;
+        carried_bottle = Instantiate(carried_bottle);
 
         hasBottle = true;
     }
