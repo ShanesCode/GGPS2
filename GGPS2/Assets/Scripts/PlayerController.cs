@@ -31,7 +31,8 @@ public class PlayerController : MonoBehaviour
     private float jumpForce;
     private bool jumpSquat;
 
-    private LayerMask groundMask;
+    [SerializeField] private LayerMask groundMask;
+    [SerializeField] private LayerMask bottleMask;
     [SerializeField] private bool grounded;
     private Vector2 groundOffset;
     private Vector2 size;
@@ -46,9 +47,6 @@ public class PlayerController : MonoBehaviour
     private bool jump;
     private float xVelocity;
 
-    bool rightBlocked;
-    bool leftBlocked;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -62,7 +60,7 @@ public class PlayerController : MonoBehaviour
 
         col = GetComponent<BoxCollider2D>();
         size = col.size;
-        groundMask = LayerMask.GetMask("Ground");
+
         groundOffset = new Vector2(0, GetComponent<BoxCollider2D>().size.y / 2);
         anim = GetComponent<Animator>();
         rb2d = GetComponent<Rigidbody2D>();
@@ -70,9 +68,6 @@ public class PlayerController : MonoBehaviour
         xVelocity = 0;
 
         groundVelocity = Vector2.zero;
-
-        rightBlocked = false;
-        leftBlocked = false;
 
         gameManager = GameObject.FindWithTag("GameManager");
     }
@@ -82,15 +77,6 @@ public class PlayerController : MonoBehaviour
         //pull inputs
         inputX = Input.GetAxis("Horizontal");
         xVelocity = speedMax * inputX;
-
-        if (rightBlocked)
-        {
-            if (xVelocity > 0) { xVelocity = 0; }
-        } 
-        else if (leftBlocked)
-        {
-            if (xVelocity < 0) { xVelocity = 0; }
-        }
 
         if (grounded)
         {
@@ -124,6 +110,11 @@ public class PlayerController : MonoBehaviour
         {
             currentFall = fallStartHeight - transform.position.y;
         }
+
+        if (grounded)
+        {
+            anim.SetBool("grounded", true);
+        }
     }
 
     // Update is called once per frame
@@ -146,7 +137,52 @@ public class PlayerController : MonoBehaviour
 
     bool GroundCheck()
     {
-        Vector2 boxColliderPos = new Vector2(transform.position.x + col.offset.x, transform.position.y + col.offset.y);
+        RaycastHit2D hitGround = Physics2D.BoxCast(col.bounds.center, col.bounds.size, 0f, Vector2.down, .1f, groundMask);
+        RaycastHit2D hitBottle = Physics2D.BoxCast(col.bounds.center, col.bounds.size, 0f, Vector2.down, .1f, bottleMask);
+        if (hitGround || hitBottle)
+        {
+            anim.SetBool("grounded", true);
+
+            OnGroundedEventArgs e = new OnGroundedEventArgs();
+
+            if (hitGround)
+            {
+                if (hitGround.rigidbody != null)
+                {
+                    groundVelocity = hitGround.rigidbody.velocity;
+                }
+
+                e.groundTransform = hitGround.transform;
+            }
+            else if (hitBottle)
+            {
+                if (hitBottle.rigidbody != null)
+                {
+                    groundVelocity = hitBottle.rigidbody.velocity;
+                }
+
+                e.groundTransform = hitBottle.transform;
+            }
+
+            fallStarted = false;
+            if (longestFall < currentFall)
+            {
+                longestFall = currentFall;
+                gameManager.GetComponent<GameManager>().UpdateLongestFallDistance(longestFall);
+            }
+            currentFall = 0;
+
+            OnGrounded?.Invoke(this, e);
+            return true;
+        }
+        else
+        {
+            anim.SetBool("grounded", false);
+            groundVelocity = Vector2.zero;
+            return false;
+        }
+
+        /*Vector2 boxColliderPos = new Vector2(transform.position.x + col.offset.x, transform.position.y + col.offset.y);
 
         RaycastHit2D hit = Physics2D.CircleCast((Vector2)transform.position + groundOffset, col.size.x/2, Vector2.down, groundMask);
         if (hit) 
@@ -179,7 +215,7 @@ public class PlayerController : MonoBehaviour
         }
         anim.SetBool("grounded", false);
         groundVelocity = Vector2.zero;
-        return false;
+        return false;*/
     }
 
     void Flip()
@@ -193,50 +229,6 @@ public class PlayerController : MonoBehaviour
         return left;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        // Get contact points
-        ContactPoint2D[] contacts = new ContactPoint2D[10];
-        collision.GetContacts(contacts);
-
-        // Below is being used to prevent wall-cling behaviour
-        // Check if those contacts are near the leftmost or rightmost edge of collider
-        int contactsNearBoundingBoxLeftSide = 0;
-        int contactsNearBoundingBoxRightSide = 0;
-        int contactsNearBoundingBoxBottomSide = 0;
-
-        foreach (ContactPoint2D contact in contacts)
-        {
-            if (contact.collider == null) { break; }
-
-            if (Mathf.Abs(contact.point.y - col.bounds.min.y) < 0.1)
-            {
-                contactsNearBoundingBoxBottomSide++;
-            }
-
-            if (Mathf.Abs(contact.point.x - col.bounds.min.x) < 0.1)
-            {
-                contactsNearBoundingBoxLeftSide++;
-            }
-
-            if (Mathf.Abs(contact.point.x - col.bounds.max.x) < 0.1)
-            {
-                contactsNearBoundingBoxRightSide++;
-            }
-        }
-
-        // If all collision points are near leftmost or rightmost edge, assume player is colliding to his side and not below
-        // Prevent player from adding any xVelocity in that direction
-        if (contactsNearBoundingBoxLeftSide > 0 && contactsNearBoundingBoxRightSide == 0 && contactsNearBoundingBoxBottomSide != 0)
-        {
-            leftBlocked = true;
-        }
-        else if (contactsNearBoundingBoxRightSide > 0 && contactsNearBoundingBoxLeftSide == 0 && contactsNearBoundingBoxBottomSide != 0)
-        {
-            rightBlocked = true;
-        }
-    }
-
     public void Kill()
     {
         anim.SetTrigger("death");
@@ -247,11 +239,5 @@ public class PlayerController : MonoBehaviour
         OnDeathEventArgs e = new OnDeathEventArgs();
 
         OnDeath?.Invoke(this, e);
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        rightBlocked = false;
-        leftBlocked = false;
     }
 }

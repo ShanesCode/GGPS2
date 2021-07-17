@@ -283,7 +283,7 @@ public class BottleController : MonoBehaviour
 
         carried_bottle = bottle;
         carried_bottle.GetComponent<Bottle>().SetBeingCarried(true);  // Makes the bottles kinematic and removes the collider.  Also sets mass and drag to default
-        bottleCarryOffset = new Vector3(transform.position.x + (gameObject.GetComponent<BoxCollider2D>().bounds.size.x * flip) / 2, transform.position.y + 1, transform.position.z);
+        bottleCarryOffset = new Vector3(transform.position.x + (gameObject.GetComponent<Collider2D>().bounds.size.x * flip) / 2, transform.position.y + 1, transform.position.z);
         carried_bottle.transform.position = bottleCarryOffset;
         carried_bottle = Instantiate(carried_bottle);
 

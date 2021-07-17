@@ -1255,7 +1255,7 @@ GameObject:
   m_Layer: 0
   m_Name: Room1 SpawnPoint
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -2449,7 +2449,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1beeea72c22d4b24d88abbdf68178ffc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 1000349563}
+  levelNumber: 0
+  player: {fileID: 0}
+  camera: {fileID: 0}
   currentRoom: 0
   nextRoomNumber: 0
   endRoomTriggers:
@@ -2727,7 +2729,7 @@ GameObject:
   m_Layer: 0
   m_Name: Room0 SpawnPoint
   m_TagString: InitialSpawn
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -3013,11 +3015,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 943049094}
   m_CullTransparentMesh: 1
---- !u!1 &1000349563 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8876144569204872231, guid: dcf53bbaddb713e4ebcaf304bcc16c11, type: 3}
-  m_PrefabInstance: {fileID: 8876144568523295580}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1003387570
 GameObject:
   m_ObjectHideFlags: 0
