@@ -112,6 +112,11 @@ public class BottleController : MonoBehaviour
     {
         float shortest_distance_bottle = 100;
 
+        if (bottles.Count == 0)
+        {
+            nearest_bottle = null;
+        }
+
         // Iterates through all game objects and gets those with tag Bottle
         foreach (GameObject bottle in bottles)
         {
@@ -146,6 +151,7 @@ public class BottleController : MonoBehaviour
         //wasteCount--;
         //gameManager.GetComponent<GameManager>().UpdateWasteCount(wasteCount);
 
+        nearest_bottle = null;
         hasBottle = true;
     }
 
