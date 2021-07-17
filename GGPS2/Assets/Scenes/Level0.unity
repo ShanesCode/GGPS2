@@ -359,7 +359,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa062c6b8d0f6d044a46771add46e384, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roomNumber: 1
+  roomNumber: 3
 --- !u!61 &52750202
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -12395,12 +12395,12 @@ SpriteRenderer:
   m_SortingLayerID: 1392038997
   m_SortingLayer: -1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 552ffdbce4a854a4d90ec494606f83cb, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c9fc24ec8cbedd842a71890c8aec6bdf, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 30.007326, y: 8}
+  m_Size: {x: 30.007326, y: 12}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -12519,7 +12519,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa062c6b8d0f6d044a46771add46e384, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roomNumber: 1
+  roomNumber: 2
 --- !u!61 &1902783270
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -12944,7 +12944,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 8
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
