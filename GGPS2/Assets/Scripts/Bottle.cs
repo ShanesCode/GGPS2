@@ -10,6 +10,7 @@ public class Bottle : MonoBehaviour
     public GameObject labelText;
 
     [SerializeField] private LayerMask groundMask;
+    [SerializeField] private LayerMask bottleMask;
     BoxCollider2D col;
     GameObject player;
 
@@ -72,7 +73,7 @@ public class Bottle : MonoBehaviour
 
     bool GroundCheck()
     {
-        return Physics2D.BoxCast(col.bounds.center, col.bounds.size, 0f, Vector2.down, .1f, groundMask);
+        return Physics2D.BoxCast(col.bounds.center, col.bounds.size, 0f, Vector2.down, .1f, groundMask) || Physics2D.BoxCast(col.bounds.center, col.bounds.size, 0f, Vector2.down, .1f, bottleMask);
     }
 
     public void ChuckBottle()
