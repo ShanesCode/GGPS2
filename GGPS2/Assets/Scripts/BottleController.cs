@@ -30,7 +30,12 @@ public class BottleController : MonoBehaviour
         drinkCount = gameManager.GetComponent<GameManager>().GetDrinkCount();
         recycleCount = gameManager.GetComponent<GameManager>().GetRecycleCount();
 
-        foreach(GameObject bin in GameObject.FindGameObjectsWithTag("Bin"))
+        foreach (GameObject bottle in GameObject.FindGameObjectsWithTag("Bottle"))
+        {
+            bottles.Add(bottle);
+        }
+
+        foreach (GameObject bin in GameObject.FindGameObjectsWithTag("Bin"))
         {
             bins.Add(bin);
         }

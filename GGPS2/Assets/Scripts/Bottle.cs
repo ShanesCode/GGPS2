@@ -28,19 +28,26 @@ public class Bottle : MonoBehaviour
     private int wasteCount;
     GameObject gameManager;
     // Start is called before the first frame update
+
+    private void Awake()
+    {
+        tag = "Bottle";
+    }
+
     void Start()
     {
         col = GetComponent<BoxCollider2D>();
         size = col.size;
         player = GameObject.FindWithTag("Player");
 
-        tag = "Bottle";
-
         RandomiseBottleColours();
         RandomiseBottleWords();
 
         gameManager = GameObject.FindWithTag("GameManager");
         wasteCount = gameManager.GetComponent<GameManager>().GetWasteCount();
+
+        gameObject.GetComponent<Rigidbody2D>().drag = 1;
+        gameObject.GetComponent<Rigidbody2D>().mass = 9999999;
     }
 
     // Update is called once per frame
