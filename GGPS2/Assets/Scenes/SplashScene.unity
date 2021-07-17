@@ -461,9 +461,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnRoom: 0
   tutorialComplete: 0
-  jumpCount: 0
-  drinkCount: 0
-  recycleCount: 0
   longestFallDistance: 0
   bottleStack: 0
   level1Complete: 0

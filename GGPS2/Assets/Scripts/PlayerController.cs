@@ -91,7 +91,7 @@ public class PlayerController : MonoBehaviour
             jump = Input.GetButtonDown("Jump");
         }
 
-        if (grounded && jump && !GetComponent<BottleController>().hasBottle)
+        if (grounded && jump)
         {
             anim.SetBool("jump", true);
             jumpSquat = true;

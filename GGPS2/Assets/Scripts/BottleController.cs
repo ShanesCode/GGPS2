@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class BottleController : MonoBehaviour
 {
+    private const int MAX_BOTTLE_STACK_HEIGHT_ABOVE_PLAYER = 2;
     public GameObject bottle;
     public List<GameObject> bins;
     public bool hasBottle;
@@ -119,9 +120,9 @@ public class BottleController : MonoBehaviour
         bottleCarryOffset = new Vector3(transform.position.x + (gameObject.GetComponent<BoxCollider2D>().bounds.size.x * flip) / 2, transform.position.y + 1, transform.position.z);
         nearest_bottle.transform.position = bottleCarryOffset;
 
-        wasteCount = gameManager.GetComponent<GameManager>().GetWasteCount();
-        wasteCount--;
-        gameManager.GetComponent<GameManager>().UpdateWasteCount(wasteCount);
+        //wasteCount = gameManager.GetComponent<GameManager>().GetWasteCount();
+        //wasteCount--;
+        //gameManager.GetComponent<GameManager>().UpdateWasteCount(wasteCount);
 
         hasBottle = true;
     }
@@ -148,34 +149,53 @@ public class BottleController : MonoBehaviour
         Vector3 placement_coordinates = transform.position + new Vector3(flip * 1, 0, 0);
         BoxCollider2D bottle_collider;
         GameObject top_of_stack = null;
+        List<GameObject> bottlesAtXOfPlacementPosition = new List<GameObject>();
         if (bottles.Count > 0)
         {
-            // This foreach loop is used to check how big the stack of bottles is
-            // I think it might also prevent the player form stacking above some value
-            foreach (GameObject go in bottles)
+            // For each bottle in the world
+            foreach (GameObject b in bottles)
             {
-                bottle_collider = go.GetComponent<BoxCollider2D>();
-                if (placement_coordinates.x + ((bottle_collider.size.x * bottle_collider.transform.localScale.x) / 2) <= bottle_collider.bounds.max.x && placement_coordinates.x + ((bottle_collider.size.x * bottle_collider.transform.localScale.x) / 2) >= bottle_collider.bounds.min.x || placement_coordinates.x - ((bottle_collider.size.x * bottle_collider.transform.localScale.x) / 2) <= bottle_collider.bounds.max.x && placement_coordinates.x - ((bottle_collider.size.x * bottle_collider.transform.localScale.x) / 2) >= bottle_collider.bounds.min.x)
+                // Get the bottle collider
+                bottle_collider = b.GetComponent<BoxCollider2D>();
+
+                // Check if the bottle is at the x coordinate of where we want to place our bottle
+                bool bottleAtXOfPlacementPosition = (placement_coordinates.x + ((bottle_collider.size.x * bottle_collider.transform.localScale.x) / 2) <= bottle_collider.bounds.max.x && placement_coordinates.x + ((bottle_collider.size.x * bottle_collider.transform.localScale.x) / 2) >= bottle_collider.bounds.min.x || placement_coordinates.x - ((bottle_collider.size.x * bottle_collider.transform.localScale.x) / 2) <= bottle_collider.bounds.max.x && placement_coordinates.x - ((bottle_collider.size.x * bottle_collider.transform.localScale.x) / 2) >= bottle_collider.bounds.min.x);
+                if (bottleAtXOfPlacementPosition)
                 {
-                    if (top_of_stack != null)
+                    bottlesAtXOfPlacementPosition.Add(b);
+                }
+            }
+
+            foreach (GameObject b in bottlesAtXOfPlacementPosition)
+            {
+                // If first bottle, set top_of_stack equal to that bottles
+                if (top_of_stack == null)
+                {
+                    top_of_stack = b;
+                }
+                else
+                {
+                    // If not the first bottle, check if its higher than the top of the stack. If it is, make it the new top_of_stack
+                    if (b.transform.position.y > top_of_stack.transform.position.y)
                     {
-                        if (go.transform.position.y > top_of_stack.transform.position.y)
-                        {
-                            top_of_stack = go;
-                        }
-                    }
-                    else
-                    {
-                        top_of_stack = go;
+                        top_of_stack = b;
                     }
                 }
             }
+
             if (top_of_stack != null)
             {
                 bottle_collider = top_of_stack.GetComponent<BoxCollider2D>();
-                if (top_of_stack.transform.position.y + (bottle_collider.size.y * bottle_collider.transform.localScale.y) > 2 * (bottle_collider.size.y * bottle_collider.transform.localScale.y))
+
+                // If adding to the stack means the stack will be bigger than 2 bottles above the player's feet
+                float playerFeetYPos = gameObject.GetComponent<Collider2D>().bounds.min.y;
+                float bottleHeight = bottle_collider.size.y * bottle_collider.transform.localScale.y;
+                float topOfTopBottleYPos = top_of_stack.transform.position.y + bottleHeight;
+                
+                if (topOfTopBottleYPos > playerFeetYPos + MAX_BOTTLE_STACK_HEIGHT_ABOVE_PLAYER * bottleHeight)
                 {
-                    hasBottle = true;
+                    anim.SetTrigger("placeDisallowed");
+                    return;
                 }
                 else
                 {
@@ -186,7 +206,6 @@ public class BottleController : MonoBehaviour
                     hasBottle = false;
                     return;
                 }
-
             }
             else
             {
