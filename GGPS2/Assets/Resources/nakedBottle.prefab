@@ -415,6 +415,11 @@ MonoBehaviour:
   - KING
   - GIGA
   - HUGE
+  - POWER
+  - QUEEN
+  - MAX
+  - UBER
+  - SUPER
   secondWords:
   - CHUG
   - GUZZLE
@@ -422,3 +427,9 @@ MonoBehaviour:
   - JUICE
   - CREAM
   - FIZZ
+  - SODA
+  - COLA
+  - QUENCH
+  - ENERGY
+  - SLURP
+  - GUSH
