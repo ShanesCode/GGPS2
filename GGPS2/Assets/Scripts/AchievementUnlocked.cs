@@ -12,7 +12,6 @@ public class AchievementUnlocked : MonoBehaviour
     public Image image;
 
     [Range(0.0f, 10.0f)]public float displayTime = 3.0f;
-    private float displayReset;
 
     GameObject gameManager;
 
@@ -26,7 +25,6 @@ public class AchievementUnlocked : MonoBehaviour
 
         gameManager = GameObject.FindWithTag("GameManager");
         gameManager.GetComponent<GameManager>().OnAchievementUnlocked += AchievementUnlocked_OnAchievementUnlocked;
-        displayReset = displayTime;
     }
 
     private void AchievementUnlocked_OnAchievementUnlocked(object sender, GameManager.OnAchievementUnlockedEventArgs e)
@@ -36,20 +34,27 @@ public class AchievementUnlocked : MonoBehaviour
         requirement.text = e.requirement;
         image.sprite = e.sprite;
 
-        displayTime = displayReset;
+        StartCoroutine(AchievementDisplayCoroutine());
     }
 
     // Update is called once per frame
     void Update()
     {
-        displayTime -= Time.deltaTime;
-        if (displayTime <= 0)
-        {
-            achievementUnlockedUI.SetActive(false);
-            achievement.text = "";
-            requirement.text = "";
-            image.sprite = null;
-            displayTime = 0;
-        }
+        
+    }
+
+    IEnumerator AchievementDisplayCoroutine()
+    {
+        //yield on a new YieldInstruction that waits for 5 seconds.
+        yield return new WaitForSecondsRealtime(displayTime);
+
+        achievementUnlockedUI.SetActive(false);
+        achievement.text = "";
+        requirement.text = "";
+        image.sprite = null;
+        displayTime = 0;
+
+        //After we have waited 5 seconds print the time again.
+        Debug.Log("Finished Coroutine at timestamp : " + Time.time);
     }
 }
