@@ -173,7 +173,7 @@ GameObject:
   - component: {fileID: 19313089}
   - component: {fileID: 19313088}
   m_Layer: 0
-  m_Name: Hazards2
+  m_Name: Hazards3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -19614,7 +19614,7 @@ GameObject:
   - component: {fileID: 609748303}
   - component: {fileID: 609748304}
   m_Layer: 0
-  m_Name: Grid2
+  m_Name: Grid3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22767,7 +22767,7 @@ GameObject:
   - component: {fileID: 1308257625}
   - component: {fileID: 1308257624}
   m_Layer: 0
-  m_Name: Grid
+  m_Name: Grid0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22876,7 +22876,7 @@ GameObject:
   - component: {fileID: 1337789064}
   - component: {fileID: 1337789063}
   m_Layer: 6
-  m_Name: Ground2
+  m_Name: Ground3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
