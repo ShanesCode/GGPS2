@@ -10,13 +10,8 @@ public class Bottle : MonoBehaviour
     public GameObject labelText;
 
     [SerializeField] private LayerMask groundMask;
-    private Vector2 size;
     BoxCollider2D col;
     GameObject player;
-
-    GameObject ground;
-
-    float x_offset_from_ground;
 
     bool grounded;
 
@@ -28,10 +23,7 @@ public class Bottle : MonoBehaviour
     private int wasteCount;
     GameObject gameManager;
 
-    Vector2 boxColliderPos;
-    Vector2 bottom_of_object;
     // Start is called before the first frame update
-
     private void Awake()
     {
         tag = "Bottle";
@@ -40,7 +32,6 @@ public class Bottle : MonoBehaviour
     void Start()
     {
         col = GetComponent<BoxCollider2D>();
-        size = col.size;
         player = GameObject.FindWithTag("Player");
 
         RandomiseBottleColours();
@@ -72,20 +63,11 @@ public class Bottle : MonoBehaviour
             gameObject.GetComponent<Rigidbody2D>().mass = 9999999;
             Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), player.GetComponent<Collider2D>(), false);
         }
-
-        boxColliderPos = new Vector2(transform.position.x + col.offset.x, transform.position.y + col.offset.y);
-        bottom_of_object = new Vector2(transform.position.x, transform.position.y - (col.size.y / 2));
     }
 
     private void FixedUpdate()
     {
         grounded = GroundCheck();
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(bottom_of_object, col.size.x / 2);
     }
 
     bool GroundCheck()
@@ -102,8 +84,6 @@ public class Bottle : MonoBehaviour
 
     public void SetBeingCarried(bool carried)
     {
-        // Set ground to null so that next time we're grounded, the ground has changed for the condition in GroundCheck
-        ground = null;
         // Set the mass and drag to default values so that the bottle moves nicely in the air and whilst being carried
         gameObject.GetComponent<Rigidbody2D>().drag = 0;
         gameObject.GetComponent<Rigidbody2D>().mass = 1;

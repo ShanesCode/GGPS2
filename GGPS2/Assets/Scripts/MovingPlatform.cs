@@ -15,6 +15,7 @@ public class MovingPlatform : MonoBehaviour
     public bool left;
 
     Rigidbody2D rb2d;
+    GameObject sticky;
     // Start is called before the first frame update
     void Awake()
     {
@@ -34,6 +35,15 @@ public class MovingPlatform : MonoBehaviour
         {
             goals[i] += (Vector2)transform.localPosition;
         }
+
+        /*sticky = new GameObject();
+        sticky.transform.SetParent(gameObject.transform);
+        sticky.transform.localPosition = Vector2.zero;
+        sticky.AddComponent<Rigidbody2D>();
+        sticky.GetComponent<Rigidbody2D>().isKinematic = true;
+        sticky.AddComponent<BoxCollider2D>().isTrigger = true;
+        sticky.GetComponent<BoxCollider2D>().size = new Vector2(gameObject.GetComponent<BoxCollider2D>().size.x + 0.1f, gameObject.GetComponent<BoxCollider2D>().size.y + 0.1f);
+        sticky.AddComponent<StickyPlatform>();*/
     }
 
     private void Update()
