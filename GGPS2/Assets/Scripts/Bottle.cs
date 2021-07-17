@@ -24,6 +24,9 @@ public class Bottle : MonoBehaviour
 
     public List<string> firstWords;
     public List<string> secondWords;
+
+    private int wasteCount;
+    GameObject gameManager;
     // Start is called before the first frame update
     void Start()
     {
@@ -35,6 +38,9 @@ public class Bottle : MonoBehaviour
 
         RandomiseBottleColours();
         RandomiseBottleWords();
+
+        gameManager = GameObject.FindWithTag("GameManager");
+        wasteCount = gameManager.GetComponent<GameManager>().GetWasteCount();
     }
 
     // Update is called once per frame
@@ -108,6 +114,8 @@ public class Bottle : MonoBehaviour
     public void ChuckBottle()
     {
         gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(flip * 3f, 5f);
+        wasteCount++;
+        gameManager.GetComponent<GameManager>().UpdateWasteCount(wasteCount);
     }
 
     public void SetBeingCarried(bool carried)

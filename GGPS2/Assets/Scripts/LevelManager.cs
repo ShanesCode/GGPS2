@@ -7,15 +7,19 @@ using UnityEngine.UI;
 public class LevelManager : MonoBehaviour
 {
     public GameObject player;
+    public GameObject camera;
     GameObject gameManager;
-    private int currentRoom;
+    public int currentRoom;
     [SerializeField] public int nextRoomNumber;
     [SerializeField] private List<EndRoomTrigger> endRoomTriggers;
     [SerializeField] private List<GameObject> roomSpawnPoints;
     [SerializeField] private GameObject endRoomUI;
     [SerializeField] private GameObject pauseMenu;
     [SerializeField] private GameObject settings;
-    GameObject[] test;
+
+    public int startWasteCount;
+    public int startDrinkCount;
+    public int startRecycleCount;
 
     public bool paused;
     // Start is called before the first frame update
@@ -31,11 +35,17 @@ public class LevelManager : MonoBehaviour
             endRoomTriggers[i].GetComponent<EndRoomTrigger>().OnTrigger += LevelManager_OnTrigger;
         }
 
+        camera = GameObject.FindWithTag("MainCamera");
+
         player = GameObject.FindWithTag("Player");
         player.GetComponent<PlayerController>().OnDeath += LevelMan_OnDeath;
 
         player.transform.position = roomSpawnPoints[gameManager.GetComponent<GameManager>().spawnRoom].transform.position;
         currentRoom = gameManager.GetComponent<GameManager>().spawnRoom;
+
+        startWasteCount = gameManager.GetComponent<GameManager>().GetWasteCount();
+        startDrinkCount = gameManager.GetComponent<GameManager>().GetDrinkCount();
+        startRecycleCount = gameManager.GetComponent<GameManager>().GetRecycleCount();
     }
 
     private void Update()
@@ -79,6 +89,7 @@ public class LevelManager : MonoBehaviour
         paused = false;
         endRoomUI.SetActive(false);
         player.transform.position = roomSpawnPoints[nextRoomNumber].transform.position;
+        camera.GetComponent<CameraController>().InitialisePosition();
         currentRoom += 1;
     }
 

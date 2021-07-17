@@ -10,11 +10,12 @@ public class GameManager : MonoBehaviour
     public int spawnRoom;
 
     public bool tutorialComplete = false;
-    public int jumpCount;
-    public int drinkCount;
-    public int recycleCount;
-    public int longestFallDistance;
-    public int bottleStack;
+    private int jumpCount = 0;
+    private int drinkCount = 0;
+    private int wasteCount = 0;
+    private int recycleCount = 0;
+    public float longestFallDistance = 0.0f;
+    public int bottleStack = 0;
     public bool level1Complete = false;
     public bool gameComplete = false;
 
@@ -22,7 +23,7 @@ public class GameManager : MonoBehaviour
     private const int JUMPING_JACK = 250;
     private const int KING_CHUGGER = 50;
     private const int STANDUP_CITIZEN = 1; // 10
-    private const int DAREDEVIL = 3; // 30
+    private const float DAREDEVIL = 3.0f; // 30
     // A stack of bottles is a "bottle tower" if it is at least BOTTLE_TOWER tall.
     private const int BOTTLE_TOWER = 2; // 10
     #endregion
@@ -110,6 +111,21 @@ public class GameManager : MonoBehaviour
         return drinkCount;
     }
 
+    public int GetJumpCount()
+    {
+        return jumpCount;
+    }
+
+    public int GetWasteCount()
+    {
+        return wasteCount;
+    }
+
+    public int GetRecycleCount()
+    {
+        return recycleCount;
+    }
+
     public void UpdateTutorialComplete(bool tutorialComplete_)
     {
         tutorialComplete = tutorialComplete_;
@@ -162,6 +178,24 @@ public class GameManager : MonoBehaviour
             };
             OnAchievementUnlocked?.Invoke(this, e);
         }
+    }
+
+    public void UpdateWasteCount(int wasteCount_)
+    {
+        wasteCount = wasteCount_;
+        /*if (drinkCount == KING_CHUGGER && !achievementsDic["king chugger"].achieved)
+        {
+            Debug.Log("Achievement unlocked: " + achievementsDic["king chugger"].title);
+            achievementsDic["king chugger"].achieved = true;
+
+            OnAchievementUnlockedEventArgs e = new OnAchievementUnlockedEventArgs
+            {
+                title = achievementsDic["king chugger"].title,
+                requirement = achievementsDic["king chugger"].requirement,
+                sprite = achievementsDic["king chugger"].sprite
+            };
+            OnAchievementUnlocked?.Invoke(this, e);
+        }*/
     }
 
     public void UpdateRecycleCount(int recycleCount_)
