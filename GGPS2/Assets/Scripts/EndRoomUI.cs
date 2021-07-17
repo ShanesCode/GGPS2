@@ -51,6 +51,11 @@ public class EndRoomUI : MonoBehaviour
             wasteCount = gameManager.GetComponent<GameManager>().GetWasteCount() - (prevRoomWasteCount + levelManager.GetComponent<LevelManager>().startWasteCount);
             indulgenceCount = gameManager.GetComponent<GameManager>().GetDrinkCount() - (prevRoomIndulgenceCount + levelManager.GetComponent<LevelManager>().startDrinkCount);
             recycleCount = gameManager.GetComponent<GameManager>().GetRecycleCount() - (prevRoomRecycleCount + levelManager.GetComponent<LevelManager>().startRecycleCount);
+
+            if (wasteCount < recycleCount)
+            {
+                gameManager.GetComponent<GameManager>().UnlockAchievement("Carbon Cutter");
+            }
         }
 
         stats.text =
