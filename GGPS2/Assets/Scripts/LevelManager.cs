@@ -28,7 +28,13 @@ public class LevelManager : MonoBehaviour
     public bool paused;
     private void Awake()
     {
-        levelNumber = int.Parse(SceneManager.GetActiveScene().name.Remove(0, 5));
+        if (SceneManager.GetActiveScene().name.Contains("Level")) {
+            levelNumber = int.Parse(SceneManager.GetActiveScene().name.Remove(0, 5));
+        }
+        else
+        {
+            levelNumber = FINAL_LEVEL + 1;
+        }
     }
 
     // Start is called before the first frame update
@@ -109,10 +115,18 @@ public class LevelManager : MonoBehaviour
         {
             if (levelNumber < FINAL_LEVEL)
             {
+                switch (levelNumber)
+                {
+                    case 0:
+                        gameManager.GetComponent<GameManager>().UpdateTutorialComplete(true);
+                        break;
+                }
+
                 StartCoroutine(LoadYourAsyncScene("Level" + (levelNumber + 1)));
             }
             else
             {
+                gameManager.GetComponent<GameManager>().UpdateGameComplete(true);
                 StartCoroutine(LoadYourAsyncScene("EndScene"));
             }
         }
