@@ -20,6 +20,11 @@ public class PlayerController : MonoBehaviour
     GameObject gameManager;
     private int jumpCount;
 
+    private bool fallStarted;
+    private float fallStartHeight;
+    private float longestFall;
+    private float currentFall;
+
     public float speedMax;
     private bool left;
 
@@ -48,6 +53,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         jumpCount = 0;
+        longestFall = 0;
 
         speedMax = 5.0f;
         jumpForce = 400.0f;
@@ -107,6 +113,17 @@ public class PlayerController : MonoBehaviour
 
         anim.SetFloat("xSpeed", Mathf.Abs(xVelocity));
         anim.SetFloat("ySpeed", rb2d.velocity.y);
+
+        if (!grounded && rb2d.velocity.y < -0.01 && !fallStarted)
+        {
+            fallStarted = true;
+            fallStartHeight = transform.position.y;
+        }
+
+        if (fallStarted)
+        {
+            currentFall = fallStartHeight - transform.position.y;
+        }
     }
 
     // Update is called once per frame
@@ -142,6 +159,14 @@ public class PlayerController : MonoBehaviour
                 if (hit.rigidbody != null) {
                     groundVelocity = hit.rigidbody.velocity;
                 }
+
+                fallStarted = false;
+                if (longestFall < currentFall)
+                {
+                    longestFall = currentFall;
+                    gameManager.GetComponent<GameManager>().UpdateLongestFallDistance(longestFall);
+                }
+                currentFall = 0;
 
                 OnGroundedEventArgs e = new OnGroundedEventArgs()
                 {

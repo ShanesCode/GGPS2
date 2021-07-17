@@ -120,6 +120,9 @@ public class LevelManager : MonoBehaviour
                     case 0:
                         gameManager.GetComponent<GameManager>().UpdateTutorialComplete(true);
                         break;
+                    case 1:
+                        gameManager.GetComponent<GameManager>().UpdateLevel1Complete(true);
+                        break;
                 }
 
                 StartCoroutine(LoadYourAsyncScene("Level" + (levelNumber + 1)));

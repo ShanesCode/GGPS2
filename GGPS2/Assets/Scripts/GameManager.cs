@@ -23,10 +23,10 @@ public class GameManager : MonoBehaviour
     #region Requirements
     private const int JUMPING_JACK = 250;
     private const int SUPER_CHUGGER = 50;
-    private const int STANDUP_CITIZEN = 1; // 10
-    private const float DAREDEVIL = 3.0f; // 30
+    private const int STANDUP_CITIZEN = 10;
+    private const float DAREDEVIL = 30.0f; // 30
     // A stack of bottles is a "bottle tower" if it is at least BOTTLE_TOWER tall.
-    private const int BOTTLE_TOWER = 2; // 10
+    private const int BOTTLE_TOWER = 10; // 10
     #endregion
 
     public List<Achievement> achievements;
@@ -61,11 +61,12 @@ public class GameManager : MonoBehaviour
             new Achievement(3, "Super Chugger", "Drink " + SUPER_CHUGGER + " times.", "Not one bathroom break needed: the sign of a true king."),
             new Achievement(4, "Standup Citizen", "Recycle " + STANDUP_CITIZEN + " times.", "The council still has every right to harass you but you'll still take the moral high ground."),
             new Achievement(5, "Daredevil", "Fall more than " + DAREDEVIL + " feet.", "I'm not seeking penance for what I've done, Father. I'm asking forgiveness, for what I'm about to do. - Matt Murdock"),
-            new Achievement(6, "Jenga Master", "Remove a bottle from a bottle tower.", "Jenga mastery will make you look cool at some parties, just not cool parties."),
-            new Achievement(7, "Questionable Architect", "Build a bottle tower.", "Architecture is a very dangerous job. If a writer makes a bad book, eh, people don't read it. But if you make bad architecture, you impose ugliness on a place for a hundred years. - Renzo Piano"),
-            new Achievement(8, "Pavement Pounder", "Complete Level 1.", "Meticulously curated Spotify playlist on, you're iPod shuffling down the street. You love to WALKMAN."),
-            new Achievement(9, "Unlimited Power", "Complete the game.", "Wow, you really put up with this game for that long. Thanks, I guess."),
-            new Achievement(10, "Carbon Cutter", "Recycle more than you dump.", "Cleanliness is next to godliness - you're a saint for leaving the world better than you found it."),
+            //new Achievement(6, "Jenga Master", "Remove a bottle from a bottle tower.", "Jenga mastery will make you look cool at some parties, just not cool parties."),
+            new Achievement(6, "Questionable Architect", "Build a bottle tower.", "Architecture is a very dangerous job. If a writer makes a bad book, eh, people don't read it. But if you make bad architecture, you impose ugliness on a place for a hundred years. - Renzo Piano"),
+            new Achievement(7, "Pavement Pounder", "Complete Level 1.", "Meticulously curated Spotify playlist on, you're iPod shuffling down the street. You love to WALKMAN."),
+            new Achievement(8, "Unlimited Power", "Complete the game.", "Wow, you really put up with this game for that long. Thanks, I guess."),
+            new Achievement(9, "Carbon Cutter", "Recycle more than you dump.", "Cleanliness is next to godliness - you're a saint for leaving the world better than you found it."),
+            new Achievement(10, "10"),
             new Achievement(11, "11"),
             new Achievement(12, "12"),
             new Achievement(13, "13"),
@@ -217,10 +218,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void UpdateLongestFallDistance(int longestFallDistance_)
+    public void UpdateLongestFallDistance(float longestFallDistance_)
     {
         longestFallDistance = longestFallDistance_;
-        if (longestFallDistance == DAREDEVIL && !achievementsDic["daredevil"].achieved)
+        if (longestFallDistance >= DAREDEVIL && !achievementsDic["daredevil"].achieved)
         {
             Debug.Log("Achievement unlocked: " + achievementsDic["daredevil"].title);
             achievementsDic["daredevil"].achieved = true;
@@ -239,7 +240,7 @@ public class GameManager : MonoBehaviour
     {
         bottleStack = bottleStack_;
 
-        if (bottleStack == BOTTLE_TOWER && !addingToStack && !achievementsDic["jenga master"].achieved) {
+        /*if (bottleStack == BOTTLE_TOWER && !addingToStack && !achievementsDic["jenga master"].achieved) {
             Debug.Log("Achievement unlocked: " + achievementsDic["jenga master"].title);
             achievementsDic["jenga master"].achieved = true;
 
@@ -250,9 +251,9 @@ public class GameManager : MonoBehaviour
                 sprite = achievementsDic["jenga master"].sprite
             };
             OnAchievementUnlocked?.Invoke(this, e);
-        }
+        }*/
 
-        if (bottleStack == (BOTTLE_TOWER - 1) && addingToStack && !achievementsDic["questionable architect"].achieved)
+        if (bottleStack >= BOTTLE_TOWER && !achievementsDic["questionable architect"].achieved)
         {
             Debug.Log("Achievement unlocked: " + achievementsDic["questionable architect"].title);
             achievementsDic["questionable architect"].achieved = true;
