@@ -5481,7 +5481,7 @@ Transform:
   - {fileID: 261189886}
   - {fileID: 1280648715}
   m_Father: {fileID: 1649065686}
-  m_RootOrder: 5
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1350817408
 GameObject:
@@ -5514,7 +5514,7 @@ Transform:
   - {fileID: 491198041}
   - {fileID: 236250754}
   m_Father: {fileID: 1464550200}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!156049354 &1350817410
 Grid:
@@ -5746,7 +5746,7 @@ Transform:
   - {fileID: 299824058}
   - {fileID: 1418378037}
   m_Father: {fileID: 1964471749}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!156049354 &1380062374
 Grid:
@@ -6543,8 +6543,8 @@ Transform:
   m_Children:
   - {fileID: 335110584}
   - {fileID: 1507780407}
-  - {fileID: 630018821}
   - {fileID: 1350817409}
+  - {fileID: 630018821}
   - {fileID: 988613537}
   m_Father: {fileID: 0}
   m_RootOrder: 5
@@ -7181,12 +7181,12 @@ Transform:
   m_Children:
   - {fileID: 833615444}
   - {fileID: 1992869395}
+  - {fileID: 1308257625}
   - {fileID: 1408801713}
   - {fileID: 8399124877148725284}
   - {fileID: 310185373}
-  - {fileID: 1308257625}
-  - {fileID: 671134651}
   - {fileID: 1894853583}
+  - {fileID: 671134651}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8101,7 +8101,7 @@ Transform:
   m_LocalScale: {x: 3, y: 3, z: 0}
   m_Children: []
   m_Father: {fileID: 1649065686}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1894853584
 SpriteRenderer:
@@ -8199,8 +8199,8 @@ Transform:
   m_Children:
   - {fileID: 943946900}
   - {fileID: 939853819}
-  - {fileID: 1165940701}
   - {fileID: 1380062373}
+  - {fileID: 1165940701}
   - {fileID: 822469866}
   m_Father: {fileID: 0}
   m_RootOrder: 7
@@ -8658,7 +8658,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 8
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
