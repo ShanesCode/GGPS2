@@ -3,36 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class LevelSelect : MonoBehaviour
+public class Splash : MonoBehaviour
 {
-    public GameObject parentMenu;
-    GameObject gameManager;
-    // Start is called before the first frame update
-    void Start()
+    bool loading;
+
+    private void Awake()
     {
-        gameManager = GameObject.FindWithTag("GameManager");
+        loading = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
-    }
+        if (!loading)
+        {
+            GoToMainMenu();
+        }
 
-    public void UpdateGameManagerSpawnRoom(int roomNumber)
-    {
-        gameManager.GetComponent<GameManager>().SetSpawnRoom(roomNumber);
-    }
-
-    public void ReturnToParent()
-    {
-        parentMenu.SetActive(true);
-        gameObject.SetActive(false);
-    }
-
-    public void GoToLevel(int selectedLevel)
-    {
-        StartCoroutine(LoadYourAsyncScene("Level" + selectedLevel));
+        loading = true;
     }
 
     IEnumerator LoadYourAsyncScene(string scene)
@@ -49,5 +37,10 @@ public class LevelSelect : MonoBehaviour
         {
             yield return null;
         }
+    }
+
+    public void GoToMainMenu()
+    {
+        StartCoroutine(LoadYourAsyncScene("MainMenuScene"));
     }
 }

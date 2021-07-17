@@ -15,7 +15,7 @@ public class CameraController : MonoBehaviour
         player = GameObject.Find("Player");
         p_transform = player.transform;
 
-        transform.position = new Vector3(p_transform.position.x, p_transform.position.y + y_offset, transform.position.z);
+        InitialisePosition();
 
         player.GetComponent<PlayerController>().OnGrounded += Cam_OnPlayerGrounded;
     }
@@ -31,5 +31,10 @@ public class CameraController : MonoBehaviour
     {
         float smooth_increment = Mathf.MoveTowards(transform.position.y, player.transform.position.y + y_offset, smoothingStep * Time.deltaTime);
         transform.position = new Vector3(transform.position.x, smooth_increment, transform.position.z);
+    }
+
+    public void InitialisePosition()
+    {
+        transform.position = new Vector3(p_transform.position.x, p_transform.position.y + y_offset, transform.position.z);
     }
 }

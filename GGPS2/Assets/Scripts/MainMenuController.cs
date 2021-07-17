@@ -8,11 +8,11 @@ public class MainMenuController : MonoBehaviour
     public GameObject levelSelect;
     public GameObject achievements;
     public GameObject settings;
-    GameManager gameManager = new GameManager();
+    GameObject gameManager;
     // Start is called before the first frame update
     void Start()
     {
-
+        gameManager = GameObject.FindWithTag("GameManager");
     }
 
     // Update is called once per frame
@@ -39,7 +39,7 @@ public class MainMenuController : MonoBehaviour
 
     public void StartNewGame()
     {
-        gameManager.SetSpawnRoom(0);
+        gameManager.GetComponent<GameManager>().SetSpawnRoom(0);
         StartCoroutine(LoadYourAsyncScene("Level0"));
     }
 
