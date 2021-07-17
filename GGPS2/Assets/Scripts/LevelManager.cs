@@ -25,6 +25,7 @@ public class LevelManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gameObject.tag = "LevelManager";
         gameManager = GameObject.FindWithTag("GameManager");
 
         Time.timeScale = 1;
