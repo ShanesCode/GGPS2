@@ -211,7 +211,13 @@ public class PlayerController : MonoBehaviour
             rightBlocked = true;
         }
     }
+
     public void Kill()
+    {
+        anim.SetTrigger("death");
+    }
+
+    public void Death()
     {
         OnDeathEventArgs e = new OnDeathEventArgs();
 
