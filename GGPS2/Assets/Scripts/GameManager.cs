@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     private int drinkCount = 0;
     private int wasteCount = 0;
     private int recycleCount = 0;
+
     public float longestFallDistance = 0.0f;
     public int bottleStack = 0;
     public bool level1Complete = false;
@@ -21,7 +22,7 @@ public class GameManager : MonoBehaviour
 
     #region Requirements
     private const int JUMPING_JACK = 250;
-    private const int KING_CHUGGER = 50;
+    private const int SUPER_CHUGGER = 50;
     private const int STANDUP_CITIZEN = 1; // 10
     private const float DAREDEVIL = 3.0f; // 30
     // A stack of bottles is a "bottle tower" if it is at least BOTTLE_TOWER tall.
@@ -54,17 +55,17 @@ public class GameManager : MonoBehaviour
 
         achievements = new List<Achievement>()
         {
-            new Achievement(0, "Aficionado", "Launch our game.", "Only true gaming and drinks connoisseurs would pick our game to play from the bunch. Cheers!", null, true),
+            new Achievement(0, "Aficionado", "Launch our game.", "Only true gaming and soda connoisseurs would pick our game to play from the bunch. Cheers!", null, true),
             new Achievement(1, "Socialite", "Complete the tutorial.", "It's a dangerous business, going out your door. You step onto the road, and if you don't keep your feet, there's no knowing where you might be swept off to. - Bilbo Baggins"),
             new Achievement(2, "Jumping Jack", "Jump " + JUMPING_JACK + " times.", "Lots of jumping after drinking all that soda? Thank god the devs didn't code a way to feel sick."),
-            new Achievement(3, "King Chugger", "Drink " + KING_CHUGGER + " times.", "Not one bathroom break needed: the sign of a true king."),
+            new Achievement(3, "Super Chugger", "Drink " + SUPER_CHUGGER + " times.", "Not one bathroom break needed: the sign of a true king."),
             new Achievement(4, "Standup Citizen", "Recycle " + STANDUP_CITIZEN + " times.", "The council still has every right to harass you but you'll still take the moral high ground."),
             new Achievement(5, "Daredevil", "Fall more than " + DAREDEVIL + " feet.", "I'm not seeking penance for what I've done, Father. I'm asking forgiveness, for what I'm about to do. - Matt Murdock"),
             new Achievement(6, "Jenga Master", "Remove a bottle from a bottle tower.", "Jenga mastery will make you look cool at some parties, just not cool parties."),
             new Achievement(7, "Questionable Architect", "Build a bottle tower.", "Architecture is a very dangerous job. If a writer makes a bad book, eh, people don't read it. But if you make bad architecture, you impose ugliness on a place for a hundred years. - Renzo Piano"),
             new Achievement(8, "Pavement Pounder", "Complete Level 1.", "Meticulously curated Spotify playlist on, you're iPod shuffling down the street. You love to WALKMAN."),
             new Achievement(9, "Unlimited Power", "Complete the game.", "Wow, you really put up with this game for that long. Thanks, I guess."),
-            new Achievement(10, "10"),
+            new Achievement(10, "Carbon Cutter", "Recycle more than you dump.", "Cleanliness is next to godliness - you're a saint for leaving the world better than you found it."),
             new Achievement(11, "11"),
             new Achievement(12, "12"),
             new Achievement(13, "13"),
@@ -165,16 +166,16 @@ public class GameManager : MonoBehaviour
     public void UpdateDrinkCount(int drinkCount_)
     {
         drinkCount = drinkCount_;
-        if (drinkCount == KING_CHUGGER && !achievementsDic["king chugger"].achieved)
+        if (drinkCount == SUPER_CHUGGER && !achievementsDic["super chugger"].achieved)
         {
-            Debug.Log("Achievement unlocked: " + achievementsDic["king chugger"].title);
-            achievementsDic["king chugger"].achieved = true;
+            Debug.Log("Achievement unlocked: " + achievementsDic["super chugger"].title);
+            achievementsDic["super chugger"].achieved = true;
 
             OnAchievementUnlockedEventArgs e = new OnAchievementUnlockedEventArgs
             {
-                title = achievementsDic["king chugger"].title,
-                requirement = achievementsDic["king chugger"].requirement,
-                sprite = achievementsDic["king chugger"].sprite
+                title = achievementsDic["super chugger"].title,
+                requirement = achievementsDic["super chugger"].requirement,
+                sprite = achievementsDic["super chugger"].sprite
             };
             OnAchievementUnlocked?.Invoke(this, e);
         }
@@ -183,16 +184,16 @@ public class GameManager : MonoBehaviour
     public void UpdateWasteCount(int wasteCount_)
     {
         wasteCount = wasteCount_;
-        /*if (drinkCount == KING_CHUGGER && !achievementsDic["king chugger"].achieved)
+        /*if (drinkCount == SUPER_CHUGGER && !achievementsDic["super chugger"].achieved)
         {
-            Debug.Log("Achievement unlocked: " + achievementsDic["king chugger"].title);
-            achievementsDic["king chugger"].achieved = true;
+            Debug.Log("Achievement unlocked: " + achievementsDic["super chugger"].title);
+            achievementsDic["super chugger"].achieved = true;
 
             OnAchievementUnlockedEventArgs e = new OnAchievementUnlockedEventArgs
             {
-                title = achievementsDic["king chugger"].title,
-                requirement = achievementsDic["king chugger"].requirement,
-                sprite = achievementsDic["king chugger"].sprite
+                title = achievementsDic["super chugger"].title,
+                requirement = achievementsDic["super chugger"].requirement,
+                sprite = achievementsDic["super chugger"].sprite
             };
             OnAchievementUnlocked?.Invoke(this, e);
         }*/
@@ -301,5 +302,20 @@ public class GameManager : MonoBehaviour
             };
             OnAchievementUnlocked?.Invoke(this, e);
         }
+    }
+
+    public void UnlockAchievement(string achievementTitle)
+    {
+        string achTitle = achievementTitle.ToLower();
+        Debug.Log("Achievement unlocked: " + achievementsDic[achTitle].title);
+        achievementsDic[achTitle].achieved = true;
+
+        OnAchievementUnlockedEventArgs e = new OnAchievementUnlockedEventArgs
+        {
+            title = achievementsDic[achTitle].title,
+            requirement = achievementsDic[achTitle].requirement,
+            sprite = achievementsDic[achTitle].sprite
+        };
+        OnAchievementUnlocked?.Invoke(this, e);
     }
 }

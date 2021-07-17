@@ -33,11 +33,11 @@ public class EndRoomUI : MonoBehaviour
         stats = transform.GetChild(0).GetChild(1).GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>();
         title = transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>();
 
-        levelNumber = int.Parse(SceneManager.GetActiveScene().name.Remove(0, 5));
+        levelNumber = levelManager.GetComponent<LevelManager>().levelNumber;
 
-        prevRoomWasteCount = levelManager.GetComponent<LevelManager>().startWasteCount;
-        prevRoomIndulgenceCount = levelManager.GetComponent<LevelManager>().startDrinkCount;
-        prevRoomRecycleCount = levelManager.GetComponent<LevelManager>().startRecycleCount;
+        prevRoomWasteCount = 0;
+        prevRoomIndulgenceCount = 0;
+        prevRoomRecycleCount = 0;
 
         gameObject.SetActive(false);
     }
@@ -48,9 +48,9 @@ public class EndRoomUI : MonoBehaviour
         {
             roomNumber = levelManager.GetComponent<LevelManager>().currentRoom;
 
-            wasteCount = gameManager.GetComponent<GameManager>().GetWasteCount() - prevRoomWasteCount;
-            indulgenceCount = gameManager.GetComponent<GameManager>().GetDrinkCount() - prevRoomIndulgenceCount;
-            recycleCount = gameManager.GetComponent<GameManager>().GetRecycleCount() - prevRoomRecycleCount;
+            wasteCount = gameManager.GetComponent<GameManager>().GetWasteCount() - (prevRoomWasteCount + levelManager.GetComponent<LevelManager>().startWasteCount);
+            indulgenceCount = gameManager.GetComponent<GameManager>().GetDrinkCount() - (prevRoomIndulgenceCount + levelManager.GetComponent<LevelManager>().startDrinkCount);
+            recycleCount = gameManager.GetComponent<GameManager>().GetRecycleCount() - (prevRoomRecycleCount + levelManager.GetComponent<LevelManager>().startRecycleCount);
         }
 
         stats.text =

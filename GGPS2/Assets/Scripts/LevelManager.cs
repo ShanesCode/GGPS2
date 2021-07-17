@@ -6,6 +6,10 @@ using UnityEngine.UI;
 
 public class LevelManager : MonoBehaviour
 {
+    public int levelNumber;
+
+    const int FINAL_LEVEL = 2;
+
     public GameObject player;
     public GameObject camera;
     GameObject gameManager;
@@ -22,6 +26,11 @@ public class LevelManager : MonoBehaviour
     public int startRecycleCount;
 
     public bool paused;
+    private void Awake()
+    {
+        levelNumber = int.Parse(SceneManager.GetActiveScene().name.Remove(0, 5));
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -89,9 +98,24 @@ public class LevelManager : MonoBehaviour
         Time.timeScale = 1;
         paused = false;
         endRoomUI.SetActive(false);
-        player.transform.position = roomSpawnPoints[nextRoomNumber].transform.position;
-        camera.GetComponent<CameraController>().InitialisePosition();
-        currentRoom += 1;
+
+        if (nextRoomNumber < roomSpawnPoints.Count)
+        {
+            player.transform.position = roomSpawnPoints[nextRoomNumber].transform.position;
+            camera.GetComponent<CameraController>().InitialisePosition();
+            currentRoom += 1;
+        }
+        else
+        {
+            if (levelNumber < FINAL_LEVEL)
+            {
+                StartCoroutine(LoadYourAsyncScene("Level" + (levelNumber + 1)));
+            }
+            else
+            {
+                StartCoroutine(LoadYourAsyncScene("EndScene"));
+            }
+        }
     }
 
     public void ResetRoom()
