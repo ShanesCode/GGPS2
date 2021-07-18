@@ -272,6 +272,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bird (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 4529820813845408851, guid: d62a3928ab2f6304cbf224dd0dd274c7, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 4529820814795321294, guid: d62a3928ab2f6304cbf224dd0dd274c7, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -320,6 +324,10 @@ PrefabInstance:
     - target: {fileID: 4529820813845408851, guid: d62a3928ab2f6304cbf224dd0dd274c7, type: 3}
       propertyPath: m_Name
       value: Bird (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4529820813845408851, guid: d62a3928ab2f6304cbf224dd0dd274c7, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 4529820814795321294, guid: d62a3928ab2f6304cbf224dd0dd274c7, type: 3}
       propertyPath: m_RootOrder
@@ -4671,6 +4679,10 @@ PrefabInstance:
     - target: {fileID: 3807949596637135086, guid: 9c9613df30ad2924795ab648847f5544, type: 3}
       propertyPath: m_Name
       value: Dog (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3807949596637135086, guid: 9c9613df30ad2924795ab648847f5544, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 4636212174374554069, guid: 9c9613df30ad2924795ab648847f5544, type: 3}
       propertyPath: m_RootOrder
@@ -14390,6 +14402,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bird (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 4529820813845408851, guid: d62a3928ab2f6304cbf224dd0dd274c7, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 4529820814795321294, guid: d62a3928ab2f6304cbf224dd0dd274c7, type: 3}
       propertyPath: m_RootOrder
       value: 10
@@ -22699,6 +22715,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bird (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 4529820813845408851, guid: d62a3928ab2f6304cbf224dd0dd274c7, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 4529820814795321294, guid: d62a3928ab2f6304cbf224dd0dd274c7, type: 3}
       propertyPath: m_RootOrder
       value: 8
@@ -23208,6 +23228,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1285976170}
     m_Modifications:
+    - target: {fileID: 4529820813845408851, guid: d62a3928ab2f6304cbf224dd0dd274c7, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 4529820814795321294, guid: d62a3928ab2f6304cbf224dd0dd274c7, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -24917,6 +24941,10 @@ PrefabInstance:
       propertyPath: goals.Array.data[1].y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4529820813845408851, guid: d62a3928ab2f6304cbf224dd0dd274c7, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 4529820814795321294, guid: d62a3928ab2f6304cbf224dd0dd274c7, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -26574,6 +26602,10 @@ PrefabInstance:
     - target: {fileID: 4529820813845408851, guid: d62a3928ab2f6304cbf224dd0dd274c7, type: 3}
       propertyPath: m_Name
       value: Bird (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4529820813845408851, guid: d62a3928ab2f6304cbf224dd0dd274c7, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 4529820814795321294, guid: d62a3928ab2f6304cbf224dd0dd274c7, type: 3}
       propertyPath: m_RootOrder
@@ -36607,6 +36639,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bird (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 4529820813845408851, guid: d62a3928ab2f6304cbf224dd0dd274c7, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
     - target: {fileID: 4529820814795321294, guid: d62a3928ab2f6304cbf224dd0dd274c7, type: 3}
       propertyPath: m_RootOrder
       value: 7
@@ -37137,6 +37173,10 @@ PrefabInstance:
     - target: {fileID: 3807949596637135086, guid: 9c9613df30ad2924795ab648847f5544, type: 3}
       propertyPath: m_Name
       value: Dog
+      objectReference: {fileID: 0}
+    - target: {fileID: 3807949596637135086, guid: 9c9613df30ad2924795ab648847f5544, type: 3}
+      propertyPath: m_TagString
+      value: Ground
       objectReference: {fileID: 0}
     - target: {fileID: 4636212174374554069, guid: 9c9613df30ad2924795ab648847f5544, type: 3}
       propertyPath: m_RootOrder
