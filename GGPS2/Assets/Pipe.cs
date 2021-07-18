@@ -26,12 +26,13 @@ public class Pipe : MonoBehaviour
 
     public void ShootBottle()
     {
-        Instantiate(bottle, spawnPos, Quaternion.Euler(0, 0, Random.Range(0.0f, 360.0f)));
         bottleCount--;
 
         if (bottleCount <= 0)
         {
             anim.SetTrigger("idle");
         }
+
+        Instantiate(bottle, spawnPos, Quaternion.Euler(0, 0, Random.Range(0.0f, 360.0f)));
     }
 }

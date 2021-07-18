@@ -7,12 +7,12 @@ using TMPro;
 public class EndLevelNumber : MonoBehaviour
 {
     GameObject gameManager;
-    TextMeshProUGUI text;
+    public TextMeshPro text;
     // Start is called before the first frame update
     void Start()
     {
         gameManager = GameObject.FindWithTag("GameManager");
-        text = GetComponent<TextMeshProUGUI>();
+        text = GetComponent<TextMeshPro>();
         text.text = gameManager.GetComponent<GameManager>().GetWasteCount().ToString();
     }
 }

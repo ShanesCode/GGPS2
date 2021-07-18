@@ -7,6 +7,7 @@ public class BottleController : MonoBehaviour
 {
     private const int MAX_BOTTLE_STACK_HEIGHT_ABOVE_PLAYER = 2;
     private const float PICKUP_DISTANCE = 3f;
+    private const float MAX_PLACE_DISTANCE = 8f;
     public GameObject bottle;
     public List<GameObject> bins;
     public bool hasBottle;
@@ -192,7 +193,7 @@ public class BottleController : MonoBehaviour
                 // Check if the bottle is at the x coordinate of where we want to place our bottle
                 // bool bottleAtXOfPlacementPosition = (placement_coordinates.x + ((bottle_collider.size.x * bottle_collider.transform.localScale.x) / 2) <= bottle_collider.bounds.max.x && placement_coordinates.x + ((bottle_collider.size.x * bottle_collider.transform.localScale.x) / 2) >= bottle_collider.bounds.min.x || placement_coordinates.x - ((bottle_collider.size.x * bottle_collider.transform.localScale.x) / 2) <= bottle_collider.bounds.max.x && placement_coordinates.x - ((bottle_collider.size.x * bottle_collider.transform.localScale.x) / 2) >= bottle_collider.bounds.min.x);
                 bool bottleAtXOfPlacementPosition = (placement_coordinates.x <= bottle_collider.bounds.max.x && placement_coordinates.x >= bottle_collider.bounds.min.x);
-                if (bottleAtXOfPlacementPosition)
+                if (bottleAtXOfPlacementPosition && Vector2.Distance(transform.position, b.transform.position) < MAX_PLACE_DISTANCE)
                 {
                     // Add it to a new list
                     bottlesAtXOfPlacementPosition.Add(b);
