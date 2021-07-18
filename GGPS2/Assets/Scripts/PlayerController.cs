@@ -34,8 +34,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask groundMask;
     [SerializeField] private LayerMask bottleMask;
     [SerializeField] private bool grounded;
-    private Vector2 groundOffset;
-    private Vector2 size;
 
     private Vector2 groundVelocity;
 
@@ -50,7 +48,9 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        jumpCount = 0;
+        gameManager = GameObject.FindWithTag("GameManager");
+
+        jumpCount = gameManager.GetComponent<GameManager>().GetJumpCount();
         longestFall = 0;
 
         speedMax = 5.0f;
@@ -59,17 +59,12 @@ public class PlayerController : MonoBehaviour
         jumpSquat = false;
 
         col = GetComponent<BoxCollider2D>();
-        size = col.size;
-
-        groundOffset = new Vector2(0, GetComponent<BoxCollider2D>().size.y / 2);
         anim = GetComponent<Animator>();
         rb2d = GetComponent<Rigidbody2D>();
 
         xVelocity = 0;
 
         groundVelocity = Vector2.zero;
-
-        gameManager = GameObject.FindWithTag("GameManager");
     }
 
     private void Update()
@@ -124,7 +119,7 @@ public class PlayerController : MonoBehaviour
         rb2d.velocity = new Vector2(xVelocity + groundVelocity.x, rb2d.velocity.y);
     }
 
-    void Jump()
+    public void Jump()
     {
         rb2d.AddForce(new Vector2(0, jumpForce));
         jumpSquat = false;
