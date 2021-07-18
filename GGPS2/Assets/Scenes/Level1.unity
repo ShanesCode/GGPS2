@@ -8064,7 +8064,7 @@ MonoBehaviour:
   - {fileID: 1334796197}
   - {fileID: 1095986062}
   - {fileID: 1290816052}
-  endRoomUI: {fileID: 0}
+  endRoomUI: {fileID: 1769139460}
   pauseMenu: {fileID: 1445125178}
   settings: {fileID: 165700375}
   startWasteCount: 0

@@ -37834,7 +37834,7 @@ MonoBehaviour:
   - {fileID: 335110583}
   - {fileID: 833615443}
   - {fileID: 1900837377}
-  endRoomUI: {fileID: 0}
+  endRoomUI: {fileID: 2070114697}
   pauseMenu: {fileID: 1445125178}
   settings: {fileID: 165700375}
   startWasteCount: 0
