@@ -11,8 +11,11 @@ public class Bottle : MonoBehaviour
 
     [SerializeField] private LayerMask groundMask;
     [SerializeField] private LayerMask bottleMask;
-    BoxCollider2D col;
+    BoxCollider2D boxCol;
+    CapsuleCollider2D capsCol;
     GameObject player;
+
+    float bottleHeight;
 
     public bool grounded;
     bool onTrueGround;
@@ -34,7 +37,10 @@ public class Bottle : MonoBehaviour
 
     void Start()
     {
-        col = GetComponent<BoxCollider2D>();
+        boxCol = GetComponent<BoxCollider2D>();
+        capsCol = GetComponent<CapsuleCollider2D>();
+        bottleHeight = GetComponent<SpriteRenderer>().size.y * transform.localScale.y;
+
         player = GameObject.FindWithTag("Player");
 
         RandomiseBottleColours();
@@ -83,8 +89,8 @@ public class Bottle : MonoBehaviour
 
     bool GroundCheck()
     {
-        RaycastHit2D hitGround = Physics2D.BoxCast(col.bounds.center, new Vector2(col.bounds.size.x * 0.8f, col.bounds.size.y), 0f, Vector2.down, 0.1f, groundMask);
-        RaycastHit2D hitBottle = Physics2D.BoxCast(col.bounds.center, new Vector2(col.bounds.size.x * 0.8f, col.bounds.size.y), 0f, Vector2.down, 0.1f, bottleMask);
+        RaycastHit2D hitGround = Physics2D.BoxCast(boxCol.bounds.center, new Vector2(boxCol.bounds.size.x * 0.8f, bottleHeight), 0f, Vector2.down, 0.2f, groundMask);
+        RaycastHit2D hitBottle = Physics2D.BoxCast(boxCol.bounds.center, new Vector2(boxCol.bounds.size.x * 0.8f, bottleHeight), 0f, Vector2.down, 0.2f, bottleMask);
         if (hitGround)
         {
             // Set the ground as the parent
@@ -97,7 +103,8 @@ public class Bottle : MonoBehaviour
             onTrueGround = true;
 
             // Stop ignoring collisions with player
-            Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), player.GetComponent<Collider2D>(), false);
+            Physics2D.IgnoreCollision(gameObject.GetComponent<BoxCollider2D>(), player.GetComponent<Collider2D>(), false);
+            Physics2D.IgnoreCollision(gameObject.GetComponent<CapsuleCollider2D>(), player.GetComponent<Collider2D>(), false);
             return true;
         }
 
@@ -106,7 +113,8 @@ public class Bottle : MonoBehaviour
             gameObject.transform.SetParent(hitBottle.transform);
             onTrueGround = false;
 
-            Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), player.GetComponent<Collider2D>(), false);
+            Physics2D.IgnoreCollision(gameObject.GetComponent<BoxCollider2D>(), player.GetComponent<Collider2D>(), false);
+            Physics2D.IgnoreCollision(gameObject.GetComponent<CapsuleCollider2D>(), player.GetComponent<Collider2D>(), false);
             return true;
         }
         
@@ -127,12 +135,14 @@ public class Bottle : MonoBehaviour
             // Turn off the collider so that it doesn't hit anything whilst being carried
             // Make it kinematic so that its position can be set directly via the offset in BottleController
             gameObject.GetComponent<BoxCollider2D>().enabled = false;
+            gameObject.GetComponent<CapsuleCollider2D>().enabled = false;
             gameObject.GetComponent<Rigidbody2D>().isKinematic = true;
         }
         else
         {
             // Turn on the collider so that it hits things again
             // Make it non-kinematic so that it has gravity and forces act on it as normal
+            gameObject.GetComponent<CapsuleCollider2D>().enabled = true;
             gameObject.GetComponent<BoxCollider2D>().enabled = true;
             gameObject.GetComponent<Rigidbody2D>().isKinematic = false;
         }

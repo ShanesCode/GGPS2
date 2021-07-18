@@ -270,6 +270,7 @@ GameObject:
   - component: {fileID: 2093263240705301237}
   - component: {fileID: 2093263240705301236}
   - component: {fileID: -5921027567555005848}
+  - component: {fileID: 2320334530205750536}
   m_Layer: 7
   m_Name: nakedBottle
   m_TagString: Untagged
@@ -378,7 +379,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.0134010315, y: 0}
+  m_Offset: {x: 0.0134010315, y: 0.14508867}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -389,7 +390,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.629982, y: 2.84}
+  m_Size: {x: 1.629982, y: 2.5498228}
   m_EdgeRadius: 0
 --- !u!114 &-5921027567555005848
 MonoBehaviour:
@@ -437,3 +438,19 @@ MonoBehaviour:
   - ENERGY
   - SLURP
   - GUSH
+--- !u!70 &2320334530205750536
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8032861064615473417}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.0023381694, y: -1.0156236}
+  m_Size: {x: 1.6746182, y: 0.77132046}
+  m_Direction: 1

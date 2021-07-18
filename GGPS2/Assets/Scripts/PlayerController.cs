@@ -33,9 +33,11 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private LayerMask groundMask;
     [SerializeField] private LayerMask bottleMask;
-    [SerializeField] private bool grounded;
+    public bool grounded;
 
     private Vector2 groundVelocity;
+
+    public GameObject ground;
 
     Animator anim;
     Rigidbody2D rb2d;
@@ -90,7 +92,33 @@ public class PlayerController : MonoBehaviour
             if (xVelocity < 0 && !left) Flip();
         }
 
-        grounded = GroundCheck();
+        if (grounded)
+        {
+            anim.SetBool("grounded", true);
+
+            OnGroundedEventArgs e = new OnGroundedEventArgs();
+            e.groundTransform = ground.transform;
+
+            if (ground.GetComponent<Rigidbody2D>() != null)
+            {
+                groundVelocity = ground.GetComponent<Rigidbody2D>().velocity;
+            }
+
+            fallStarted = false;
+            if (longestFall < currentFall)
+            {
+                longestFall = currentFall;
+                gameManager.GetComponent<GameManager>().UpdateLongestFallDistance(longestFall);
+            }
+            currentFall = 0;
+
+            OnGrounded?.Invoke(this, e);
+        } 
+        else
+        {
+            anim.SetBool("grounded", false);
+            groundVelocity = Vector2.zero;
+        }
 
         anim.SetFloat("xSpeed", Mathf.Abs(xVelocity));
         anim.SetFloat("ySpeed", rb2d.velocity.y);
@@ -105,16 +133,12 @@ public class PlayerController : MonoBehaviour
         {
             currentFall = fallStartHeight - transform.position.y;
         }
-
-        if (grounded)
-        {
-            anim.SetBool("grounded", true);
-        }
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
+        //GroundCheck();
         if (jumpSquat) return;
         rb2d.velocity = new Vector2(xVelocity + groundVelocity.x, rb2d.velocity.y);
     }
@@ -130,53 +154,28 @@ public class PlayerController : MonoBehaviour
         grounded = false;
     }
 
-    bool GroundCheck()
+    /*void GroundCheck()
     {
-        RaycastHit2D hitGround = Physics2D.BoxCast(col.bounds.center, col.bounds.size, 0f, Vector2.down, .15f, groundMask);
-        RaycastHit2D hitBottle = Physics2D.BoxCast(col.bounds.center, col.bounds.size, 0f, Vector2.down, .15f, bottleMask);
-        if (hitGround || hitBottle)
+        RaycastHit2D hitGround = Physics2D.BoxCast(col.bounds.center, col.bounds.size, 0f, Vector2.down, .2f, groundMask);
+        RaycastHit2D hitBottle = Physics2D.BoxCast(col.bounds.center, col.bounds.size, 0f, Vector2.down, .2f, bottleMask);
+
+        if (hitGround)
         {
-            anim.SetBool("grounded", true);
-
-            OnGroundedEventArgs e = new OnGroundedEventArgs();
-
-            if (hitGround)
-            {
-                if (hitGround.rigidbody != null)
-                {
-                    groundVelocity = hitGround.rigidbody.velocity;
-                }
-
-                e.groundTransform = hitGround.transform;
-            }
-            else if (hitBottle)
-            {
-                if (hitBottle.rigidbody != null)
-                {
-                    groundVelocity = hitBottle.rigidbody.velocity;
-                }
-
-                e.groundTransform = hitBottle.transform;
-            }
-
-            fallStarted = false;
-            if (longestFall < currentFall)
-            {
-                longestFall = currentFall;
-                gameManager.GetComponent<GameManager>().UpdateLongestFallDistance(longestFall);
-            }
-            currentFall = 0;
-
-            OnGrounded?.Invoke(this, e);
-            return true;
+            ground = hitGround.transform.gameObject;
+            grounded = true;
+            return;
         }
-        else
+
+        if (hitBottle)
         {
-            anim.SetBool("grounded", false);
-            groundVelocity = Vector2.zero;
-            return false;
+            ground = hitBottle.transform.gameObject;
+            grounded = true;
+            return;
         }
-    }
+
+        grounded = false;
+        return;
+    }*/
 
     void Flip()
     {
