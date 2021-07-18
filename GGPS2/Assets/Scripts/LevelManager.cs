@@ -125,6 +125,7 @@ public class LevelManager : MonoBehaviour
                         break;
                 }
 
+                gameManager.GetComponent<GameManager>().SetSpawnRoom(0);
                 StartCoroutine(LoadYourAsyncScene("Level" + (levelNumber + 1)));
             }
             else
