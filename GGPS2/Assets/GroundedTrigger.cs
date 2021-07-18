@@ -24,7 +24,7 @@ public class GroundedTrigger : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Bottle" || collision.gameObject.tag == "Bottle")
+        if (collision.gameObject.tag == "Ground" || collision.gameObject.tag == "Bottle")
         {
             player.GetComponent<PlayerController>().grounded = true;
             player.GetComponent<PlayerController>().ground = collision.gameObject;
