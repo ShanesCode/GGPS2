@@ -132,8 +132,8 @@ public class PlayerController : MonoBehaviour
 
     bool GroundCheck()
     {
-        RaycastHit2D hitGround = Physics2D.BoxCast(col.bounds.center, col.bounds.size, 0f, Vector2.down, .1f, groundMask);
-        RaycastHit2D hitBottle = Physics2D.BoxCast(col.bounds.center, col.bounds.size, 0f, Vector2.down, .1f, bottleMask);
+        RaycastHit2D hitGround = Physics2D.BoxCast(col.bounds.center, col.bounds.size, 0f, Vector2.down, .15f, groundMask);
+        RaycastHit2D hitBottle = Physics2D.BoxCast(col.bounds.center, col.bounds.size, 0f, Vector2.down, .15f, bottleMask);
         if (hitGround || hitBottle)
         {
             anim.SetBool("grounded", true);
@@ -176,41 +176,6 @@ public class PlayerController : MonoBehaviour
             groundVelocity = Vector2.zero;
             return false;
         }
-
-        /*Vector2 boxColliderPos = new Vector2(transform.position.x + col.offset.x, transform.position.y + col.offset.y);
-
-        RaycastHit2D hit = Physics2D.CircleCast((Vector2)transform.position + groundOffset, col.size.x/2, Vector2.down, groundMask);
-        if (hit) 
-        {
-            float distance = Mathf.Abs(hit.point.y - boxColliderPos.y);
-            if (distance <= size.y)
-            {
-                anim.SetBool("grounded", true);
-
-                if (hit.rigidbody != null) {
-                    groundVelocity = hit.rigidbody.velocity;
-                }
-
-                fallStarted = false;
-                if (longestFall < currentFall)
-                {
-                    longestFall = currentFall;
-                    gameManager.GetComponent<GameManager>().UpdateLongestFallDistance(longestFall);
-                }
-                currentFall = 0;
-
-                OnGroundedEventArgs e = new OnGroundedEventArgs()
-                {
-                    groundTransform = hit.transform
-                };
-                
-                OnGrounded?.Invoke(this, e);
-                return true;
-            }
-        }
-        anim.SetBool("grounded", false);
-        groundVelocity = Vector2.zero;
-        return false;*/
     }
 
     void Flip()
