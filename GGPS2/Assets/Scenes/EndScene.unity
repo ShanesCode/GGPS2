@@ -6670,6 +6670,7 @@ MonoBehaviour:
   levelNumber: 0
   player: {fileID: 0}
   camera: {fileID: 0}
+  song: {fileID: 8300000, guid: 9677c8b0a385f6745be7bb5e2ce343a0, type: 3}
   currentRoom: 0
   nextRoomNumber: 0
   endRoomTriggers: []

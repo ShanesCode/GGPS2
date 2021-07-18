@@ -615,7 +615,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 180}
-  m_SizeDelta: {x: -800, y: 80}
+  m_SizeDelta: {x: -400, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &198818540
 MonoBehaviour:
@@ -4188,7 +4188,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -40}
-  m_SizeDelta: {x: -800, y: 350}
+  m_SizeDelta: {x: -400, y: 350}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &452364908
 MonoBehaviour:
@@ -5287,6 +5287,7 @@ MonoBehaviour:
   levelNumber: 0
   player: {fileID: 0}
   camera: {fileID: 0}
+  song: {fileID: 8300000, guid: 0aa5e39a26d2a6a4da8d38caf666da76, type: 3}
   currentRoom: 0
   nextRoomNumber: 0
   endRoomTriggers:
@@ -14476,7 +14477,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -40}
-  m_SizeDelta: {x: -800, y: 350}
+  m_SizeDelta: {x: -400, y: 350}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1188153044
 MonoBehaviour:
@@ -26413,7 +26414,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 180}
-  m_SizeDelta: {x: -800, y: 80}
+  m_SizeDelta: {x: -400, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1755827387
 MonoBehaviour:
