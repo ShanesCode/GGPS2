@@ -6,6 +6,7 @@ using UnityEngine;
 public class BottleController : MonoBehaviour
 {
     private const int MAX_BOTTLE_STACK_HEIGHT_ABOVE_PLAYER = 2;
+    private const float PICKUP_DISTANCE = 2f;
     public GameObject bottle;
     public List<GameObject> bins;
     public bool hasBottle;
@@ -120,9 +121,13 @@ public class BottleController : MonoBehaviour
         // Iterates through all game objects and gets those with tag Bottle
         foreach (GameObject bottle in bottles)
         {
+            // Check bottle is in the direction player is facing
+            if (Mathf.Sign(bottle.transform.position.x - transform.position.x) != Mathf.Sign(flip)) {
+                continue;
+            }
 
             // Calculates the distance between the player and the current bottle being checked
-            float working_diff = Mathf.Abs(transform.position.x - bottle.transform.position.x);
+            float working_diff = Vector3.Distance(transform.position, bottle.transform.position);
 
             // If the current bottle is nearer to the player than the previous nearest, it replaces that bottle
             if (working_diff < shortest_distance_bottle)
@@ -133,7 +138,7 @@ public class BottleController : MonoBehaviour
         }
 
         // If the nearest bottle is within the specified distance destroy it and change the player hasBottle state
-        if (shortest_distance_bottle < 2 && nearest_bottle != null)
+        if (shortest_distance_bottle < PICKUP_DISTANCE && nearest_bottle != null)
         {
             anim.SetTrigger("pickup");
         }
@@ -236,10 +241,12 @@ public class BottleController : MonoBehaviour
                 }
                 else
                 {
-                    // Put bottle on top of stack?
+                    // Put bottle on top of stack
                     carried_bottle.GetComponent<Bottle>().SetBeingCarried(false);
-                    carried_bottle.transform.position = new Vector3(top_of_stack.transform.position.x, top_of_stack.transform.position.y + (bottle_collider.size.y * bottle_collider.transform.localScale.y), 0);
-                    bottles.Add(carried_bottle);
+                    carried_bottle.transform.SetParent(top_of_stack.transform);
+                    carried_bottle.transform.localPosition = new Vector3(0, bottleHeight, 0);
+                    //carried_bottle.transform.position = new Vector3(top_of_stack.transform.position.x, top_of_stack.transform.position.y + (bottle_collider.size.y * bottle_collider.transform.localScale.y), 0);
+                    //bottles.Add(carried_bottle); // Moved this to the Bottle.cs script when a bottle is grounded
                     hasBottle = false;
                     
                     if (currentlyCheckingBiggestStack)
@@ -257,7 +264,7 @@ public class BottleController : MonoBehaviour
                 carried_bottle.GetComponent<Bottle>().SetBeingCarried(false); // Makes the bottles non-kinematic and adds the collider. Also sets mass and drag to default
                 Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), carried_bottle.GetComponent<Collider2D>(), true); // Prevents the bottle colliding with the player
                 carried_bottle.GetComponent<Bottle>().ChuckBottle(); // Gives the bottle velocity
-                bottles.Add(carried_bottle); // Adds the bottle to the list of bottles in the world
+                //bottles.Add(carried_bottle); // Moved this to the Bottle.cs script when a bottle is grounded
                 hasBottle = false;
                 carried_bottle = null;
                 return;
@@ -269,7 +276,7 @@ public class BottleController : MonoBehaviour
             carried_bottle.GetComponent<Bottle>().SetBeingCarried(false); // Makes the bottles non-kinematic and adds the collider. Also sets mass and drag to default
             Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), carried_bottle.GetComponent<Collider2D>(), true); // Prevents the bottle colliding with the player
             carried_bottle.GetComponent<Bottle>().ChuckBottle(); // Gives the bottle velocity
-            bottles.Add(carried_bottle); // Adds the bottle to the list of bottles in the world
+            //bottles.Add(carried_bottle); // Moved this to the Bottle.cs script when a bottle is grounded
             hasBottle = false;
             carried_bottle = null;
 

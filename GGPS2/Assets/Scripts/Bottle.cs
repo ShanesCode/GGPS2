@@ -14,7 +14,9 @@ public class Bottle : MonoBehaviour
     BoxCollider2D col;
     GameObject player;
 
-    bool grounded;
+    public bool grounded;
+    bool onTrueGround;
+    Vector3 trueGroundedPosition;
 
     int flip;
 
@@ -40,9 +42,6 @@ public class Bottle : MonoBehaviour
 
         gameManager = GameObject.FindWithTag("GameManager");
         wasteCount = gameManager.GetComponent<GameManager>().GetWasteCount();
-
-        gameObject.GetComponent<Rigidbody2D>().drag = 1;
-        gameObject.GetComponent<Rigidbody2D>().mass = 9999999;
     }
 
     // Update is called once per frame
@@ -59,10 +58,20 @@ public class Bottle : MonoBehaviour
 
         if (grounded)
         {
-            //gameObject.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
-            gameObject.GetComponent<Rigidbody2D>().drag = 1;
-            gameObject.GetComponent<Rigidbody2D>().mass = 9999999;
+            if (!onTrueGround)
+            {
+                transform.localPosition = new Vector3(0, transform.localPosition.y, 0);
+            }
+            else
+            {
+                transform.localPosition = trueGroundedPosition;
+            }
             Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), player.GetComponent<Collider2D>(), false);
+            player.GetComponent<BottleController>().bottles.Add(gameObject); // Adds the bottle to the list of bottles in the world
+        }
+        else
+        {
+            transform.SetParent(null);
         }
     }
 
@@ -73,7 +82,24 @@ public class Bottle : MonoBehaviour
 
     bool GroundCheck()
     {
-        return Physics2D.BoxCast(col.bounds.center, col.bounds.size, 0f, Vector2.down, .1f, groundMask) || Physics2D.BoxCast(col.bounds.center, col.bounds.size, 0f, Vector2.down, .1f, bottleMask);
+        RaycastHit2D hitGround = Physics2D.BoxCast(col.bounds.center, col.bounds.size, 0f, Vector2.down, .1f, groundMask);
+        RaycastHit2D hitBottle = Physics2D.BoxCast(col.bounds.center, col.bounds.size, 0f, Vector2.down, .1f, bottleMask);
+        if (hitGround)
+        {
+            gameObject.transform.SetParent(hitGround.transform);
+            trueGroundedPosition = transform.localPosition;
+            onTrueGround = true;
+            return true;
+        }
+
+        if (hitBottle)
+        {
+            gameObject.transform.SetParent(hitBottle.transform);
+            onTrueGround = false;
+            return true;
+        }
+        
+        return false;
     }
 
     public void ChuckBottle()
@@ -85,16 +111,16 @@ public class Bottle : MonoBehaviour
 
     public void SetBeingCarried(bool carried)
     {
-        // Set the mass and drag to default values so that the bottle moves nicely in the air and whilst being carried
-        gameObject.GetComponent<Rigidbody2D>().drag = 0;
-        gameObject.GetComponent<Rigidbody2D>().mass = 1;
-
         if (carried)
         {
             // Turn off the collider so that it doesn't hit anything whilst being carried
             // Make it kinematic so that its position can be set directly via the offset in BottleController
             gameObject.GetComponent<BoxCollider2D>().enabled = false;
             gameObject.GetComponent<Rigidbody2D>().isKinematic = true;
+            /*if (transform.childCount == 1)
+            {
+                transform.GetChild(1).GetComponent<Bottle>().grounded = false;
+            }*/
         }
         else
         {
