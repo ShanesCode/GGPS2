@@ -36,6 +36,8 @@ public class MovingPlatform : MonoBehaviour
             goals[i] += (Vector2)transform.localPosition;
         }
 
+        tag = "Ground";
+
         /*sticky = new GameObject();
         sticky.transform.SetParent(gameObject.transform);
         sticky.transform.localPosition = Vector2.zero;
