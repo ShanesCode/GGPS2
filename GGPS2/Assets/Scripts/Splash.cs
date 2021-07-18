@@ -5,23 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class Splash : MonoBehaviour
 {
-    bool loading;
-
-    private void Awake()
-    {
-        loading = false;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (!loading)
-        {
-            GoToMainMenu();
-        }
-
-        loading = true;
-    }
 
     IEnumerator LoadYourAsyncScene(string scene)
     {
