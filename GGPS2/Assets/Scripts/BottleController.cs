@@ -6,7 +6,7 @@ using UnityEngine;
 public class BottleController : MonoBehaviour
 {
     private const int MAX_BOTTLE_STACK_HEIGHT_ABOVE_PLAYER = 2;
-    private const float PICKUP_DISTANCE = 2f;
+    private const float PICKUP_DISTANCE = 3f;
     public GameObject bottle;
     public List<GameObject> bins;
     public bool hasBottle;
@@ -55,7 +55,7 @@ public class BottleController : MonoBehaviour
         hasBottle = false;
         anim = GetComponent<Animator>();
 
-        bottleHeight = bottle.GetComponent<BoxCollider2D>().size.y * bottle.GetComponent<BoxCollider2D>().transform.localScale.y;
+        bottleHeight = bottle.GetComponent<SpriteRenderer>().size.y * bottle.transform.localScale.y;
     }
 
     // Update is called once per frame
@@ -147,10 +147,6 @@ public class BottleController : MonoBehaviour
         carried_bottle.GetComponent<Bottle>().SetBeingCarried(true);
         bottleCarryOffset = new Vector3(transform.position.x + (gameObject.GetComponent<BoxCollider2D>().bounds.size.x * flip) / 2, transform.position.y + 1, transform.position.z);
         carried_bottle.transform.position = bottleCarryOffset;
-
-        //wasteCount = gameManager.GetComponent<GameManager>().GetWasteCount();
-        //wasteCount--;
-        //gameManager.GetComponent<GameManager>().UpdateWasteCount(wasteCount);
 
         nearest_bottle = null;
         hasBottle = true;
@@ -262,7 +258,8 @@ public class BottleController : MonoBehaviour
             {
                 // Throw the bottle
                 carried_bottle.GetComponent<Bottle>().SetBeingCarried(false); // Makes the bottles non-kinematic and adds the collider. Also sets mass and drag to default
-                Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), carried_bottle.GetComponent<Collider2D>(), true); // Prevents the bottle colliding with the player
+                Physics2D.IgnoreCollision(carried_bottle.GetComponent<BoxCollider2D>(), gameObject.GetComponent<Collider2D>(), true);
+                Physics2D.IgnoreCollision(carried_bottle.GetComponent<CapsuleCollider2D>(), gameObject.GetComponent<Collider2D>(), true); // Prevents the bottle colliding with the player
                 carried_bottle.GetComponent<Bottle>().ChuckBottle(); // Gives the bottle velocity
                 bottles.Add(carried_bottle); // Adds the bottle to the list of bottles in the world
                 hasBottle = false;
@@ -274,7 +271,8 @@ public class BottleController : MonoBehaviour
         {
             // Throw the bottle
             carried_bottle.GetComponent<Bottle>().SetBeingCarried(false); // Makes the bottles non-kinematic and adds the collider. Also sets mass and drag to default
-            Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), carried_bottle.GetComponent<Collider2D>(), true); // Prevents the bottle colliding with the player
+            Physics2D.IgnoreCollision(carried_bottle.GetComponent<BoxCollider2D>(), gameObject.GetComponent<Collider2D>(), true);
+            Physics2D.IgnoreCollision(carried_bottle.GetComponent<CapsuleCollider2D>(), gameObject.GetComponent<Collider2D>(), true); // Prevents the bottle colliding with the player
             carried_bottle.GetComponent<Bottle>().ChuckBottle(); // Gives the bottle velocity
             bottles.Add(carried_bottle); // Adds the bottle to the list of bottles in the world
             hasBottle = false;
