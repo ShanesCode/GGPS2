@@ -8294,7 +8294,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   settings: {fileID: 370545655}
-  levelManager: {fileID: 0}
+  levelManager: {fileID: 747197494}
 --- !u!224 &1471423853
 RectTransform:
   m_ObjectHideFlags: 0
