@@ -22811,7 +22811,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa062c6b8d0f6d044a46771add46e384, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roomNumber: 3
+  roomNumber: 4
 --- !u!61 &1205729333
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -36973,7 +36973,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa062c6b8d0f6d044a46771add46e384, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  roomNumber: 3
+  roomNumber: 2
 --- !u!61 &2125084867
 BoxCollider2D:
   m_ObjectHideFlags: 0
