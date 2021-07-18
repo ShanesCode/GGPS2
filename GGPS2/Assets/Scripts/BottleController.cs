@@ -173,6 +173,7 @@ public class BottleController : MonoBehaviour
                 hasBottle = false;
                 recycleCount++;
                 gameManager.GetComponent<GameManager>().UpdateRecycleCount(recycleCount);
+                bottles.Remove(carried_bottle);
                 Destroy(carried_bottle);
                 return;
             }
