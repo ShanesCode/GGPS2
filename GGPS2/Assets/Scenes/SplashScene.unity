@@ -699,6 +699,17 @@ MonoBehaviour:
   bottleStack: 0
   level1Complete: 0
   gameComplete: 0
+  achievementSprites:
+  - {fileID: 21300000, guid: ef0fd566813901947b9632147505f585, type: 3}
+  - {fileID: 21300000, guid: ba8e03d99893212449088e9801d7fb38, type: 3}
+  - {fileID: 21300000, guid: 40e46792aaeafc947bd08c6dab1f1de3, type: 3}
+  - {fileID: 21300000, guid: e827155aa932a0f45acae5ff646541e8, type: 3}
+  - {fileID: 21300000, guid: 8b8449b2841ea554dad81dd733ad2236, type: 3}
+  - {fileID: 21300000, guid: 2dcdcf1417aaee84d8f24aeedd4ca150, type: 3}
+  - {fileID: 21300000, guid: d4ace0260b38de64890626c6fd5fd631, type: 3}
+  - {fileID: 21300000, guid: a4f120e6922c5a14f8de7d1f418a5d8a, type: 3}
+  - {fileID: 21300000, guid: f5025e581bc82004a8534dd078cb6820, type: 3}
+  - {fileID: 21300000, guid: 9261c163ff714494cab7e843df8a3a00, type: 3}
   achievements: []
 --- !u!1 &765210529
 GameObject:
