@@ -58,16 +58,16 @@ public class GameManager : MonoBehaviour
         achievements = new List<Achievement>()
         {
             new Achievement(0, "Aficionado", "Launch our game.", "Only true gaming and soda connoisseurs would pick our game to play from the bunch. Cheers!", achievementSprites[0], true),
-            new Achievement(1, "Socialite", "Complete the tutorial.", "It's a dangerous business, going out your door. You step onto the road, and if you don't keep your feet, there's no knowing where you might be swept off to. - Bilbo Baggins", achievementSprites[1]),
-            new Achievement(2, "Jumping Jack", "Jump " + JUMPING_JACK + " times.", "Lots of jumping after drinking all that soda? Thank god the devs didn't code a way to feel sick.", achievementSprites[2]),
-            new Achievement(3, "Super Chugger", "Drink " + SUPER_CHUGGER + " times.", "Not one bathroom break needed: the sign of a true king.", achievementSprites[3]),
-            new Achievement(4, "Standup Citizen", "Recycle " + STANDUP_CITIZEN + " times.", "The council still has every right to harass you but you'll still take the moral high ground.", achievementSprites[4]),
-            new Achievement(5, "Daredevil", "Fall more than " + DAREDEVIL + " feet.", "I'm not seeking penance for what I've done, Father. I'm asking forgiveness, for what I'm about to do. - Matt Murdock", achievementSprites[5]),
+            new Achievement(1, "Socialite", "Complete the tutorial.", "It's a dangerous business, going out your door. You step onto the road, and if you don't keep your feet, there's no knowing where you might be swept off to. - Bilbo Baggins", achievementSprites[1], true),
+            new Achievement(2, "Jumping Jack", "Jump " + JUMPING_JACK + " times.", "Lots of jumping after drinking all that soda? Thank god the devs didn't code a way to feel sick.", achievementSprites[2], true),
+            new Achievement(3, "Super Chugger", "Drink " + SUPER_CHUGGER + " times.", "Not one bathroom break needed: the sign of a true king.", achievementSprites[3], true),
+            new Achievement(4, "Standup Citizen", "Recycle " + STANDUP_CITIZEN + " times.", "The council still has every right to harass you but you'll still take the moral high ground.", achievementSprites[4], true),
+            new Achievement(5, "Daredevil", "Fall more than " + DAREDEVIL + " feet.", "I'm not seeking penance for what I've done, Father. I'm asking forgiveness, for what I'm about to do. - Matt Murdock", achievementSprites[5], true),
             //new Achievement(6, "Jenga Master", "Remove a bottle from a bottle tower.", "Jenga mastery will make you look cool at some parties, just not cool parties."),
             new Achievement(6, "Questionable Architect", "Build a bottle tower.", "Architecture is a very dangerous job. If a writer makes a bad book, eh, people don't read it. But if you make bad architecture, you impose ugliness on a place for a hundred years. - Renzo Piano", achievementSprites[6], true),
-            new Achievement(7, "Pavement Pounder", "Complete Level 1.", "Meticulously curated Spotify playlist on, you're iPod shuffling down the street. You love to WALKMAN.", achievementSprites[7]),
-            new Achievement(8, "Unlimited Power", "Complete the game.", "Wow, you really put up with this game for that long. Thanks, I guess.", achievementSprites[8]),
-            new Achievement(9, "Carbon Cutter", "Recycle more than you dump.", "Cleanliness is next to godliness - you're a saint for leaving the world better than you found it.", achievementSprites[9]),
+            new Achievement(7, "Pavement Pounder", "Complete Level 1.", "Meticulously curated Spotify playlist on, you're iPod shuffling down the street. You love to WALKMAN.", achievementSprites[7], true),
+            new Achievement(8, "Unlimited Power", "Complete the game.", "Wow, you really put up with this game for that long. Thanks, I guess.", achievementSprites[8], true),
+            new Achievement(9, "Carbon Cutter", "Recycle more than you dump.", "Cleanliness is next to godliness - you're a saint for leaving the world better than you found it.", achievementSprites[9], true),
 
         };
 
