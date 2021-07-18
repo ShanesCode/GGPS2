@@ -13,6 +13,8 @@ public class LevelManager : MonoBehaviour
     public GameObject player;
     public GameObject camera;
     GameObject gameManager;
+    GameObject musicManager;
+    public AudioClip song;
     public int currentRoom;
     [SerializeField] public int nextRoomNumber;
     [SerializeField] private List<EndRoomTrigger> endRoomTriggers;
@@ -42,6 +44,10 @@ public class LevelManager : MonoBehaviour
     {
         gameObject.tag = "LevelManager";
         gameManager = GameObject.FindWithTag("GameManager");
+
+        musicManager = GameObject.FindWithTag("MusicManager");
+        musicManager.GetComponent<AudioSource>().clip = song;
+        musicManager.GetComponent<AudioSource>().Play();
 
         Time.timeScale = 1;
         paused = false;

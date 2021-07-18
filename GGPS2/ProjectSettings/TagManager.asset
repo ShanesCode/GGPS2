@@ -11,6 +11,7 @@ TagManager:
   - Bottle
   - LevelManager
   - Bin
+  - MusicManager
   layers:
   - Default
   - TransparentFX
