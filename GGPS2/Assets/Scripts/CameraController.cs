@@ -17,20 +17,14 @@ public class CameraController : MonoBehaviour
 
         InitialisePosition();
 
-        player.GetComponent<PlayerController>().OnGrounded += Cam_OnPlayerGrounded;
+        smoothingStep = 5.0f;
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        Vector3 newPos = new Vector3(p_transform.position.x, transform.position.y, transform.position.z);
-        transform.position = newPos;
-    }
-
-    private void Cam_OnPlayerGrounded(object sender, PlayerController.OnGroundedEventArgs e)
-    {
         float smooth_increment = Mathf.MoveTowards(transform.position.y, player.transform.position.y + y_offset, smoothingStep * Time.deltaTime);
-        transform.position = new Vector3(transform.position.x, smooth_increment, transform.position.z);
+        transform.position = new Vector3(player.transform.position.x, smooth_increment, transform.position.z);
     }
 
     public void InitialisePosition()
