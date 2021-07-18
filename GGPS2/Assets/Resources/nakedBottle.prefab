@@ -411,6 +411,7 @@ MonoBehaviour:
   bottleMask:
     serializedVersion: 2
     m_Bits: 128
+  grounded: 0
   firstWords:
   - BIG
   - MEGA

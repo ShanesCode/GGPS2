@@ -55,9 +55,11 @@ public class Bottle : MonoBehaviour
         {
             flip = -1;
         }
+         
 
         if (grounded)
         {
+            gameObject.GetComponent<Rigidbody2D>().isKinematic = true;
             if (!onTrueGround)
             {
                 transform.localPosition = new Vector3(0, transform.localPosition.y, 0);
@@ -66,11 +68,10 @@ public class Bottle : MonoBehaviour
             {
                 transform.localPosition = trueGroundedPosition;
             }
-            Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), player.GetComponent<Collider2D>(), false);
-            player.GetComponent<BottleController>().bottles.Add(gameObject); // Adds the bottle to the list of bottles in the world
         }
         else
         {
+            gameObject.GetComponent<Rigidbody2D>().isKinematic = false;
             transform.SetParent(null);
         }
     }
@@ -82,13 +83,21 @@ public class Bottle : MonoBehaviour
 
     bool GroundCheck()
     {
-        RaycastHit2D hitGround = Physics2D.BoxCast(col.bounds.center, col.bounds.size, 0f, Vector2.down, .1f, groundMask);
-        RaycastHit2D hitBottle = Physics2D.BoxCast(col.bounds.center, col.bounds.size, 0f, Vector2.down, .1f, bottleMask);
+        RaycastHit2D hitGround = Physics2D.BoxCast(col.bounds.center, new Vector2(col.bounds.size.x * 0.8f, col.bounds.size.y), 0f, Vector2.down, 0.1f, groundMask);
+        RaycastHit2D hitBottle = Physics2D.BoxCast(col.bounds.center, new Vector2(col.bounds.size.x * 0.8f, col.bounds.size.y), 0f, Vector2.down, 0.1f, bottleMask);
         if (hitGround)
         {
+            // Set the ground as the parent
             gameObject.transform.SetParent(hitGround.transform);
+
+            // Store the local position of the object
             trueGroundedPosition = transform.localPosition;
+
+            // Bool to check if ground is ground and not bottle
             onTrueGround = true;
+
+            // Stop ignoring collisions with player
+            Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), player.GetComponent<Collider2D>(), false);
             return true;
         }
 
@@ -96,6 +105,8 @@ public class Bottle : MonoBehaviour
         {
             gameObject.transform.SetParent(hitBottle.transform);
             onTrueGround = false;
+
+            Physics2D.IgnoreCollision(gameObject.GetComponent<Collider2D>(), player.GetComponent<Collider2D>(), false);
             return true;
         }
         
@@ -117,10 +128,6 @@ public class Bottle : MonoBehaviour
             // Make it kinematic so that its position can be set directly via the offset in BottleController
             gameObject.GetComponent<BoxCollider2D>().enabled = false;
             gameObject.GetComponent<Rigidbody2D>().isKinematic = true;
-            /*if (transform.childCount == 1)
-            {
-                transform.GetChild(1).GetComponent<Bottle>().grounded = false;
-            }*/
         }
         else
         {
