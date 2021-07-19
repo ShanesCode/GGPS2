@@ -5976,8 +5976,8 @@ MonoBehaviour:
   roomSpawnPoints:
   - {fileID: 833615443}
   endRoomUI: {fileID: 0}
-  pauseMenu: {fileID: 0}
-  settings: {fileID: 0}
+  pauseMenu: {fileID: 1471423851}
+  settings: {fileID: 370545655}
   startWasteCount: 0
   startDrinkCount: 0
   startRecycleCount: 0
