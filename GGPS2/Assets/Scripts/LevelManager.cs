@@ -23,9 +23,9 @@ public class LevelManager : MonoBehaviour
     [SerializeField] private GameObject pauseMenu;
     [SerializeField] private GameObject settings;
 
-    public int startWasteCount;
-    public int startDrinkCount;
-    public int startRecycleCount;
+    public int roomWasteCount;
+    public int roomIndulgenceCount;
+    public int roomRecycleCount;
 
     public bool paused;
     private void Awake()
@@ -65,9 +65,9 @@ public class LevelManager : MonoBehaviour
         player.transform.position = roomSpawnPoints[gameManager.GetComponent<GameManager>().spawnRoom].transform.position;
         currentRoom = gameManager.GetComponent<GameManager>().spawnRoom;
 
-        startWasteCount = gameManager.GetComponent<GameManager>().GetWasteCount();
-        startDrinkCount = gameManager.GetComponent<GameManager>().GetDrinkCount();
-        startRecycleCount = gameManager.GetComponent<GameManager>().GetRecycleCount();
+        roomWasteCount = 0;
+        roomIndulgenceCount = 0;
+        roomRecycleCount = 0;
     }
 
     private void Update()
@@ -114,6 +114,7 @@ public class LevelManager : MonoBehaviour
         if (nextRoomNumber < roomSpawnPoints.Count)
         {
             player.transform.position = roomSpawnPoints[nextRoomNumber].transform.position;
+            ResetRoomCounters();
             camera.GetComponent<CameraController>().InitialisePosition();
             currentRoom += 1;
         }
@@ -152,6 +153,7 @@ public class LevelManager : MonoBehaviour
         }*/
         endRoomUI.SetActive(false);
         gameManager.GetComponent<GameManager>().spawnRoom = currentRoom;
+        ResetRoomCounters();
         StartCoroutine(LoadYourAsyncScene(SceneManager.GetActiveScene().name));
     }
 
@@ -185,7 +187,14 @@ public class LevelManager : MonoBehaviour
     }
     private void LevelMan_OnDeath(object sender, PlayerController.OnDeathEventArgs e)
     {
-        Debug.Log("player is dead");
         ResetRoom();
+        ResetRoomCounters();
+    }
+
+    public void ResetRoomCounters()
+    {
+        roomWasteCount = 0;
+        roomIndulgenceCount = 0;
+        roomRecycleCount = 0;
     }
 }

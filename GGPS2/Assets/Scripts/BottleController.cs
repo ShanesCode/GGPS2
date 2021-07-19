@@ -31,6 +31,7 @@ public class BottleController : MonoBehaviour
     Vector3 bottleCarryOffset;
 
     GameObject gameManager;
+    GameObject levelManager;
 
     // Start is called before the first frame update
     void Start()
@@ -57,6 +58,8 @@ public class BottleController : MonoBehaviour
         anim = GetComponent<Animator>();
 
         bottleHeight = bottle.GetComponent<SpriteRenderer>().size.y * bottle.transform.localScale.y;
+
+        levelManager = GameObject.FindWithTag("LevelManager");
     }
 
     // Update is called once per frame
@@ -179,6 +182,8 @@ public class BottleController : MonoBehaviour
                 hasBottle = false;
                 recycleCount++;
                 gameManager.GetComponent<GameManager>().UpdateRecycleCount(recycleCount);
+                levelManager.GetComponent<LevelManager>().roomRecycleCount++;
+                Debug.Log("Room Recycle Count: " + levelManager.GetComponent<LevelManager>().roomRecycleCount);
                 bottles.Remove(carried_bottle);
                 Destroy(carried_bottle);
                 return;
@@ -261,6 +266,8 @@ public class BottleController : MonoBehaviour
                     carried_bottle.GetComponent<Rigidbody2D>().isKinematic = true;
                     carried_bottle.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
 
+                    AddToWasteCounters(carried_bottle);
+
                     // Stop ignoring collisions with player
                     Physics2D.IgnoreCollision(carried_bottle.GetComponent<BoxCollider2D>(), gameObject.GetComponent<Collider2D>(), false);
                     Physics2D.IgnoreCollision(carried_bottle.GetComponent<CapsuleCollider2D>(), gameObject.GetComponent<Collider2D>(), false);
@@ -286,6 +293,9 @@ public class BottleController : MonoBehaviour
                 Physics2D.IgnoreCollision(carried_bottle.GetComponent<CapsuleCollider2D>(), gameObject.GetComponent<Collider2D>(), true); // Prevents the bottle colliding with the player
                 carried_bottle.GetComponent<Bottle>().ChuckBottle(); // Gives the bottle velocity
                 bottles.Add(carried_bottle); // Adds the bottle to the list of bottles in the world
+
+                AddToWasteCounters(carried_bottle);
+
                 hasBottle = false;
                 carried_bottle = null;
                 return;
@@ -299,6 +309,9 @@ public class BottleController : MonoBehaviour
             Physics2D.IgnoreCollision(carried_bottle.GetComponent<CapsuleCollider2D>(), gameObject.GetComponent<Collider2D>(), true); // Prevents the bottle colliding with the player
             carried_bottle.GetComponent<Bottle>().ChuckBottle(); // Gives the bottle velocity
             bottles.Add(carried_bottle); // Adds the bottle to the list of bottles in the world
+
+            AddToWasteCounters(carried_bottle);
+
             hasBottle = false;
             carried_bottle = null;
             return;
@@ -309,6 +322,8 @@ public class BottleController : MonoBehaviour
     {
         drinkCount++;
         gameManager.GetComponent<GameManager>().UpdateDrinkCount(drinkCount);
+        levelManager.GetComponent<LevelManager>().roomIndulgenceCount++;
+        Debug.Log("Room Drink Count: " + levelManager.GetComponent<LevelManager>().roomIndulgenceCount);
 
         carried_bottle = bottle;
         carried_bottle.GetComponent<Bottle>().SetBeingCarried(true);  // Makes the bottles kinematic and removes the collider.  Also sets mass and drag to default
@@ -318,6 +333,20 @@ public class BottleController : MonoBehaviour
         carried_bottle = Instantiate(carried_bottle);
 
         hasBottle = true;
+    }
+
+    private void AddToWasteCounters(GameObject bottle)
+    {
+        // Add to waste count
+        if (bottle.GetComponent<Bottle>().playerCreated && !bottle.GetComponent<Bottle>().counted)
+        {
+            bottle.GetComponent<Bottle>().wasteCount = gameManager.GetComponent<GameManager>().GetWasteCount();
+            bottle.GetComponent<Bottle>().wasteCount++;
+            levelManager.GetComponent<LevelManager>().roomWasteCount++;
+            bottle.GetComponent<Bottle>().counted = true;
+            Debug.Log("Room Waste Count: " + levelManager.GetComponent<LevelManager>().roomWasteCount);
+            gameManager.GetComponent<GameManager>().UpdateWasteCount(bottle.GetComponent<Bottle>().wasteCount);
+        }
     }
 
 }

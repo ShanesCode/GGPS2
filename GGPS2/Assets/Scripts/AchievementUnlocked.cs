@@ -11,7 +11,7 @@ public class AchievementUnlocked : MonoBehaviour
     public TextMeshProUGUI requirement;
     public Image image;
 
-    [Range(0.0f, 10.0f)]public float displayTime = 3.0f;
+    [Range(0.0f, 10.0f)]public float displayTime = 5.0f;
 
     GameObject gameManager;
 
@@ -34,7 +34,7 @@ public class AchievementUnlocked : MonoBehaviour
         requirement.text = e.requirement;
         image.sprite = e.sprite;
 
-        StartCoroutine(AchievementDisplayCoroutine());
+        StartCoroutine(AchievementDisplayCoroutine(achievement.text));
     }
 
     // Update is called once per frame
@@ -43,16 +43,18 @@ public class AchievementUnlocked : MonoBehaviour
         
     }
 
-    IEnumerator AchievementDisplayCoroutine()
+    IEnumerator AchievementDisplayCoroutine(string title)
     {
         //yield on a new YieldInstruction that waits for 5 seconds.
         yield return new WaitForSecondsRealtime(displayTime);
 
-        achievementUnlockedUI.SetActive(false);
-        achievement.text = "";
-        requirement.text = "";
-        image.sprite = null;
-        displayTime = 0;
+        if (title == achievement.text)
+        {
+            achievementUnlockedUI.SetActive(false);
+            achievement.text = "";
+            requirement.text = "";
+            image.sprite = null;
+        }
 
         //After we have waited 5 seconds print the time again.
         Debug.Log("Finished Coroutine at timestamp : " + Time.time);

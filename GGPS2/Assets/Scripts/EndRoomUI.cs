@@ -8,14 +8,8 @@ using UnityEngine.SceneManagement;
 public class EndRoomUI : MonoBehaviour
 {
     public TextMeshProUGUI stats;
-    public int wasteCount;
-    public int indulgenceCount;
-    public int recycleCount;
+    
     public int devCount;
-
-    private int prevRoomWasteCount;
-    private int prevRoomIndulgenceCount;
-    private int prevRoomRecycleCount;
 
     public TextMeshProUGUI title;
     public int levelNumber;
@@ -35,10 +29,6 @@ public class EndRoomUI : MonoBehaviour
 
         levelNumber = levelManager.GetComponent<LevelManager>().levelNumber;
 
-        prevRoomWasteCount = 0;
-        prevRoomIndulgenceCount = 0;
-        prevRoomRecycleCount = 0;
-
         gameObject.SetActive(false);
     }
 
@@ -48,32 +38,18 @@ public class EndRoomUI : MonoBehaviour
         {
             roomNumber = levelManager.GetComponent<LevelManager>().currentRoom;
 
-            wasteCount = gameManager.GetComponent<GameManager>().GetWasteCount() - (prevRoomWasteCount + levelManager.GetComponent<LevelManager>().startWasteCount);
-            indulgenceCount = gameManager.GetComponent<GameManager>().GetDrinkCount() - (prevRoomIndulgenceCount + levelManager.GetComponent<LevelManager>().startDrinkCount);
-            recycleCount = gameManager.GetComponent<GameManager>().GetRecycleCount() - (prevRoomRecycleCount + levelManager.GetComponent<LevelManager>().startRecycleCount);
-
-            if (wasteCount < recycleCount)
+            if (levelManager.GetComponent<LevelManager>().roomWasteCount < levelManager.GetComponent<LevelManager>().roomRecycleCount)
             {
                 gameManager.GetComponent<GameManager>().UnlockAchievement("Carbon Cutter");
             }
         }
 
         stats.text =
-            "Dumped litter:\t\t\t\t" + wasteCount + '\t' + " times" + '\n' +
-            "Indulged gluttonously:\t\t" + indulgenceCount + '\t' + " times" + '\n' +
-            "Thoughtfully recycled:\t" + recycleCount + '\t' + " times" + '\n' + '\n' +
+            "Dumped litter:\t\t\t\t" + levelManager.GetComponent<LevelManager>().roomWasteCount + '\t' + " times" + '\n' +
+            "Indulged gluttonously:\t\t" + levelManager.GetComponent<LevelManager>().roomIndulgenceCount + '\t' + " times" + '\n' +
+            "Thoughtfully recycled:\t" + levelManager.GetComponent<LevelManager>().roomRecycleCount + '\t' + " times" + '\n' + '\n' +
             "Dev's best:\t\t\t\t\t" + devCount + '\t' + " bottles dumped" + '\n';
 
         title.text = "Room " + levelNumber + "-" + roomNumber + " Complete!";
-
-        prevRoomWasteCount = wasteCount;
-        prevRoomIndulgenceCount = indulgenceCount;
-        prevRoomRecycleCount = recycleCount;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }

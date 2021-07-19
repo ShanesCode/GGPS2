@@ -20854,9 +20854,9 @@ MonoBehaviour:
   endRoomUI: {fileID: 1051517002}
   pauseMenu: {fileID: 1445125178}
   settings: {fileID: 165700375}
-  startWasteCount: 0
-  startDrinkCount: 0
-  startRecycleCount: 0
+  roomWasteCount: 0
+  roomIndulgenceCount: 0
+  roomRecycleCount: 0
   paused: 0
 --- !u!4 &747197496
 Transform:
@@ -21676,14 +21676,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stats: {fileID: 1050077521}
-  wasteCount: 0
-  indulgenceCount: 0
-  recycleCount: 0
   devCount: 0
   title: {fileID: 1498533782}
   levelNumber: 0
   roomNumber: 0
-  levelManager: {fileID: 0}
+  levelManager: {fileID: 747197494}
   gameManager: {fileID: 0}
 --- !u!1 &1052090794
 GameObject:

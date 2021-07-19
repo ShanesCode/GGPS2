@@ -23,8 +23,8 @@ public class GameManager : MonoBehaviour
     public List<Sprite> achievementSprites;
 
     #region Requirements
-    private const int JUMPING_JACK = 50;
-    private const int SUPER_CHUGGER = 10;
+    private const int JUMPING_JACK = 2; // 50
+    private const int SUPER_CHUGGER = 2; // 10
     private const int STANDUP_CITIZEN = 10;
     private const float DAREDEVIL = 30.0f; // 30
     // A stack of bottles is a "bottle tower" if it is at least BOTTLE_TOWER tall.

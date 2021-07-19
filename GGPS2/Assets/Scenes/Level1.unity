@@ -4129,7 +4129,7 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 4
-      m_TileSpriteIndex: 4
+      m_TileSpriteIndex: 5
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -6030,10 +6030,10 @@ Tilemap:
     m_Data: {fileID: -8149558691943800154, guid: 546772bf6d8f7504d83805479a6e5455, type: 3}
   - m_RefCount: 22
     m_Data: {fileID: -8188137010878805612, guid: 546772bf6d8f7504d83805479a6e5455, type: 3}
-  - m_RefCount: 1
-    m_Data: {fileID: 2931922008408751561, guid: 546772bf6d8f7504d83805479a6e5455, type: 3}
   - m_RefCount: 0
     m_Data: {fileID: 0}
+  - m_RefCount: 1
+    m_Data: {fileID: 2931922008408751561, guid: 546772bf6d8f7504d83805479a6e5455, type: 3}
   - m_RefCount: 1
     m_Data: {fileID: -3173515460104702813, guid: 320895afc12b9ab498845827ed5a81fa, type: 3}
   - m_RefCount: 37
@@ -8558,9 +8558,9 @@ MonoBehaviour:
   endRoomUI: {fileID: 1769139460}
   pauseMenu: {fileID: 1445125178}
   settings: {fileID: 165700375}
-  startWasteCount: 0
-  startDrinkCount: 0
-  startRecycleCount: 0
+  roomWasteCount: 0
+  roomIndulgenceCount: 0
+  roomRecycleCount: 0
   paused: 0
 --- !u!4 &747197496
 Transform:
@@ -9366,6 +9366,18 @@ MonoBehaviour:
       - m_Target: {fileID: 747197495}
         m_TargetAssemblyTypeName: LevelManager, Assembly-CSharp
         m_MethodName: ResetRoom
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1769139462}
+        m_TargetAssemblyTypeName: EndRoomUI, Assembly-CSharp
+        m_MethodName: ResetRoomCounters
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -26951,6 +26963,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1769139462}
+        m_TargetAssemblyTypeName: EndRoomUI, Assembly-CSharp
+        m_MethodName: ResetRoomCounters
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1412260377
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28945,14 +28969,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stats: {fileID: 798647884}
-  wasteCount: 0
-  indulgenceCount: 0
-  recycleCount: 0
   devCount: 0
   title: {fileID: 1199982118}
   levelNumber: 0
   roomNumber: 0
-  levelManager: {fileID: 0}
+  levelManager: {fileID: 747197494}
   gameManager: {fileID: 0}
 --- !u!1 &1805938765
 GameObject:

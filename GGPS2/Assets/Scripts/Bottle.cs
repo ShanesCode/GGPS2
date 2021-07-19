@@ -20,11 +20,12 @@ public class Bottle : MonoBehaviour
     public List<string> firstWords;
     public List<string> secondWords;
 
-    private int wasteCount;
+    public int wasteCount;
     GameObject gameManager;
+    GameObject levelManager;
 
     public bool playerCreated;
-    private bool counted;
+    public bool counted;
 
     // Start is called before the first frame update
     private void Awake()
@@ -41,6 +42,7 @@ public class Bottle : MonoBehaviour
         RandomiseBottleWords();
 
         gameManager = GameObject.FindWithTag("GameManager");
+        levelManager = GameObject.FindWithTag("LevelManager");
     }
 
     // Update is called once per frame
@@ -72,7 +74,10 @@ public class Bottle : MonoBehaviour
         {
             wasteCount = gameManager.GetComponent<GameManager>().GetWasteCount();
             wasteCount++;
+            levelManager.GetComponent<LevelManager>().roomWasteCount++;
             counted = true;
+            
+            Debug.Log("Room Waste Count: " + levelManager.GetComponent<LevelManager>().roomWasteCount);
             gameManager.GetComponent<GameManager>().UpdateWasteCount(wasteCount);
         }
     }
