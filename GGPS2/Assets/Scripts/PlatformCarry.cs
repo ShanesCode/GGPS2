@@ -24,7 +24,6 @@ public class PlatformCarry : MonoBehaviour
         GameObject other = collision.collider.gameObject;
         if (other.GetComponent<MovingPlatform>())
         {
-            Debug.Log("onplatform");
             onPlatform = true;
             platformVelocity = other.GetComponent<Rigidbody2D>().velocity;
         }
