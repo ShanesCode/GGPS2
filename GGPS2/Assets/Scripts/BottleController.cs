@@ -145,6 +145,19 @@ public class BottleController : MonoBehaviour
     {
         bottles.Remove(nearest_bottle);
         carried_bottle = nearest_bottle;
+
+        // For each child bottle of the one being picked up (if it is not the top of a stack), make the child bottle dynamic
+        for (int i = 0; i < carried_bottle.transform.childCount; i++)
+        {
+            if (carried_bottle.transform.GetChild(i).tag == "Bottle")
+            {
+                carried_bottle.transform.GetChild(i).transform.parent = null;
+                carried_bottle.transform.GetChild(i).GetComponent<CapsuleCollider2D>().enabled = true;
+                carried_bottle.transform.GetChild(i).GetComponent<BoxCollider2D>().enabled = true;
+                carried_bottle.transform.GetChild(i).GetComponent<Rigidbody2D>().isKinematic = false;
+            }
+        }
+
         carried_bottle.GetComponent<Bottle>().SetBeingCarried(true);
         bottleCarryOffset = new Vector3(transform.position.x + (gameObject.GetComponent<BoxCollider2D>().bounds.size.x * flip) / 2, transform.position.y + 1, transform.position.z);
         carried_bottle.transform.position = bottleCarryOffset;
@@ -243,7 +256,16 @@ public class BottleController : MonoBehaviour
                     carried_bottle.GetComponent<Bottle>().SetBeingCarried(false);
                     carried_bottle.transform.SetParent(top_of_stack.transform);
                     carried_bottle.transform.localPosition = new Vector3(0, bottleHeight, 0);
+
+                    carried_bottle.GetComponent<Rigidbody2D>().isKinematic = true;
+                    carried_bottle.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+
+                    // Stop ignoring collisions with player
+                    Physics2D.IgnoreCollision(carried_bottle.GetComponent<BoxCollider2D>(), gameObject.GetComponent<Collider2D>(), false);
+                    Physics2D.IgnoreCollision(carried_bottle.GetComponent<CapsuleCollider2D>(), gameObject.GetComponent<Collider2D>(), false);
+
                     bottles.Add(carried_bottle); // Adds the bottle to the list of bottles in the world
+                    carried_bottle = null;
                     hasBottle = false;
                     
                     if (currentlyCheckingBiggestStack)

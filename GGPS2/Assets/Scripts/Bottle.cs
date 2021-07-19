@@ -61,11 +61,6 @@ public class Bottle : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
-    {
-        //grounded = GroundCheck();
-    }
-
     public void ChuckBottle()
     {
         gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(flip * 3f, 5f);

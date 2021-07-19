@@ -17,41 +17,39 @@ public class BottleGroundedTrigger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Ground" && !bottle.GetComponent<Bottle>().beingCarried)
+        if (!bottle.GetComponent<Bottle>().beingCarried && bottle.transform.parent == null)
         {
-            // Set the ground as the parent
-            bottle.transform.SetParent(collision.transform);
+            if (collision.gameObject.tag == "Ground" || collision.gameObject.tag == "Bottle")
+            {
+                // Set the ground as the parent
+                bottle.transform.SetParent(collision.transform);
 
-            bottle.transform.localPosition = bottle.transform.localPosition;
-            bottle.GetComponent<Rigidbody2D>().isKinematic = true;
-            bottle.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+                if (collision.gameObject.tag == "Ground")
+                {
+                    bottle.transform.localPosition = bottle.transform.localPosition;
+                }
 
-            // Stop ignoring collisions with player
-            Physics2D.IgnoreCollision(bottle.GetComponent<BoxCollider2D>(), player.GetComponent<Collider2D>(), false);
-            Physics2D.IgnoreCollision(bottle.GetComponent<CapsuleCollider2D>(), player.GetComponent<Collider2D>(), false);
-        }
+                if (collision.gameObject.tag == "Bottle")
+                {
+                    bottle.transform.localPosition = new Vector3(0, bottle.transform.localPosition.y, 0);
+                }
 
-        if (collision.gameObject.tag == "Bottle" && !bottle.GetComponent<Bottle>().beingCarried)
-        {
-            // Set the ground as the parent
-            bottle.transform.SetParent(collision.transform);
+                bottle.GetComponent<Rigidbody2D>().isKinematic = true;
+                bottle.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
 
-            bottle.transform.localPosition = new Vector3(0, bottle.transform.localPosition.y, 0);
-            bottle.GetComponent<Rigidbody2D>().isKinematic = true;
-            bottle.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-
-            // Stop ignoring collisions with player
-            Physics2D.IgnoreCollision(bottle.GetComponent<BoxCollider2D>(), player.GetComponent<Collider2D>(), false);
-            Physics2D.IgnoreCollision(bottle.GetComponent<CapsuleCollider2D>(), player.GetComponent<Collider2D>(), false);
+                // Stop ignoring collisions with player
+                Physics2D.IgnoreCollision(bottle.GetComponent<BoxCollider2D>(), player.GetComponent<Collider2D>(), false);
+                Physics2D.IgnoreCollision(bottle.GetComponent<CapsuleCollider2D>(), player.GetComponent<Collider2D>(), false);
+            }
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Ground" || collision.gameObject.tag == "Bottle" && bottle.GetComponent<Bottle>().beingCarried)
+        if ((collision.gameObject.tag == "Ground" || collision.gameObject.tag == "Bottle") && bottle.GetComponent<Bottle>().beingCarried)
         {
             bottle.transform.SetParent(null);
-            bottle.GetComponent<Rigidbody2D>().isKinematic = false;
+            //bottle.GetComponent<Rigidbody2D>().isKinematic = false;
         }
     }
 }
