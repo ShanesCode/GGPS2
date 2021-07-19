@@ -430,7 +430,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8032861064615473417}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -489,10 +489,7 @@ MonoBehaviour:
   bottleMask:
     serializedVersion: 2
     m_Bits: 128
-  ground: {fileID: 0}
-  grounded: 0
-  onTrueGround: 0
-  trueGroundedPosition: {x: 0, y: 0, z: 0}
+  beingCarried: 0
   firstWords:
   - BIG
   - MEGA

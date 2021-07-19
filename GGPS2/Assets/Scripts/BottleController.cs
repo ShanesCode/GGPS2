@@ -151,10 +151,11 @@ public class BottleController : MonoBehaviour
         {
             if (carried_bottle.transform.GetChild(i).tag == "Bottle")
             {
-                carried_bottle.transform.GetChild(i).transform.parent = null;
                 carried_bottle.transform.GetChild(i).GetComponent<CapsuleCollider2D>().enabled = true;
                 carried_bottle.transform.GetChild(i).GetComponent<BoxCollider2D>().enabled = true;
                 carried_bottle.transform.GetChild(i).GetComponent<Rigidbody2D>().isKinematic = false;
+                carried_bottle.transform.GetChild(i).transform.parent = null;
+                i--;
             }
         }
 

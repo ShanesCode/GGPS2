@@ -17,7 +17,7 @@ public class BottleGroundedTrigger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!bottle.GetComponent<Bottle>().beingCarried && bottle.transform.parent == null)
+        if (!bottle.GetComponent<Bottle>().beingCarried && (bottle.transform.parent == null || bottle.transform.parent.name == "Room0" || bottle.transform.parent.name == "Room1" || bottle.transform.parent.name == "Room2" || bottle.transform.parent.name == "Room3"))
         {
             if (collision.gameObject.tag == "Ground" || collision.gameObject.tag == "Bottle")
             {
