@@ -8,8 +8,8 @@ using UnityEngine.SceneManagement;
 public class EndRoomUI : MonoBehaviour
 {
     public TextMeshProUGUI stats;
-    
-    public int devCount;
+
+    public List<int> devCount;
 
     public TextMeshProUGUI title;
     public int levelNumber;
@@ -48,7 +48,7 @@ public class EndRoomUI : MonoBehaviour
             "Indulged gluttonously:\t\t" + levelManager.GetComponent<LevelManager>().roomIndulgenceCount + '\t' + " times" + '\n' +
             "Thoughtfully recycled:\t" + levelManager.GetComponent<LevelManager>().roomRecycleCount + '\t' + " times" + '\n' + '\n' +
             "Waste score:\t\t\t\t" + levelManager.GetComponent<LevelManager>().roomWasteCount + '\t' + '\n' +
-            "Dev's best:\t\t\t\t\t" + devCount + '\t';
+            "Dev's best:\t\t\t\t\t" + devCount[roomNumber] + '\t';
 
         title.text = "Room " + levelNumber + "-" + roomNumber + " Complete!";
     }
