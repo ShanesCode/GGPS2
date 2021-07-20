@@ -110,6 +110,8 @@ public class LevelManager : MonoBehaviour
         paused = false;
         endRoomUI.SetActive(false);
 
+        gameManager.GetComponent<GameManager>().endGameWasteCount += roomWasteCount;
+
         if (nextRoomNumber < roomSpawnPoints.Count)
         {
             player.transform.position = roomSpawnPoints[nextRoomNumber].transform.position;
@@ -193,6 +195,7 @@ public class LevelManager : MonoBehaviour
     public void ResetRoomCounters()
     {
         gameManager.GetComponent<GameManager>().UpdateWasteCount(gameManager.GetComponent<GameManager>().GetWasteCount() - roomWasteCount);
+        gameManager.GetComponent<GameManager>().endGameWasteCount -= roomWasteCount;
         roomWasteCount = 0;
         gameManager.GetComponent<GameManager>().UpdateDrinkCount(gameManager.GetComponent<GameManager>().GetDrinkCount() - roomIndulgenceCount);
         roomIndulgenceCount = 0;

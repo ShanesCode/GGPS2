@@ -20,6 +20,8 @@ public class GameManager : MonoBehaviour
     public bool level1Complete = false;
     public bool gameComplete = false;
 
+    public int endGameWasteCount = 0;
+
     public List<Sprite> achievementSprites;
 
     #region Requirements
