@@ -77,7 +77,6 @@ public class Bottle : MonoBehaviour
             levelManager.GetComponent<LevelManager>().roomWasteCount++;
             counted = true;
             
-            Debug.Log("Room Waste Count: " + levelManager.GetComponent<LevelManager>().roomWasteCount);
             gameManager.GetComponent<GameManager>().UpdateWasteCount(wasteCount);
         }
     }
