@@ -193,6 +193,7 @@ public class BottleController : MonoBehaviour
                 hasBottle = false;
                 recycleCount++;
                 gameManager.GetComponent<GameManager>().UpdateRecycleCount(recycleCount);
+                levelManager.GetComponent<LevelManager>().roomWasteCount--;
                 levelManager.GetComponent<LevelManager>().roomRecycleCount++;
                 bottles.Remove(carried_bottle);
                 Destroy(carried_bottle);
@@ -334,12 +335,13 @@ public class BottleController : MonoBehaviour
         gameManager.GetComponent<GameManager>().UpdateDrinkCount(drinkCount);
         levelManager.GetComponent<LevelManager>().roomIndulgenceCount++;
 
-        carried_bottle = bottle;
+        //carried_bottle = bottle;
+        carried_bottle = Instantiate(bottle);
         carried_bottle.GetComponent<Bottle>().SetBeingCarried(true);  // Makes the bottles kinematic and removes the collider.  Also sets mass and drag to default
         bottleCarryOffset = new Vector3(transform.position.x + (gameObject.GetComponent<Collider2D>().bounds.size.x * flip) / 2, transform.position.y + 1, transform.position.z);
         carried_bottle.transform.position = bottleCarryOffset;
         carried_bottle.GetComponent<Bottle>().playerCreated = true;
-        carried_bottle = Instantiate(carried_bottle);
+        
 
         hasBottle = true;
     }
