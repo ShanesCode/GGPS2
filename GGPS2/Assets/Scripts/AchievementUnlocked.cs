@@ -37,12 +37,6 @@ public class AchievementUnlocked : MonoBehaviour
         StartCoroutine(AchievementDisplayCoroutine(achievement.text));
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     IEnumerator AchievementDisplayCoroutine(string title)
     {
         //yield on a new YieldInstruction that waits for 5 seconds.
@@ -55,8 +49,5 @@ public class AchievementUnlocked : MonoBehaviour
             requirement.text = "";
             image.sprite = null;
         }
-
-        //After we have waited 5 seconds print the time again.
-        Debug.Log("Finished Coroutine at timestamp : " + Time.time);
     }
 }

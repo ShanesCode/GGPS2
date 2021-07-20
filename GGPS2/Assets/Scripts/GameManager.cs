@@ -116,7 +116,6 @@ public class GameManager : MonoBehaviour
         tutorialComplete = tutorialComplete_;
         if (tutorialComplete && !achievementsDic["socialite"].achieved)
         {
-            Debug.Log("Achievement unlocked: " + achievementsDic["socialite"].title);
             achievementsDic["socialite"].achieved = true;
 
             OnAchievementUnlockedEventArgs e = new OnAchievementUnlockedEventArgs
@@ -134,7 +133,6 @@ public class GameManager : MonoBehaviour
         jumpCount = jumpCount_;
         if (jumpCount == JUMPING_JACK && !achievementsDic["jumping jack"].achieved)
         {
-            Debug.Log("Achievement unlocked: " + achievementsDic["jumping jack"].title);
             achievementsDic["jumping jack"].achieved = true;
 
             OnAchievementUnlockedEventArgs e = new OnAchievementUnlockedEventArgs
@@ -152,7 +150,6 @@ public class GameManager : MonoBehaviour
         drinkCount = drinkCount_;
         if (drinkCount == SUPER_CHUGGER && !achievementsDic["super chugger"].achieved)
         {
-            Debug.Log("Achievement unlocked: " + achievementsDic["super chugger"].title);
             achievementsDic["super chugger"].achieved = true;
 
             OnAchievementUnlockedEventArgs e = new OnAchievementUnlockedEventArgs
@@ -170,7 +167,6 @@ public class GameManager : MonoBehaviour
         wasteCount = wasteCount_;
         /*if (drinkCount == SUPER_CHUGGER && !achievementsDic["super chugger"].achieved)
         {
-            Debug.Log("Achievement unlocked: " + achievementsDic["super chugger"].title);
             achievementsDic["super chugger"].achieved = true;
 
             OnAchievementUnlockedEventArgs e = new OnAchievementUnlockedEventArgs
@@ -188,7 +184,6 @@ public class GameManager : MonoBehaviour
         recycleCount = recycleCount_;
         if (recycleCount == STANDUP_CITIZEN && !achievementsDic["standup citizen"].achieved)
         {
-            Debug.Log("Achievement unlocked: " + achievementsDic["standup citizen"].title);
             achievementsDic["standup citizen"].achieved = true;
 
             OnAchievementUnlockedEventArgs e = new OnAchievementUnlockedEventArgs
@@ -206,7 +201,6 @@ public class GameManager : MonoBehaviour
         longestFallDistance = longestFallDistance_;
         if (longestFallDistance >= DAREDEVIL && !achievementsDic["daredevil"].achieved)
         {
-            Debug.Log("Achievement unlocked: " + achievementsDic["daredevil"].title);
             achievementsDic["daredevil"].achieved = true;
 
             OnAchievementUnlockedEventArgs e = new OnAchievementUnlockedEventArgs
@@ -224,7 +218,6 @@ public class GameManager : MonoBehaviour
         bottleStack = bottleStack_;
 
         /*if (bottleStack == BOTTLE_TOWER && !addingToStack && !achievementsDic["jenga master"].achieved) {
-            Debug.Log("Achievement unlocked: " + achievementsDic["jenga master"].title);
             achievementsDic["jenga master"].achieved = true;
 
             OnAchievementUnlockedEventArgs e = new OnAchievementUnlockedEventArgs
@@ -238,7 +231,6 @@ public class GameManager : MonoBehaviour
 
         if (bottleStack >= BOTTLE_TOWER && !achievementsDic["questionable architect"].achieved)
         {
-            Debug.Log("Achievement unlocked: " + achievementsDic["questionable architect"].title);
             achievementsDic["questionable architect"].achieved = true;
 
             OnAchievementUnlockedEventArgs e = new OnAchievementUnlockedEventArgs
@@ -257,7 +249,6 @@ public class GameManager : MonoBehaviour
         level1Complete = level1Complete_;
         if (level1Complete && !achievementsDic["pavement pounder"].achieved)
         {
-            Debug.Log("Achievement unlocked: " + achievementsDic["pavement pounder"].title);
             achievementsDic["pavement pounder"].achieved = true;
 
             OnAchievementUnlockedEventArgs e = new OnAchievementUnlockedEventArgs
@@ -275,7 +266,6 @@ public class GameManager : MonoBehaviour
         gameComplete = gameComplete_;
         if (gameComplete && !achievementsDic["unlimited power"].achieved)
         {
-            Debug.Log("Achievement unlocked: " + achievementsDic["unlimited power"].title);
             achievementsDic["unlimited power"].achieved = true;
 
             OnAchievementUnlockedEventArgs e = new OnAchievementUnlockedEventArgs
@@ -291,7 +281,6 @@ public class GameManager : MonoBehaviour
     public void UnlockAchievement(string achievementTitle)
     {
         string achTitle = achievementTitle.ToLower();
-        Debug.Log("Achievement unlocked: " + achievementsDic[achTitle].title);
         achievementsDic[achTitle].achieved = true;
 
         OnAchievementUnlockedEventArgs e = new OnAchievementUnlockedEventArgs

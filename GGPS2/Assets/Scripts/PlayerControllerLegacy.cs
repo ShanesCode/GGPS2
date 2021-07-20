@@ -121,7 +121,6 @@ public class PlayerControllerLegacy : MonoBehaviour
         RaycastHit2D hit = Physics2D.BoxCast(boxColliderPos, new Vector2(size.x, size.y / 2), 0.0f, Vector2.down, size.y, groundMask);
         if (hit)
         {
-            //Debug.Log(hit.collider.gameObject.name);
             float distance = Mathf.Abs(hit.point.y - boxColliderPos.y);
             if (distance > size.y)
             {

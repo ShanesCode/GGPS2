@@ -81,7 +81,6 @@ public class LevelManager : MonoBehaviour
     private void LevelManager_OnTrigger(object sender, EndRoomTrigger.OnTriggerEventArgs e)
     {
         // Open End Room UI
-        Debug.Log("Room complete: " + e.roomNumber);
         Time.timeScale = 0;
         paused = true;
         endRoomUI.SetActive(true);
