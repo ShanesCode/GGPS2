@@ -38,17 +38,17 @@ public class EndRoomUI : MonoBehaviour
         {
             roomNumber = levelManager.GetComponent<LevelManager>().currentRoom;
 
-            if (levelManager.GetComponent<LevelManager>().roomWasteCount < levelManager.GetComponent<LevelManager>().roomRecycleCount)
+            if ((levelManager.GetComponent<LevelManager>().roomWasteCount < levelManager.GetComponent<LevelManager>().roomRecycleCount) && !gameManager.GetComponent<GameManager>().achievementsDic["carbon cutter"].achieved)
             {
                 gameManager.GetComponent<GameManager>().UnlockAchievement("Carbon Cutter");
             }
         }
 
         stats.text =
-            "Dumped litter:\t\t\t\t" + levelManager.GetComponent<LevelManager>().roomWasteCount + '\t' + " times" + '\n' +
             "Indulged gluttonously:\t\t" + levelManager.GetComponent<LevelManager>().roomIndulgenceCount + '\t' + " times" + '\n' +
             "Thoughtfully recycled:\t" + levelManager.GetComponent<LevelManager>().roomRecycleCount + '\t' + " times" + '\n' + '\n' +
-            "Dev's best:\t\t\t\t\t" + devCount + '\t' + " bottles dumped" + '\n';
+            "Waste score:\t\t\t\t" + levelManager.GetComponent<LevelManager>().roomWasteCount + '\t' + '\n' +
+            "Dev's best:\t\t\t\t\t" + devCount + '\t';
 
         title.text = "Room " + levelNumber + "-" + roomNumber + " Complete!";
     }

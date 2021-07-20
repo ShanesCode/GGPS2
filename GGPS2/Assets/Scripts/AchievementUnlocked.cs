@@ -29,25 +29,22 @@ public class AchievementUnlocked : MonoBehaviour
 
     private void AchievementUnlocked_OnAchievementUnlocked(object sender, GameManager.OnAchievementUnlockedEventArgs e)
     {
+        StartCoroutine(AchievementDisplayCoroutine(achievement.text, e));
+    }
+
+    IEnumerator AchievementDisplayCoroutine(string title, GameManager.OnAchievementUnlockedEventArgs e)
+    {
         achievementUnlockedUI.SetActive(true);
         achievement.text = e.title;
         requirement.text = e.requirement;
         image.sprite = e.sprite;
 
-        StartCoroutine(AchievementDisplayCoroutine(achievement.text));
-    }
-
-    IEnumerator AchievementDisplayCoroutine(string title)
-    {
         //yield on a new YieldInstruction that waits for 5 seconds.
         yield return new WaitForSecondsRealtime(displayTime);
 
-        if (title == achievement.text)
-        {
-            achievementUnlockedUI.SetActive(false);
-            achievement.text = "";
-            requirement.text = "";
-            image.sprite = null;
-        }
+        achievementUnlockedUI.SetActive(false);
+        achievement.text = "";
+        requirement.text = "";
+        image.sprite = null;
     }
 }

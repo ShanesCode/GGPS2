@@ -13,6 +13,6 @@ public class EndLevelNumber : MonoBehaviour
     {
         gameManager = GameObject.FindWithTag("GameManager");
         text = GetComponent<TextMeshPro>();
-        text.text = gameManager.GetComponent<GameManager>().GetWasteCount().ToString();
+        text.text = gameManager.GetComponent<GameManager>().endGameWasteCount.ToString();
     }
 }

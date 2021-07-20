@@ -15,7 +15,7 @@ public class Pipe : MonoBehaviour
         gameManager = GameObject.FindWithTag("GameManager");
         if (gameManager != null)
         {
-            bottleCount = gameManager.GetComponent<GameManager>().GetWasteCount();
+            bottleCount = gameManager.GetComponent<GameManager>().GetWasteCount() - gameManager.GetComponent<GameManager>().GetRecycleCount();
         } else
         {
             bottleCount = 50;
@@ -28,9 +28,10 @@ public class Pipe : MonoBehaviour
     {
         bottleCount--;
 
-        if (bottleCount <= 0)
+        if (bottleCount < 0)
         {
             anim.SetTrigger("idle");
+            return;
         }
 
         Instantiate(bottle, spawnPos, Quaternion.Euler(0, 0, Random.Range(0.0f, 360.0f)));
