@@ -22,8 +22,8 @@ public class BottleController : MonoBehaviour
 
     [Range(0, 5)] public float binDetectionDistance = 2.0f;
     
-    private int drinkCount;
-    private int recycleCount;
+    public int drinkCount;
+    public int recycleCount;
     //private int wasteCount;
 
     GameObject nearest_bottle;
@@ -82,7 +82,17 @@ public class BottleController : MonoBehaviour
 
         if (Input.GetKeyDown("e"))
         {
-            InteractBottle();
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("place") == false)
+            {
+                InteractBottle();
+            }
+            else
+            {
+                if (anim.GetCurrentAnimatorStateInfo(0).length - 1f > anim.GetCurrentAnimatorStateInfo(0).normalizedTime)
+                {
+                    InteractBottle();
+                }
+            }
         }
 
         if (hasBottle && carried_bottle != null)
@@ -140,14 +150,15 @@ public class BottleController : MonoBehaviour
         // If the nearest bottle is within the specified distance destroy it and change the player hasBottle state
         if (shortest_distance_bottle < PICKUP_DISTANCE && nearest_bottle != null)
         {
+            bottles.Remove(nearest_bottle);
+            carried_bottle = nearest_bottle;
             anim.SetTrigger("pickup");
         }
     }
 
     public void PickupBottle()
     {
-        bottles.Remove(nearest_bottle);
-        carried_bottle = nearest_bottle;
+        
 
         // For each child bottle of the one being picked up (if it is not the top of a stack), make the child bottle dynamic
         for (int i = 0; i < carried_bottle.transform.childCount; i++)

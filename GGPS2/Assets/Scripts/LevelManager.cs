@@ -193,8 +193,13 @@ public class LevelManager : MonoBehaviour
 
     public void ResetRoomCounters()
     {
+        gameManager.GetComponent<GameManager>().UpdateWasteCount(gameManager.GetComponent<GameManager>().GetWasteCount() - roomWasteCount);
         roomWasteCount = 0;
+        gameManager.GetComponent<GameManager>().UpdateDrinkCount(gameManager.GetComponent<GameManager>().GetDrinkCount() - roomIndulgenceCount);
         roomIndulgenceCount = 0;
+        gameManager.GetComponent<GameManager>().UpdateRecycleCount(gameManager.GetComponent<GameManager>().GetRecycleCount() - roomRecycleCount);
         roomRecycleCount = 0;
     }
 }
+
+
