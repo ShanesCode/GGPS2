@@ -34,6 +34,7 @@ public class BottleController : MonoBehaviour
     GameObject levelManager;
 
     bool pickingUpBottle;
+    bool placingBottle;
 
     // Start is called before the first frame update
     void Start()
@@ -65,6 +66,7 @@ public class BottleController : MonoBehaviour
         levelManager = GameObject.FindWithTag("LevelManager");
 
         pickingUpBottle = false;
+        placingBottle = false;
     }
 
     // Update is called once per frame
@@ -84,9 +86,17 @@ public class BottleController : MonoBehaviour
             pickingUpBottle = false;
         }
 
+        if (anim.GetAnimatorTransitionInfo(0).IsUserName("placeToIdle"))
+        {
+            placingBottle = false;
+        }
+
+
+        // Prevent bottle functions from being called whilst an animation is playing that triggers a bottle function
+        // on a particular frame - otherwise both will happen and cause issues
         if (!pickingUpBottle)
         {
-            if (Input.GetKeyDown("r") && !hasBottle)
+            if (Input.GetKeyDown("r") && !hasBottle && !placingBottle)
             {
                 CreateBottle();
             }
@@ -121,6 +131,7 @@ public class BottleController : MonoBehaviour
         }
         else
         {
+            placingBottle = true;
             anim.SetTrigger("place");
             // PlaceBottle() function called during animation
         }
@@ -165,6 +176,7 @@ public class BottleController : MonoBehaviour
         {
             pickingUpBottle = true;
             carried_bottle = nearest_bottle;
+            // PickupBottle() function called during animation
             anim.SetTrigger("pickup");
         }
     }
