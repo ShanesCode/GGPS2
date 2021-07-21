@@ -161,7 +161,7 @@ public class BottleController : MonoBehaviour
 
         // If the nearest bottle is within the specified distance remove it from the list of bottles in the world and set it
         // to carried_bottle. Begin the pickup animation, which calls PickupBottle() on the frame that the player has leaned down
-        if (shortest_distance_bottle < PICKUP_DISTANCE && nearest_bottle != null)
+        if (shortest_distance_bottle < PICKUP_DISTANCE && nearest_bottle != null && nearest_bottle != gameObject.GetComponent<PlayerController>().ground)
         {
             pickingUpBottle = true;
             carried_bottle = nearest_bottle;
@@ -274,7 +274,7 @@ public class BottleController : MonoBehaviour
                 }
             }
 
-            if (top_of_stack != null)
+            if (top_of_stack != null && top_of_stack != gameObject.GetComponent<PlayerController>().ground)
             {
                 bottle_collider = top_of_stack.GetComponent<BoxCollider2D>();
 
