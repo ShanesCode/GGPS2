@@ -208,7 +208,12 @@ public class BottleController : MonoBehaviour
                 anim.SetBool("hasBottle", hasBottle);
                 recycleCount++;
                 gameManager.GetComponent<GameManager>().UpdateRecycleCount(recycleCount);
-                levelManager.GetComponent<LevelManager>().roomWasteCount--;
+                
+                if (!carried_bottle.GetComponent<Bottle>().playerCreated || carried_bottle.GetComponent<Bottle>().counted)
+                {
+                    levelManager.GetComponent<LevelManager>().roomWasteCount--;
+                }
+
                 levelManager.GetComponent<LevelManager>().roomRecycleCount++;
                 bottles.Remove(carried_bottle);
                 Destroy(carried_bottle);

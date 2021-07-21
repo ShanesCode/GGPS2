@@ -155,6 +155,10 @@ public class LevelManager : MonoBehaviour
         endRoomUI.SetActive(false);
         gameManager.GetComponent<GameManager>().spawnRoom = currentRoom;
         ResetRoomCounters();
+        gameManager.GetComponent<GameManager>().UpdateWasteCount(gameManager.GetComponent<GameManager>().GetWasteCount() - roomWasteCount);
+        gameManager.GetComponent<GameManager>().endGameWasteCount -= roomWasteCount;
+        gameManager.GetComponent<GameManager>().UpdateDrinkCount(gameManager.GetComponent<GameManager>().GetDrinkCount() - roomIndulgenceCount);
+        gameManager.GetComponent<GameManager>().UpdateRecycleCount(gameManager.GetComponent<GameManager>().GetRecycleCount() - roomRecycleCount);
         StartCoroutine(LoadYourAsyncScene(SceneManager.GetActiveScene().name));
     }
 
@@ -189,17 +193,12 @@ public class LevelManager : MonoBehaviour
     private void LevelMan_OnDeath(object sender, PlayerController.OnDeathEventArgs e)
     {
         ResetRoom();
-        ResetRoomCounters();
     }
 
     public void ResetRoomCounters()
     {
-        gameManager.GetComponent<GameManager>().UpdateWasteCount(gameManager.GetComponent<GameManager>().GetWasteCount() - roomWasteCount);
-        gameManager.GetComponent<GameManager>().endGameWasteCount -= roomWasteCount;
         roomWasteCount = 0;
-        gameManager.GetComponent<GameManager>().UpdateDrinkCount(gameManager.GetComponent<GameManager>().GetDrinkCount() - roomIndulgenceCount);
         roomIndulgenceCount = 0;
-        gameManager.GetComponent<GameManager>().UpdateRecycleCount(gameManager.GetComponent<GameManager>().GetRecycleCount() - roomRecycleCount);
         roomRecycleCount = 0;
     }
 }
