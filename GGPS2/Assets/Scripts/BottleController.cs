@@ -33,6 +33,8 @@ public class BottleController : MonoBehaviour
     GameObject gameManager;
     GameObject levelManager;
 
+    bool pickingUpBottle;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -61,6 +63,8 @@ public class BottleController : MonoBehaviour
         bottleHeight = bottle.GetComponent<SpriteRenderer>().size.y * bottle.transform.localScale.y;
 
         levelManager = GameObject.FindWithTag("LevelManager");
+
+        pickingUpBottle = false;
     }
 
     // Update is called once per frame
@@ -75,23 +79,30 @@ public class BottleController : MonoBehaviour
             flip = -1;
         }
 
-        if (Input.GetKeyDown("r") && !hasBottle)
+        if (anim.GetAnimatorTransitionInfo(0).IsUserName("pickupToCarryIdle") || anim.GetAnimatorTransitionInfo(0).IsUserName("pickupToCarryFall"))
         {
-            anim.SetTrigger("drink");
-            CreateBottle();
+            pickingUpBottle = false;
         }
 
-        if (Input.GetKeyDown("e"))
+        if (!pickingUpBottle)
         {
-            if (anim.GetCurrentAnimatorStateInfo(0).IsName("place") == false)
+            if (Input.GetKeyDown("r") && !hasBottle)
             {
-                InteractBottle();
+                CreateBottle();
             }
-            else
+
+            if (Input.GetKeyDown("e"))
             {
-                if (anim.GetCurrentAnimatorStateInfo(0).length - 1f > anim.GetCurrentAnimatorStateInfo(0).normalizedTime)
+                if (anim.GetCurrentAnimatorStateInfo(0).IsName("place") == false)
                 {
                     InteractBottle();
+                }
+                else
+                {
+                    if (anim.GetCurrentAnimatorStateInfo(0).length - 1f > anim.GetCurrentAnimatorStateInfo(0).normalizedTime)
+                    {
+                        InteractBottle();
+                    }
                 }
             }
         }
@@ -152,7 +163,7 @@ public class BottleController : MonoBehaviour
         // to carried_bottle. Begin the pickup animation, which calls PickupBottle() on the frame that the player has leaned down
         if (shortest_distance_bottle < PICKUP_DISTANCE && nearest_bottle != null)
         {
-            bottles.Remove(nearest_bottle);
+            pickingUpBottle = true;
             carried_bottle = nearest_bottle;
             anim.SetTrigger("pickup");
         }
@@ -160,7 +171,7 @@ public class BottleController : MonoBehaviour
 
     public void PickupBottle()
     {
-        
+        bottles.Remove(nearest_bottle);
 
         // For each child bottle of the one being picked up (if it is not the top of a stack), make the child bottle dynamic
         for (int i = 0; i < carried_bottle.transform.childCount; i++)
@@ -351,6 +362,7 @@ public class BottleController : MonoBehaviour
         
 
         hasBottle = true;
+        anim.SetTrigger("drink");
         anim.SetBool("hasBottle", hasBottle);
     }
 
@@ -375,5 +387,15 @@ public class BottleController : MonoBehaviour
     private void ResetPickupTrigger()
     {
         anim.ResetTrigger("pickup");
+    }
+
+    private void ResetDrinkTrigger()
+    {
+        anim.ResetTrigger("place");
+    }
+
+    private void NoLongerPickingUp()
+    {
+        pickingUpBottle = false;
     }
 }
