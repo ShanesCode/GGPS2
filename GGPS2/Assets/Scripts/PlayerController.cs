@@ -199,4 +199,9 @@ public class PlayerController : MonoBehaviour
 
         OnDeath?.Invoke(this, e);
     }
+
+    private void ResetJumpTrigger()
+    {
+        anim.ResetTrigger("jump");
+    }
 }

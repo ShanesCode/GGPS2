@@ -56,6 +56,7 @@ public class BottleController : MonoBehaviour
 
         hasBottle = false;
         anim = GetComponent<Animator>();
+        anim.SetBool("hasBottle", hasBottle);
 
         bottleHeight = bottle.GetComponent<SpriteRenderer>().size.y * bottle.transform.localScale.y;
 
@@ -147,7 +148,8 @@ public class BottleController : MonoBehaviour
             }
         }
 
-        // If the nearest bottle is within the specified distance destroy it and change the player hasBottle state
+        // If the nearest bottle is within the specified distance remove it from the list of bottles in the world and set it
+        // to carried_bottle. Begin the pickup animation, which calls PickupBottle() on the frame that the player has leaned down
         if (shortest_distance_bottle < PICKUP_DISTANCE && nearest_bottle != null)
         {
             bottles.Remove(nearest_bottle);
@@ -179,6 +181,7 @@ public class BottleController : MonoBehaviour
 
         nearest_bottle = null;
         hasBottle = true;
+        anim.SetBool("hasBottle", hasBottle);
     }
 
     public void PlaceBottle()
@@ -191,6 +194,7 @@ public class BottleController : MonoBehaviour
             if (diff < binDetectionDistance && diff > -binDetectionDistance)
             {
                 hasBottle = false;
+                anim.SetBool("hasBottle", hasBottle);
                 recycleCount++;
                 gameManager.GetComponent<GameManager>().UpdateRecycleCount(recycleCount);
                 levelManager.GetComponent<LevelManager>().roomWasteCount--;
@@ -286,7 +290,8 @@ public class BottleController : MonoBehaviour
                     bottles.Add(carried_bottle); // Adds the bottle to the list of bottles in the world
                     carried_bottle = null;
                     hasBottle = false;
-                    
+                    anim.SetBool("hasBottle", hasBottle);
+
                     if (currentlyCheckingBiggestStack)
                     {
                         biggestStack++;
@@ -308,6 +313,7 @@ public class BottleController : MonoBehaviour
                 AddToWasteCounters(carried_bottle);
 
                 hasBottle = false;
+                anim.SetBool("hasBottle", hasBottle);
                 carried_bottle = null;
                 return;
             }
@@ -324,6 +330,7 @@ public class BottleController : MonoBehaviour
             AddToWasteCounters(carried_bottle);
 
             hasBottle = false;
+            anim.SetBool("hasBottle", hasBottle);
             carried_bottle = null;
             return;
         }
@@ -344,6 +351,7 @@ public class BottleController : MonoBehaviour
         
 
         hasBottle = true;
+        anim.SetBool("hasBottle", hasBottle);
     }
 
     private void AddToWasteCounters(GameObject bottle)
@@ -359,4 +367,13 @@ public class BottleController : MonoBehaviour
         }
     }
 
+    private void ResetPlaceTrigger()
+    {
+        anim.ResetTrigger("place");
+    }
+
+    private void ResetPickupTrigger()
+    {
+        anim.ResetTrigger("pickup");
+    }
 }
